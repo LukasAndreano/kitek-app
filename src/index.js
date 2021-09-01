@@ -1,17 +1,45 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
 
+// Подключаем необходимые зависимости
+import { ConfigProvider, AdaptivityProvider, AppRoot } from "@vkontakte/vkui";
+import { Provider } from "react-redux";
+import { store } from "./store";
+import themeManager from "./service/themeManager"
+import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
+
+import {
+  BrowserRouter as Router,
+} from "react-router-dom";
+
+// Подключаем все нужные стили для работы сервиса
+import "@vkontakte/vkui/dist/vkui.css";
+import "./css/style.css";
+
+// Импортируем главный файл
+import App from './App';
+
+// Подключаем менеджер тем. Автоматически определяет тему спустя 100 мс (задержка для загрузки VKUI).
+themeManager()
+
+// Чистим локальное хранилище от мусора
+localStorage.setItem("sheduleDay", 0);
+
+// Начинаем рендер, где подключаем Storage и ConfigProviver (необходим для определения платформы и нормальной работой с VKMA)
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
+  <Provider store={store}>
+    <ConfigProvider isWebView={true}>
+      <AdaptivityProvider>
+        <AppRoot>
+          <Router>
+            <App />
+          </Router>
+        </AppRoot>
+      </AdaptivityProvider>
+    </ConfigProvider>
+  </Provider>,
   document.getElementById('root')
 );
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+// Подключаем Service Worker, который необходим для PWA-приложений
+serviceWorkerRegistration.register();

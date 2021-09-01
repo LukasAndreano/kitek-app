@@ -1,21 +1,23 @@
 {
-  "name": "test",
-  "version": "0.1.0",
+  "name": "omsktec_app",
+  "version": "1.0.8",
   "private": true,
   "dependencies": {
-    "@testing-library/jest-dom": "^5.14.1",
-    "@testing-library/react": "^11.2.7",
-    "@testing-library/user-event": "^12.8.3",
+    "@reduxjs/toolkit": "^1.6.1",
+    "@vkontakte/icons": "^1.126.0",
+    "@vkontakte/vkui": "^4.14.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
-    "react-scripts": "4.0.3",
-    "web-vitals": "^1.1.2"
+    "react-redux": "^7.2.4",
+    "react-router-dom": "^5.2.1",
+    "react-scripts": "4.0.3"
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "build": "GENERATE_SOURCEMAP=false react-scripts build",
+    "prettier": "npx prettier --write public && npx prettier --write src",
+    "deploy": "npm run prettier && npm run build",
+    "vk-miniapps-deploy": "vk-miniapps-deploy"
   },
   "eslintConfig": {
     "extends": [
@@ -34,5 +36,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "prettier": "^2.3.2"
   }
 }
