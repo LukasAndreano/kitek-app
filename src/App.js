@@ -365,6 +365,14 @@ const App = withAdaptivity(
                     >
                       Никита Балин
                     </a>
+                    <br />
+                    <a
+                      href="https://github.com/LukasAndreano/kitek-app"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                    Репозиторий на GitHub
+                    </a>
                   </Footer>
                 </Panel>
               </SplitCol>
