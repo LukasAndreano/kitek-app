@@ -1,5 +1,5 @@
 export default async function authorizedAPI(method, params) {
-  const data = await fetch("https://testing-only.lukass.ru/v1/" + method, {
+  const data = await fetch("https://api.omsktec.ru/v1/" + method, {
     method: "POST",
     headers: {
       Accept: "application/json",

@@ -48,27 +48,29 @@ export default function Shedule() {
   const renderLessons = useCallback(
     (data = null, teacherMode = false) => {
       let arr = [];
-      let renderData = data[localStorage.getItem("sheduleDay")].timetable;
-      renderData.forEach((el) => {
-        let group = teacherMode ? el.group.split("-") : null;
-        arr[el.number] = (
-          <Card className="tw" key={el.number} style={{ marginBottom: 10 }}>
-            <Div>
-              <Title level="3" weight="medium">
-                {el.name}
-              </Title>
-              <h4 style={{ marginTop: 5, marginBottom: 0 }}>
-                <span className="hide">Пара №{el.number}</span>
-                <span className="type">{el.type}</span>
-                <span className="teacher">
-                  {teacherMode ? group[1] + "-" + group[0] : el.teacher}
-                </span>
-              </h4>
-            </Div>
-          </Card>
-        );
-      });
-      setShedule(arr);
+      if (data !== undefined && data.length !== 0) {
+        let renderData = data[localStorage.getItem("sheduleDay")].timetable;
+        renderData.forEach((el) => {
+          let group = teacherMode ? el.group.split("-") : null;
+          arr[el.number] = (
+            <Card className="tw" key={el.number} style={{ marginBottom: 10 }}>
+              <Div>
+                <Title level="3" weight="medium">
+                  {el.name}
+                </Title>
+                <h4 style={{ marginTop: 5, marginBottom: 0 }}>
+                  <span className="hide">Пара №{el.number}</span>
+                  <span className="type">{el.type}</span>
+                  <span className="teacher">
+                    {teacherMode ? group[1] + "-" + group[0] : el.teacher}
+                  </span>
+                </h4>
+              </Div>
+            </Card>
+          );
+        });
+        setShedule(arr);
+      }
     },
     [setShedule]
   );
@@ -159,9 +161,12 @@ export default function Shedule() {
                     el["id"] = i;
                     i++;
                   });
-
                   dispatch(setSheduleStore(data.timetable));
-                  renderShedule(data.timetable, false, true);
+                  if (data.timetable.length !== 0) {
+                    renderShedule(data.timetable, false, true);
+                  } else {
+                    setLoaded(true);
+                  }
                 }
               });
             else {
@@ -334,24 +339,45 @@ export default function Shedule() {
             ) : (
               <Fragment>
                 <Div>
-                  <HorizontalScroll
-                    showArrows
-                    getScrollToLeft={(i) => i - 120}
-                    getScrollToRight={(i) => i + 120}
-                    style={{ marginBottom: 10 }}
-                  >
-                    <div style={{ display: "flex" }}>{sheduleButtons}</div>
-                  </HorizontalScroll>
+                  {sheduleStorage.shedule.length !== 0 &&
+                  sheduleStorage.shedule !== undefined ? (
+                    <Fragment>
+                      <HorizontalScroll
+                        showArrows
+                        getScrollToLeft={(i) => i - 120}
+                        getScrollToRight={(i) => i + 120}
+                        style={{ marginBottom: 10 }}
+                      >
+                        <div style={{ display: "flex" }}>{sheduleButtons}</div>
+                      </HorizontalScroll>
 
-                  {shedule.length === 0 ? (
-                    <Placeholder
-                      icon={<Icon56FireOutline />}
-                      header="Ура, отдыхаем!"
-                    >
-                      На этот день нет пар.
-                    </Placeholder>
+                      {shedule.length === 0 ? (
+                        <Placeholder
+                          icon={<Icon56FireOutline />}
+                          header="Ура, отдыхаем!"
+                        >
+                          На этот день нет пар.
+                        </Placeholder>
+                      ) : (
+                        shedule
+                      )}
+                    </Fragment>
                   ) : (
-                    shedule
+                    <div
+                      style={{
+                        height: "80vh",
+                        display: "flex",
+                        justifyContent: "center",
+                        textAlign: "center",
+                      }}
+                    >
+                      <Placeholder
+                        icon={<Icon56FireOutline />}
+                        header="Ура, отдыхаем!"
+                      >
+                        Нет пар на эту неделю.
+                      </Placeholder>
+                    </div>
                   )}
                 </Div>
               </Fragment>

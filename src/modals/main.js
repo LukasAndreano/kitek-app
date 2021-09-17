@@ -11,13 +11,19 @@ import {
 } from "@vkontakte/vkui";
 
 import { useHistory } from "react-router-dom";
+import { motion } from "framer-motion";
 
-import { Icon56InfoOutline, Icon24Dismiss } from "@vkontakte/icons";
+import {
+  Icon56InfoOutline,
+  Icon24Dismiss,
+  Icon56GhostOutline,
+} from "@vkontakte/icons";
 
 import { setActiveModal, setUser } from "../reducers/mainReducer";
 import { saveSheduleDay, setSheduleStore } from "../reducers/sheduleReducer";
 
 import EditAccountInfo from "./EditAccountInfo";
+import ChangePassword from "./ChangePassword";
 
 export default function Modals() {
   const [blockBackButton, setBlockBackButton] = useState(false);
@@ -54,7 +60,20 @@ export default function Modals() {
         onClose={() => {
           closeModal();
         }}
-        icon={<Icon56InfoOutline />}
+        icon={
+          <motion.div
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            transition={{
+              delay: 0.1,
+              type: "spring",
+              stiffness: 260,
+              damping: 20,
+            }}
+          >
+            <Icon56InfoOutline />
+          </motion.div>
+        }
         header="Вы уверены, что хотите сменить группу?"
         subheader={
           "При смене группы из кеша удаляется расписание, а также привязка к группе."
@@ -84,7 +103,20 @@ export default function Modals() {
         onClose={() => {
           closeModal();
         }}
-        icon={<Icon56InfoOutline />}
+        icon={
+          <motion.div
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            transition={{
+              delay: 0.1,
+              type: "spring",
+              stiffness: 260,
+              damping: 20,
+            }}
+          >
+            <Icon56InfoOutline />
+          </motion.div>
+        }
         header="Выйти из аккаунта?"
         subheader={
           "После выхода из аккаунта для доступа к некоторым функциям понадобится авторизация."
@@ -137,6 +169,108 @@ export default function Modals() {
         }
       >
         <EditAccountInfo closeModal={closeModal} />
+      </ModalPage>
+
+      <ModalCard
+        id="aboutAPP"
+        className="tw"
+        onClose={() => {
+          closeModal();
+        }}
+        dynamicContentHeight
+        icon={
+          <motion.div
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            transition={{
+              delay: 0.1,
+              type: "spring",
+              stiffness: 260,
+              damping: 20,
+            }}
+          >
+            <Icon56InfoOutline />
+          </motion.div>
+        }
+        header={"О приложении"}
+        subheader={
+          "Это приложение для студентов КИТЭК'а, позволяющее просматривать текущее расписание, следить за новостями, а также быстро подписываться на социальные сети колледжа.\n\nТекущая версия: 1.1.1\nРазработчик: Никита Балин"
+        }
+        actions={
+          <Button
+            size="l"
+            mode="primary"
+            href="https://vk.com/id172118960"
+            target="_blank"
+            className="fixButton2"
+            style={{ marginTop: -20 }}
+          >
+            Страница разработчика
+          </Button>
+        }
+      />
+
+      <ModalCard
+        id="soon"
+        className="tw"
+        onClose={() => {
+          closeModal();
+        }}
+        dynamicContentHeight
+        icon={
+          <motion.div
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            transition={{
+              delay: 0.1,
+              type: "spring",
+              stiffness: 260,
+              damping: 20,
+            }}
+          >
+            <Icon56GhostOutline />
+          </motion.div>
+        }
+        header={"Эта функция еще недоступна..."}
+        subheader={
+          "Сейчас она проходит закрытое бета-тестирование. Следите за новостями, ведь мы обязательно напишем пост в социальных сетях, как только эта функция станет доступна всем пользователям."
+        }
+        actions={
+          <Button
+            size="l"
+            mode="primary"
+            onClick={() => closeModal()}
+            style={{ marginTop: -20 }}
+          >
+            Будем ждать
+          </Button>
+        }
+      />
+
+      <ModalPage
+        id="changePassword"
+        onClose={() => {
+          closeModal();
+        }}
+        dynamicContentHeight
+        header={
+          <ModalPageHeader
+            right={
+              storage.isDesktop ? (
+                ""
+              ) : (
+                <PanelHeaderButton onClick={() => closeModal()}>
+                  <Icon24Dismiss />
+                </PanelHeaderButton>
+              )
+            }
+            separator={false}
+          >
+            Смена пароля
+          </ModalPageHeader>
+        }
+      >
+        <ChangePassword closeModal={closeModal} />
       </ModalPage>
     </ModalRoot>
   );

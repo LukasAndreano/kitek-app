@@ -3,7 +3,6 @@ import { useSelector, useDispatch } from "react-redux";
 import {
   Group,
   PanelHeaderButton,
-  Button,
   PanelHeader,
   Gradient,
   Div,
@@ -11,19 +10,22 @@ import {
   Title,
   Text,
   Header,
-  Footer,
   SimpleCell,
 } from "@vkontakte/vkui";
 import {
   Icon28DoorArrowRightOutline,
   Icon28MailOutline,
   Icon28UserStarBadgeOutline,
+  Icon28SettingsOutline,
+  Icon28EditOutline,
+  Icon28InfoOutline,
+  Icon28Notifications,
 } from "@vkontakte/icons";
 
 import Login from "../forms/Login";
 import Register from "../forms/Register";
 
-import { setActiveModal, setUser } from "../reducers/mainReducer";
+import { setActiveModal, setUser, setSnackbar } from "../reducers/mainReducer";
 
 import authorizedAPI from "../service/authorizedAPI";
 import refreshToken from "../service/refreshToken";
@@ -96,7 +98,8 @@ export default function Profile() {
               <Fragment>
                 <Gradient
                   style={{
-                    margin: "-7px -7px 0 -7px",
+                    margin: 10,
+                    borderRadius: 10,
                     display: "flex",
                     flexDirection: "column",
                     alignItems: "center",
@@ -119,31 +122,36 @@ export default function Profile() {
                   >
                     {storage.user.status === 2
                       ? "Преподаватель"
-                      : storage.user.group && storage.user.course !== 0
-                      ? "Студент " +
-                        storage.user.course +
-                        "-го курса, группа " +
-                        storage.user.group
+                      : storage.user.group
+                      ? "Студент, группа " + storage.user.group
                       : "Нет никаких данных :("}
                   </Text>
-                  {storage.user.status !== 2 && (
-                    <Button
-                      size="m"
-                      mode="secondary"
-                      onClick={() => {
-                        dispatch(setActiveModal("editAccountInfo"));
-                      }}
-                    >
-                      Редактировать
-                    </Button>
-                  )}
                 </Gradient>
                 <Group mode="plain">
                   <Div style={{ marginTop: -10, marginLeft: -5 }}>
                     <Header>Общая информация</Header>
                     <SimpleCell
                       before={<Icon28MailOutline />}
-                      disabled
+                      onClick={() => {
+                        navigator.clipboard
+                          .writeText(storage.user.email)
+                          .then(() => {
+                            dispatch(
+                              setSnackbar({
+                                text: "Адрес электронной почты скопирован в буфер обмена.",
+                                success: true,
+                              })
+                            );
+                          })
+                          .catch(() => {
+                            dispatch(
+                              setSnackbar({
+                                text: "Произошла ошибка при копировании почты в буфер обмена.",
+                                success: false,
+                              })
+                            );
+                          });
+                      }}
                       description="Адрес электронной почты"
                     >
                       {storage.user.email}
@@ -159,19 +167,52 @@ export default function Profile() {
                         ? "Администратор"
                         : "Преподаватель"}
                     </SimpleCell>
+                    <Header>Настройки</Header>
+                    {storage.user.status !== 2 && (
+                      <SimpleCell
+                        before={<Icon28SettingsOutline />}
+                        onClick={() => {
+                          dispatch(setActiveModal("editAccountInfo"));
+                        }}
+                        description="Если нужно, например, изменить группу"
+                        multiline
+                      >
+                        Отредактировать профиль
+                      </SimpleCell>
+                    )}
+                    <SimpleCell
+                      onClick={() => {
+                        dispatch(setActiveModal("changePassword"));
+                      }}
+                      before={<Icon28EditOutline />}
+                      description="Безопасность - это главное"
+                      multiline
+                    >
+                      Изменить пароль
+                    </SimpleCell>
+                    <SimpleCell
+                      onClick={() => {
+                        dispatch(setActiveModal("soon"));
+                      }}
+                      before={<Icon28Notifications />}
+                      description="Получайте уведомления при изменении расписания"
+                      multiline
+                    >
+                      Уведомления (скоро)
+                    </SimpleCell>
+                    <Header>Другое</Header>
+                    <SimpleCell
+                      onClick={() => {
+                        dispatch(setActiveModal("aboutAPP"));
+                      }}
+                      before={<Icon28InfoOutline />}
+                      description="Подробная информация о приложении"
+                      multiline
+                    >
+                      О приложении
+                    </SimpleCell>
                   </Div>
                 </Group>
-                {!storage.isDesktop && <Footer>
-                    Версия приложения: 1.1.0 <br />
-                    Разработчик:{" "}
-                    <a
-                      href="https://vk.com/id172118960"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      Никита Балин
-                    </a>
-                  </Footer>}
               </Fragment>
             ) : (
               <Spinner size="medium" style={{ margin: "20px 0" }} />

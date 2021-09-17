@@ -5,13 +5,14 @@ import {
   Group,
   FormItem,
   Input,
-  CustomSelect,
   Placeholder,
-  CustomSelectOption,
+  NativeSelect,
 } from "@vkontakte/vkui";
 import { Icon56NotePenOutline } from "@vkontakte/icons";
 import { useDispatch, useSelector } from "react-redux";
 import { setSnackbar, setUser } from "../reducers/mainReducer";
+import groups from "../data/groups.json";
+import { motion } from "framer-motion";
 
 import authorizedAPI from "../service/authorizedAPI";
 import refreshToken from "../service/refreshToken";
@@ -22,15 +23,14 @@ export default function EditAccountInfo(props) {
 
   const [name, setName] = useState("");
   const [disabled, setDisabled] = useState(false);
+  const [changed, setChanged] = useState(false);
 
-  const [course, setCourse] = useState(0);
   const [group, setGroup] = useState(0);
 
   const request = useCallback(() => {
     return new Promise((resolve) => {
       authorizedAPI("editProfile", {
         name,
-        course,
         group,
       }).then((data) => {
         if (
@@ -39,7 +39,6 @@ export default function EditAccountInfo(props) {
         )
           refreshToken("editProfile", {
             name,
-            course,
             group,
           }).then((data) => {
             return resolve(data);
@@ -49,18 +48,30 @@ export default function EditAccountInfo(props) {
         }
       });
     });
-  }, [course, group, name]);
+  }, [group, name]);
 
   useEffect(() => {
     setGroup(storage.user.group === null ? 0 : storage.user.group);
     setName(storage.user.name === null ? "" : storage.user.name);
-    setCourse(storage.user.course);
-  }, [storage.user.course, storage.user.name, storage.user.group]);
+  }, [storage.user.name, storage.user.group]);
 
   return (
     <Group>
       <Placeholder
-        icon={<Icon56NotePenOutline />}
+        icon={
+          <motion.div
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            transition={{
+              delay: 0.1,
+              type: "spring",
+              stiffness: 260,
+              damping: 20,
+            }}
+          >
+            <Icon56NotePenOutline />
+          </motion.div>
+        }
         header="Редактирование профиля"
         style={{ marginBottom: -30, marginTop: -30 }}
       >
@@ -76,8 +87,8 @@ export default function EditAccountInfo(props) {
             !disabled &&
             name.length >= 5 &&
             name.length < 60 &&
-            course !== 0 &&
-            group !== 0
+            group !== 0 &&
+            changed
           ) {
             setName(name.trim());
             request().then((data) => {
@@ -90,6 +101,12 @@ export default function EditAccountInfo(props) {
                     success: true,
                   })
                 );
+              } else {
+                setDisabled(false);
+                setSnackbar({
+                  text: "Что-то пошло не так...",
+                  success: true,
+                });
               }
             });
           }
@@ -102,6 +119,7 @@ export default function EditAccountInfo(props) {
             value={name}
             required
             onChange={(e) => {
+              setChanged(true);
               setName(
                 e.target.value.replace(
                   /[0-9A-Za-z^!@#$%^&*()_|/№:?;"'.,<>=-~]/gi,
@@ -112,42 +130,26 @@ export default function EditAccountInfo(props) {
           />
         </FormItem>
         <FormItem className="mb10">
-          <CustomSelect
-            placeholder="Курс на котором Вы сейчас находитесь"
-            searchable
-            filterFn={(value, option) =>
-              option.label.toLowerCase().includes(value.toLowerCase())
-            }
-            renderOption={({ option, ...restProps }) => (
-              <CustomSelectOption {...restProps} />
-            )}
-            emptyText={"Такого курса нет :/"}
-            value={course}
-            onChange={(e) => setCourse(e.target.value)}
-            options={[
-              { value: 1, label: "1 курс" },
-              { value: 2, label: "2 курс" },
-              { value: 3, label: "3 курс" },
-              { value: 4, label: "4 курс" },
-            ]}
-          />
-        </FormItem>
-        <FormItem className="mb10">
-          <CustomSelect
-            placeholder="Группа, в которой Вы обучаетесь"
-            searchable
-            disabled={course === 0}
-            filterFn={(value, option) =>
-              option.label.toLowerCase().includes(value.toLowerCase())
-            }
-            renderOption={({ option, ...restProps }) => (
-              <CustomSelectOption {...restProps} />
-            )}
-            emptyText={"Такой группы нет :/"}
-            value={group}
-            onChange={(e) => setGroup(e.target.value)}
-            options={[{ value: "21-ИСР", label: "21-ИСР" }]}
-          />
+          <NativeSelect
+            defaultValue={group}
+            onChange={(e) => {
+              setChanged(true);
+              setGroup(e.target.value);
+            }}
+          >
+            <option value={0}>
+              {storage.user.group === null
+                ? "Укажите свою группу"
+                : "Изменилась группа?"}
+            </option>
+            {groups.map((el) => {
+              return (
+                <option key={el.id} value={el.id}>
+                  {el.name}
+                </option>
+              );
+            })}
+          </NativeSelect>
         </FormItem>
         <FormItem>
           <Button
@@ -155,9 +157,7 @@ export default function EditAccountInfo(props) {
             stretched
             type="submit"
             loading={disabled}
-            disabled={
-              name === "" || name.length < 5 || group === 0 || course === 0
-            }
+            disabled={name === "" || name.length < 5 || group === 0 || !changed}
           >
             Сохранить
           </Button>

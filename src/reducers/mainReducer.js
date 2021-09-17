@@ -17,7 +17,6 @@ export const mainReducer = createSlice({
     user: {
       name: null,
       email: null,
-      course: 0,
       group: null,
       status: 0,
     },

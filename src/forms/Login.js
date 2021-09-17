@@ -58,9 +58,7 @@ export default function Login() {
             })
           );
         } else {
-          setTimeout(() => {
-            setBlockButton(false);
-          }, 1000);
+          setBlockButton(false);
           dispatch(
             setSnackbar({
               text: "Аккаунта с таким почтой не существует или Вы ввели неправильный пароль.",

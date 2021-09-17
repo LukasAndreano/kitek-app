@@ -24,6 +24,7 @@ try {
 
   // Чистим локальное хранилище от мусора
   localStorage.setItem("sheduleDay", 0);
+  localStorage.setItem("version", "1.1.1");
 
   // Начинаем рендер, где подключаем Storage и ConfigProviver (необходим для определения платформы и нормальной работой с VKMA)
   ReactDOM.render(

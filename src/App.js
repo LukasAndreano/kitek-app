@@ -35,9 +35,16 @@ import {
 import { useHistory } from "react-router-dom";
 import { motion } from "framer-motion";
 
-import { savePlatform, saveURL, setActiveModal, setSnackbar, setPopout, setUser } from "./reducers/mainReducer";
-import authorizedAPI from "./service/authorizedAPI"
-import refreshToken from "./service/refreshToken"
+import {
+  savePlatform,
+  saveURL,
+  setActiveModal,
+  setSnackbar,
+  setPopout,
+  setUser,
+} from "./reducers/mainReducer";
+import authorizedAPI from "./service/authorizedAPI";
+import refreshToken from "./service/refreshToken";
 
 import Controller from "./Controller";
 import Modals from "./modals/main";
@@ -49,7 +56,7 @@ const App = withAdaptivity(
     const hasHeader = platform !== VKCOM;
 
     const [themeManager, setThemeManager] = useState(false);
-    const [snackbar, setSnackbarFunc] = useState(null)
+    const [snackbar, setSnackbarFunc] = useState(null);
     const [popout, setPopoutFunc] = useState(false);
 
     const storage = useSelector((state) => state.main);
@@ -111,30 +118,35 @@ const App = withAdaptivity(
     };
 
     const request = useCallback(() => {
-      return new Promise(resolve => {
-        authorizedAPI('getProfile', {}).then(data => {
-
-          if (data.errorCode !== undefined && (data.errorCode === 3 || data.errorCode === 4))
-            refreshToken('getProfile', {}).then(data => {
-              dispatch(setUser(data.user))
-              return resolve(data)
-            })
-
+      return new Promise((resolve) => {
+        authorizedAPI("getProfile", {}).then((data) => {
+          if (
+            data.errorCode !== undefined &&
+            (data.errorCode === 3 || data.errorCode === 4)
+          )
+            refreshToken("getProfile", {}).then((data) => {
+              dispatch(setUser(data.user));
+              return resolve(data);
+            });
           else {
-            return resolve(data)
+            return resolve(data);
           }
-        })
-      })
-    }, [dispatch])
+        });
+      });
+    }, [dispatch]);
 
     useEffect(() => {
-      if (window.location.pathname.split("/")[1] !== "profile" && (localStorage.getItem("access_token") !== null && localStorage.getItem("refresh_token") !== null))
-        request().then(data => {
+      if (
+        window.location.pathname.split("/")[1] !== "profile" &&
+        localStorage.getItem("access_token") !== null &&
+        localStorage.getItem("refresh_token") !== null
+      )
+        request().then((data) => {
           if (data.response) {
-            dispatch(setUser(data.user))
+            dispatch(setUser(data.user));
           }
-        })
-    }, [dispatch, request])
+        });
+    }, [dispatch, request]);
 
     useEffect(() => {
       // Определяем платформу пользователя (desktop или нет)
@@ -150,37 +162,46 @@ const App = withAdaptivity(
 
     useEffect(() => {
       if (storage.snackbar.text !== null)
-      setSnackbarFunc(<Snackbar
-          layout="vertical"
-          duration={4000}
-          className={storage.isDesktop ? "snackBar-fix" : ""}
-          onClose={() => {
-            dispatch(setSnackbar({text: null}))
-            setSnackbarFunc(null)
-          }}
-          before={
-            <motion.div
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            transition={{
-              delay: 0.4,
-              type: "spring",
-              stiffness: 260,
-              damping: 20,
+        setSnackbarFunc(
+          <Snackbar
+            layout="vertical"
+            duration={4000}
+            className={storage.isDesktop ? "snackBar-fix" : ""}
+            onClose={() => {
+              dispatch(setSnackbar({ text: null }));
+              setSnackbarFunc(null);
             }}
+            before={
+              <motion.div
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{
+                  delay: 0.4,
+                  type: "spring",
+                  stiffness: 260,
+                  damping: 20,
+                }}
+              >
+                <Avatar size={24} style={{ background: "var(--accent)" }}>
+                  {storage.snackbar.success ? (
+                    <Icon16Done fill="#fff" width={14} height={14} />
+                  ) : (
+                    <Icon16Cancel fill="#fff" width={14} height={14} />
+                  )}
+                </Avatar>
+              </motion.div>
+            }
           >
-            <Avatar
-              size={24}
-              style={{ background: "var(--accent)" }}
-            >
-              {storage.snackbar.success ? <Icon16Done fill="#fff" width={14} height={14} /> : <Icon16Cancel fill="#fff" width={14} height={14} />}
-            </Avatar>
-            </motion.div>
-          }
-        >
-          {storage.snackbar.text}
-        </Snackbar>)
-    }, [setSnackbarFunc, dispatch, storage.isDesktop, storage.snackbar.success, storage.snackbar.text])
+            {storage.snackbar.text}
+          </Snackbar>
+        );
+    }, [
+      setSnackbarFunc,
+      dispatch,
+      storage.isDesktop,
+      storage.snackbar.success,
+      storage.snackbar.text,
+    ]);
 
     return (
       <Fragment>
@@ -193,105 +214,12 @@ const App = withAdaptivity(
               <SplitCol fixed width="280px" maxWidth="280px">
                 <Panel nav="navigationDesktop">
                   {hasHeader && <PanelHeader />}
-                                    <Group>
-                                    <Cell
-                                        onClick={URLChanger}
-                                        disabled={storage.url === "profile"}
-                                        style={
-                                          storage.url === "profile"
-                                            ? {
-                                                backgroundColor:
-                                                  "var(--button_secondary_background)",
-                                                borderRadius: 8,
-                                              }
-                                            : {}
-                                        }
-                                        data-story="profile"
-                                        before={<Icon28UserCircleOutline />}
-                                      >
-                                        {storage.url !== "admin" ? "Профиль" : "Обратно в профиль"}
-                                      </Cell>
-                                      {storage.url !== "admin" &&
-                                      <Cell
-                                        onClick={URLChanger}
-                                        disabled={storage.url === "news"}
-                                        style={
-                                          storage.url === "news"
-                                            ? {
-                                                backgroundColor:
-                                                  "var(--button_secondary_background)",
-                                                borderRadius: 8,
-                                              }
-                                            : {}
-                                        }
-                                        data-story="news"
-                                        before={<Icon28Newsfeed />}
-                                      >
-                                        Новости
-                                      </Cell>}
-                                      {storage.url !== "admin" &&
-                                      <Cell
-                                        onClick={URLChanger}
-                                        disabled={storage.url === ""}
-                                        style={
-                                          storage.url === ""
-                                            ? {
-                                                backgroundColor:
-                                                  "var(--button_secondary_background)",
-                                                borderRadius: 8,
-                                              }
-                                            : {}
-                                        }
-                                        data-story=""
-                                        before={<Icon28CalendarOutline />}
-                                      >
-                                        Расписание
-                                      </Cell>}
-                                      {storage.url !== "admin" &&
-                                      <Cell
-                                        onClick={URLChanger}
-                                        disabled={storage.url === "time"}
-                                        style={
-                                          storage.url === "time"
-                                            ? {
-                                                backgroundColor:
-                                                  "var(--button_secondary_background)",
-                                                borderRadius: 8,
-                                              }
-                                            : {}
-                                        }
-                                        data-story="time"
-                                        before={<Icon28RecentOutline />}
-                                      >
-                                        Звонки
-                                      </Cell>}
-                                      {storage.url !== "admin" &&
-                                      <Cell
-                                        onClick={URLChanger}
-                                        disabled={storage.url === "social"}
-                                        style={
-                                          storage.url === "social"
-                                            ? {
-                                                backgroundColor:
-                                                  "var(--button_secondary_background)",
-                                                borderRadius: 8,
-                                              }
-                                            : {}
-                                        }
-                                        data-story="social"
-                                        before={<Icon28Users3Outline />}
-                                      >
-                                        Социальные сети
-                                      </Cell>
-          }
-                                    </Group>
-                                    {storage.url !== "admin" &&
                   <Group>
                     <Cell
                       onClick={URLChanger}
-                      disabled={storage.url === "download"}
+                      disabled={storage.url === "profile"}
                       style={
-                        storage.url === "download"
+                        storage.url === "profile"
                           ? {
                               backgroundColor:
                                 "var(--button_secondary_background)",
@@ -299,36 +227,136 @@ const App = withAdaptivity(
                             }
                           : {}
                       }
-                      data-story="download"
-                      before={<Icon28DownloadCloudOutline />}
+                      data-story="profile"
+                      before={<Icon28UserCircleOutline />}
                     >
-                      Загрузить приложение
+                      {storage.url !== "admin"
+                        ? "Профиль"
+                        : "Обратно в профиль"}
                     </Cell>
+                    {storage.url !== "admin" && (
+                      <Cell
+                        onClick={URLChanger}
+                        disabled={storage.url === "news"}
+                        style={
+                          storage.url === "news"
+                            ? {
+                                backgroundColor:
+                                  "var(--button_secondary_background)",
+                                borderRadius: 8,
+                              }
+                            : {}
+                        }
+                        data-story="news"
+                        before={<Icon28Newsfeed />}
+                      >
+                        Новости
+                      </Cell>
+                    )}
+                    {storage.url !== "admin" && (
+                      <Cell
+                        onClick={URLChanger}
+                        disabled={storage.url === ""}
+                        style={
+                          storage.url === ""
+                            ? {
+                                backgroundColor:
+                                  "var(--button_secondary_background)",
+                                borderRadius: 8,
+                              }
+                            : {}
+                        }
+                        data-story=""
+                        before={<Icon28CalendarOutline />}
+                      >
+                        Расписание
+                      </Cell>
+                    )}
+                    {storage.url !== "admin" && (
+                      <Cell
+                        onClick={URLChanger}
+                        disabled={storage.url === "time"}
+                        style={
+                          storage.url === "time"
+                            ? {
+                                backgroundColor:
+                                  "var(--button_secondary_background)",
+                                borderRadius: 8,
+                              }
+                            : {}
+                        }
+                        data-story="time"
+                        before={<Icon28RecentOutline />}
+                      >
+                        Звонки
+                      </Cell>
+                    )}
+                    {storage.url !== "admin" && (
+                      <Cell
+                        onClick={URLChanger}
+                        disabled={storage.url === "social"}
+                        style={
+                          storage.url === "social"
+                            ? {
+                                backgroundColor:
+                                  "var(--button_secondary_background)",
+                                borderRadius: 8,
+                              }
+                            : {}
+                        }
+                        data-story="social"
+                        before={<Icon28Users3Outline />}
+                      >
+                        Социальные сети
+                      </Cell>
+                    )}
                   </Group>
-  }
+                  {storage.url !== "admin" && (
+                    <Group>
+                      <Cell
+                        onClick={URLChanger}
+                        disabled={storage.url === "download"}
+                        style={
+                          storage.url === "download"
+                            ? {
+                                backgroundColor:
+                                  "var(--button_secondary_background)",
+                                borderRadius: 8,
+                              }
+                            : {}
+                        }
+                        data-story="download"
+                        before={<Icon28DownloadCloudOutline />}
+                      >
+                        Загрузить приложение
+                      </Cell>
+                    </Group>
+                  )}
                   {storage.user.status === 1 && (
                     <Group>
-                    <Cell
-                      onClick={URLChanger}
-                      disabled={storage.url === "admin"}
-                      style={
-                        storage.url === "admin"
-                          ? {
-                              backgroundColor:
-                                "var(--button_secondary_background)",
-                              borderRadius: 8,
-                            }
-                          : {}
-                      }
-                      data-story="admin"
-                      before={<Icon28LockOutline />}
-                    >
-                      {storage.url === "admin" ? "Вы в админке! Воу!" : "Перейти в админку"}
-                    </Cell>
-                  </Group>
+                      <Cell
+                        onClick={URLChanger}
+                        disabled={storage.url === "admin"}
+                        style={
+                          storage.url === "admin"
+                            ? {
+                                backgroundColor:
+                                  "var(--button_secondary_background)",
+                                borderRadius: 8,
+                              }
+                            : {}
+                        }
+                        data-story="admin"
+                        before={<Icon28LockOutline />}
+                      >
+                        {storage.url === "admin"
+                          ? "Вы в админке! Воу!"
+                          : "Перейти в админку"}
+                      </Cell>
+                    </Group>
                   )}
                   <Footer style={{ marginTop: -10 }}>
-                    Версия приложения: 1.1.0 <br />
+                    Версия приложения: 1.1.1 <br />
                     Разработчик:{" "}
                     <a
                       href="https://vk.com/id172118960"
@@ -401,7 +429,12 @@ const App = withAdaptivity(
                   )
                 }
               >
-                <View id="default" activePanel="default" modal={modal} popout={popout}>
+                <View
+                  id="default"
+                  activePanel="default"
+                  modal={modal}
+                  popout={popout}
+                >
                   <Panel id="default">
                     <Controller />
                     {snackbar}
