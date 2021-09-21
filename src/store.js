@@ -7,10 +7,10 @@ import newsReducer from "./reducers/newsReducer";
 import sheduleReducer from "./reducers/sheduleReducer";
 
 export const store = configureStore({
-  reducer: {
-    main: mainReducer,
-    time: timeReducer,
-    news: newsReducer,
-    shedule: sheduleReducer,
-  },
+	reducer: {
+		main: mainReducer,
+		time: timeReducer,
+		news: newsReducer,
+		shedule: sheduleReducer,
+	},
 });

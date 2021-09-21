@@ -19,44 +19,44 @@ import App from "./App";
 import Cookies from "./panels/Cookies";
 
 try {
-  // Подключаем менеджер тем. Автоматически определяет тему спустя 100 мс (задержка для загрузки VKUI).
-  themeManager();
+	// Подключаем менеджер тем. Автоматически определяет тему спустя 100 мс (задержка для загрузки VKUI).
+	themeManager();
 
-  // Чистим локальное хранилище от мусора
-  localStorage.setItem("sheduleDay", 0);
-  localStorage.setItem("version", "1.1.1");
+	// Чистим локальное хранилище от мусора
+	localStorage.setItem("sheduleDay", 0);
+	localStorage.setItem("version", "1.1.2");
 
-  // Начинаем рендер, где подключаем Storage и ConfigProviver (необходим для определения платформы и нормальной работой с VKMA)
-  ReactDOM.render(
-    <Provider store={store}>
-      <ConfigProvider isWebView={true}>
-        <AdaptivityProvider>
-          <AppRoot>
-            <Router>
-              <App />
-            </Router>
-          </AppRoot>
-        </AdaptivityProvider>
-      </ConfigProvider>
-    </Provider>,
-    document.getElementById("root")
-  );
+	// Начинаем рендер, где подключаем Storage и ConfigProviver (необходим для определения платформы и нормальной работой с VKMA)
+	ReactDOM.render(
+		<Provider store={store}>
+			<ConfigProvider isWebView={true}>
+				<AdaptivityProvider>
+					<AppRoot>
+						<Router>
+							<App />
+						</Router>
+					</AppRoot>
+				</AdaptivityProvider>
+			</ConfigProvider>
+		</Provider>,
+		document.getElementById("root")
+	);
 } catch {
-  ReactDOM.render(<Cookies />, document.getElementById("root"));
+	ReactDOM.render(<Cookies />, document.getElementById("root"));
 }
 
 // Подключаем Service Worker, который необходим для PWA-приложений
 serviceWorkerRegistration.register({
-  onUpdate: (registration) => {
-    const waitingServiceWorker = registration.waiting;
+	onUpdate: (registration) => {
+		const waitingServiceWorker = registration.waiting;
 
-    if (waitingServiceWorker) {
-      waitingServiceWorker.addEventListener("statechange", (event) => {
-        if (event.target.state === "activated") {
-          window.location.reload();
-        }
-      });
-      waitingServiceWorker.postMessage({ type: "SKIP_WAITING" });
-    }
-  },
+		if (waitingServiceWorker) {
+			waitingServiceWorker.addEventListener("statechange", (event) => {
+				if (event.target.state === "activated") {
+					window.location.reload();
+				}
+			});
+			waitingServiceWorker.postMessage({ type: "SKIP_WAITING" });
+		}
+	},
 });
