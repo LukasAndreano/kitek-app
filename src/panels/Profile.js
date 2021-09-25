@@ -98,7 +98,7 @@ export default function Profile() {
 				{localStorage.getItem("access_token") === null &&
 				localStorage.getItem("refresh_token") === null ? (
 					<Fragment>
-						{storage.currentForm === 1 ? <Login /> : <Register />}
+						{storage.currentForm === 0 ? <Register /> : <Login />}
 					</Fragment>
 				) : (
 					<Fragment>

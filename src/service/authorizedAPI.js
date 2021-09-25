@@ -9,5 +9,11 @@ export default async function authorizedAPI(method, params) {
 		},
 		body: JSON.stringify(params),
 	});
-	return await data.json();
+	const responseData = await data.json();
+	if (responseData.errorCode === 2) {
+		localStorage.removeItem("access_token");
+		localStorage.removeItem("refresh_token");
+		window.location.reload();
+	}
+	return responseData;
 }

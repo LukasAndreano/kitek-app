@@ -4,6 +4,7 @@ export const sheduleReducer = createSlice({
 	name: "shedule",
 	initialState: {
 		shedule: [],
+		loaded: false,
 		sheduleDay: 0,
 	},
 	reducers: {
@@ -13,9 +14,13 @@ export const sheduleReducer = createSlice({
 		saveSheduleDay: (state, action) => {
 			state.sheduleDay = action.payload;
 		},
+		setAlreadyLoaded: (state, action) => {
+			state.loaded = action.payload;
+		},
 	},
 });
 
-export const { setSheduleStore, saveSheduleDay } = sheduleReducer.actions;
+export const { setSheduleStore, saveSheduleDay, setAlreadyLoaded } =
+	sheduleReducer.actions;
 
 export default sheduleReducer.reducer;

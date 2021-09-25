@@ -88,10 +88,8 @@ export default function Modals() {
 							localStorage.removeItem("group");
 							dispatch(saveSheduleDay(0));
 							dispatch(setSheduleStore([]));
-							setTimeout(() => {
-								history.push(window.location.pathname + "r");
-								history.goBack();
-							}, 100);
+							history.push(window.location.pathname + "r");
+							history.goBack();
 						}}
 					>
 						Да, сменить

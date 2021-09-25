@@ -29,7 +29,11 @@ import refreshToken from "../service/refreshToken";
 import groups from "../data/groups.json";
 
 import { setActiveModal } from "../reducers/mainReducer";
-import { setSheduleStore, saveSheduleDay } from "../reducers/sheduleReducer";
+import {
+	setSheduleStore,
+	saveSheduleDay,
+	setAlreadyLoaded,
+} from "../reducers/sheduleReducer";
 
 const currentDate = new Date();
 
@@ -65,10 +69,15 @@ export default function Shedule() {
 					data[localStorage.getItem("sheduleDay")].timetable;
 				renderData.forEach((el) => {
 					let group = teacherMode ? el.group.split("-") : null;
-					arr[el.number] = (
+					let currentNumber =
+						arr[el.number] !== undefined
+							? el.number + 1
+							: el.number;
+
+					arr[currentNumber] = (
 						<Card
 							className="tw"
-							key={el.number}
+							key={currentNumber}
 							style={{ marginBottom: 10 }}
 						>
 							<Div>
@@ -98,16 +107,14 @@ export default function Shedule() {
 
 	// Функция, которая рендерит кнопки и потом запускает рендер текста (самого расписания)
 	const renderShedule = useCallback(
-		(data, fromStorage = false, teacherMode = false) => {
+		(
+			data,
+			fromStorage = false,
+			teacherMode = false,
+			renderSheduleWithCurrentDay = false
+		) => {
 			let arr = [];
 			let i = 0;
-			data.forEach((el) => {
-				if (el.date === fullDate) {
-					dispatch(saveSheduleDay(i));
-					localStorage.setItem("sheduleDay", i);
-					setRenderButtons(true);
-				} else i++;
-			});
 			data.forEach((el) => {
 				let date = el.date.split(".");
 				arr.push(
@@ -145,6 +152,15 @@ export default function Shedule() {
 			setSheduleButtons(arr);
 			renderLessons(data, teacherMode);
 			dispatch(setSheduleStore(data));
+			if (renderSheduleWithCurrentDay)
+				data.forEach((el) => {
+					if (el.date === fullDate) {
+						dispatch(saveSheduleDay(i));
+						localStorage.setItem("sheduleDay", i);
+						setRenderButtons(true);
+						setTimeout(() => setRenderButtons(false), 1);
+					} else i++;
+				});
 			if (!fromStorage) {
 				setTimeout(() => setLoaded(true), 400);
 			} else {
@@ -157,7 +173,7 @@ export default function Shedule() {
 
 	useEffect(() => {
 		// Вызываем рендер кнопок, чтобы отобразить их новый цвет
-		if (renderButtons) {
+		if (renderButtons && localStorage.getItem("group")) {
 			setRenderButtons(false);
 			renderShedule(
 				sheduleStorage.shedule,
@@ -180,8 +196,9 @@ export default function Shedule() {
 						? true
 						: false
 				);
-			} else {
+			} else if (!sheduleStorage.loaded) {
 				setLoader(true);
+				dispatch(setAlreadyLoaded(true));
 				if (Number(group) === 0) {
 					authorizedAPI("getSheduleForTeacher", {})
 						.then((data) => {
@@ -204,6 +221,7 @@ export default function Shedule() {
 												renderShedule(
 													data.timetable,
 													false,
+													true,
 													true
 												);
 											} else {
@@ -220,7 +238,12 @@ export default function Shedule() {
 										i++;
 									});
 									dispatch(setSheduleStore(data.timetable));
-									renderShedule(data.timetable, false, true);
+									renderShedule(
+										data.timetable,
+										false,
+										true,
+										true
+									);
 								}
 							}
 						})
@@ -237,14 +260,21 @@ export default function Shedule() {
 									i++;
 								});
 								dispatch(setSheduleStore(data.timetable));
-								renderShedule(data.timetable);
+								renderShedule(
+									data.timetable,
+									false,
+									false,
+									true
+								);
 							}
 						})
 						.catch(() => setFetching(false));
 				}
+			} else {
+				setLoaded(true);
 			}
 		},
-		[renderShedule, sheduleStorage.shedule, dispatch]
+		[renderShedule, sheduleStorage.shedule, dispatch, sheduleStorage.loaded]
 	);
 
 	// Устанавливает группу из поиска. После установки очищает локальное хранилище и перезапускает страницу.
@@ -252,6 +282,7 @@ export default function Shedule() {
 		(id, name) => {
 			dispatch(setSheduleStore([]));
 			dispatch(saveSheduleDay(0));
+			dispatch(setAlreadyLoaded(false));
 			localStorage.setItem("sheduleDay", 0);
 			localStorage.setItem(
 				"group",
