@@ -18,21 +18,20 @@ export default function Register() {
 
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
+	const [password2, setPassword2] = useState("");
 
 	const [blockButton, setBlockButton] = useState(false);
 
 	const [showPasswordError, setShowPasswordError] = useState(false);
-
-	function onChangingPassword(value) {
-		setPassword(value);
-
-		if (value.length !== 0 && value.length < 5) setShowPasswordError(true);
-		else setShowPasswordError(false);
-	}
+	const [showPasswordError2, setShowPasswordError2] = useState(false);
 
 	function submitForm(e) {
 		e.preventDefault();
-		if (password.length >= 5 && email.length !== 0) {
+		if (
+			password.length >= 5 &&
+			email.length !== 0 &&
+			password === password2
+		) {
 			setBlockButton(true);
 			api("createUser", {
 				email,
@@ -57,6 +56,7 @@ export default function Register() {
 							success: true,
 						})
 					);
+					dispatch(setCurrentForm(1));
 				} else {
 					setBlockButton(false);
 					dispatch(
@@ -67,6 +67,13 @@ export default function Register() {
 					);
 				}
 			});
+		} else if (password !== password2) {
+			dispatch(
+				setSnackbar({
+					text: "Пароли не совпадают",
+					success: false,
+				})
+			);
 		}
 	}
 
@@ -112,7 +119,42 @@ export default function Register() {
 						value={password}
 						maxLength={128}
 						onChange={(e) => {
-							onChangingPassword(e.target.value);
+							setPassword(e.target.value);
+
+							if (
+								e.target.value.length !== 0 &&
+								e.target.value.length < 5
+							)
+								setShowPasswordError(true);
+							else setShowPasswordError(false);
+						}}
+					/>
+				</FormItem>
+
+				<FormItem
+					top="Повторите пароль"
+					bottom={
+						showPasswordError2 &&
+						"Пароль должен состоять минимум из 5 символов"
+					}
+					status={showPasswordError2 && "error"}
+					className="mb10"
+				>
+					<Input
+						type="password"
+						required
+						placeholder="Введите пароль"
+						value={password2}
+						maxLength={128}
+						onChange={(e) => {
+							setPassword2(e.target.value);
+
+							if (
+								e.target.value.length !== 0 &&
+								e.target.value.length < 5
+							)
+								setShowPasswordError2(true);
+							else setShowPasswordError2(false);
 						}}
 					/>
 				</FormItem>
@@ -125,8 +167,10 @@ export default function Register() {
 						loading={blockButton}
 						disabled={
 							setShowPasswordError === true ||
+							setShowPasswordError2 === true ||
 							password.length === 0 ||
 							email.length === 0 ||
+							password2.length === 0 ||
 							blockButton
 						}
 					>
