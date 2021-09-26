@@ -186,3 +186,14 @@ a:hover {
 .noHover:hover {
 	opacity: 1;
 }
+.vkuiCustomSelectOption {
+	border-radius: 8px;
+}
+.vkuiCustomScrollView__box {
+	margin-top: 5px;
+}
+.vkuiChipsSelect__empty {
+	padding: 10px;
+	background: var(--action_sheet_separator);
+	border-radius: 8px;
+}

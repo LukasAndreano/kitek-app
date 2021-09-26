@@ -12,6 +12,7 @@ import Download from "./panels/Download";
 // С доступами
 import Profile from "./panels/Profile";
 import Admin from "./panels/admin/Admin";
+import Settings from "./panels/admin/Settings";
 
 const routes = [
 	{
@@ -48,6 +49,11 @@ const routes = [
 		path: "/admin",
 		exact: true,
 		panel: () => <Admin />,
+	},
+	{
+		path: "/admin/settings",
+		exact: true,
+		panel: () => <Settings />,
 	},
 	{
 		path: "/",

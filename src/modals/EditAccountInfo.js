@@ -10,12 +10,12 @@ import {
 } from "@vkontakte/vkui";
 import { Icon56NotePenOutline } from "@vkontakte/icons";
 import { useDispatch, useSelector } from "react-redux";
-import { setSnackbar, setUser } from "../reducers/mainReducer";
-import groups from "../data/groups.json";
+import { setSnackbar, setUser, saveGroups } from "../reducers/mainReducer";
 import { motion } from "framer-motion";
 
 import authorizedAPI from "../service/authorizedAPI";
 import refreshToken from "../service/refreshToken";
+import api from "../service/api";
 
 export default function EditAccountInfo(props) {
 	const storage = useSelector((state) => state.main);
@@ -26,6 +26,8 @@ export default function EditAccountInfo(props) {
 	const [changed, setChanged] = useState(false);
 
 	const [group, setGroup] = useState(0);
+	const [groups, setGroups] = useState([]);
+	const [loaded, setLoaded] = useState(false);
 
 	const request = useCallback(() => {
 		return new Promise((resolve) => {
@@ -53,7 +55,19 @@ export default function EditAccountInfo(props) {
 	useEffect(() => {
 		setGroup(storage.user.group === null ? 0 : storage.user.group);
 		setName(storage.user.name === null ? "" : storage.user.name);
-	}, [storage.user.name, storage.user.group]);
+		if (storage.groups.length === 0)
+			api("getGroups").then((data) => {
+				if (data.response !== undefined && data.response !== null) {
+					setGroups(data.groups);
+					dispatch(saveGroups(data.groups));
+					setLoaded(true);
+				}
+			});
+		else {
+			setGroups(storage.groups);
+			setLoaded(true);
+		}
+	}, [storage.user.name, storage.user.group, dispatch, storage.groups]);
 
 	return (
 		<Group>
@@ -131,6 +145,7 @@ export default function EditAccountInfo(props) {
 				</FormItem>
 				<FormItem className="mb10">
 					<NativeSelect
+						disabled={!loaded}
 						defaultValue={group}
 						onChange={(e) => {
 							setChanged(true);
@@ -144,7 +159,7 @@ export default function EditAccountInfo(props) {
 						</option>
 						{groups.map((el) => {
 							return (
-								<option key={el.id} value={el.id}>
+								<option key={el.groupID} value={el.groupID}>
 									{el.name}
 								</option>
 							);
@@ -156,7 +171,7 @@ export default function EditAccountInfo(props) {
 						size="l"
 						stretched
 						type="submit"
-						loading={disabled}
+						loading={disabled || !loaded}
 						disabled={
 							name === "" ||
 							name.length < 5 ||

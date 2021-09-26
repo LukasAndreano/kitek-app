@@ -53,6 +53,7 @@ serviceWorkerRegistration.register({
 		if (waitingServiceWorker) {
 			waitingServiceWorker.addEventListener("statechange", (event) => {
 				if (event.target.state === "activated") {
+					localStorage.setItem("showUpdateCard", true);
 					window.location.reload();
 				}
 			});

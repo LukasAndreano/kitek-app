@@ -21,6 +21,7 @@ export const mainReducer = createSlice({
 			status: 0,
 		},
 		currentForm: 1,
+		groups: [],
 	},
 	reducers: {
 		savePlatform: (state, action) => {
@@ -31,6 +32,9 @@ export const mainReducer = createSlice({
 		},
 		setActiveModal: (state, action) => {
 			state.activeModal = action.payload;
+		},
+		saveGroups: (state, action) => {
+			state.groups = action.payload;
 		},
 		setPopout: (state, action) => {
 			state.popout = {
@@ -61,6 +65,7 @@ export const {
 	setCurrentForm,
 	setUser,
 	setPopout,
+	saveGroups,
 } = mainReducer.actions;
 
 export default mainReducer.reducer;

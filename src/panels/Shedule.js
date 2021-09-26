@@ -26,7 +26,6 @@ import {
 import api from "../service/api";
 import authorizedAPI from "../service/authorizedAPI";
 import refreshToken from "../service/refreshToken";
-import groups from "../data/groups.json";
 
 import { setActiveModal } from "../reducers/mainReducer";
 import {
@@ -34,6 +33,8 @@ import {
 	saveSheduleDay,
 	setAlreadyLoaded,
 } from "../reducers/sheduleReducer";
+
+import { saveGroups } from "../reducers/mainReducer";
 
 const currentDate = new Date();
 
@@ -50,7 +51,6 @@ export default function Shedule() {
 	const [list, setList] = useState([]);
 	const [search, setSearch] = useState("");
 	const [loaded, setLoaded] = useState(false);
-	const [preLoaded, setPreLoaded] = useState(false);
 	const [renderButtons, setRenderButtons] = useState(false);
 	const [fetching, setFetching] = useState(false);
 
@@ -198,7 +198,6 @@ export default function Shedule() {
 				);
 			} else if (!sheduleStorage.loaded) {
 				setLoader(true);
-				dispatch(setAlreadyLoaded(true));
 				if (Number(group) === 0) {
 					authorizedAPI("getSheduleForTeacher", {})
 						.then((data) => {
@@ -209,6 +208,7 @@ export default function Shedule() {
 								refreshToken("getSheduleForTeacher", {}).then(
 									(data) => {
 										if (data.response) {
+											dispatch(setAlreadyLoaded(true));
 											let i = 0;
 											data.timetable.forEach((el) => {
 												el["id"] = i;
@@ -232,6 +232,7 @@ export default function Shedule() {
 								);
 							else {
 								if (data.response) {
+									dispatch(setAlreadyLoaded(true));
 									let i = 0;
 									data.timetable.forEach((el) => {
 										el["id"] = i;
@@ -254,6 +255,7 @@ export default function Shedule() {
 					})
 						.then((data) => {
 							if (data.response) {
+								dispatch(setAlreadyLoaded(true));
 								let i = 0;
 								data.timetable.forEach((el) => {
 									el["id"] = i;
@@ -283,6 +285,7 @@ export default function Shedule() {
 			dispatch(setSheduleStore([]));
 			dispatch(saveSheduleDay(0));
 			dispatch(setAlreadyLoaded(false));
+			setLoader(true);
 			localStorage.setItem("sheduleDay", 0);
 			localStorage.setItem(
 				"group",
@@ -290,7 +293,6 @@ export default function Shedule() {
 			);
 			setGroup({ id: id, name: name });
 			setLoaded(false);
-			setPreLoaded(false);
 		},
 		[setGroup, setLoaded, dispatch]
 	);
@@ -302,8 +304,8 @@ export default function Shedule() {
 			dataForRender.forEach((el) => {
 				arr.push(
 					<Cell
-						onClick={() => setGroupFunction(el.id, el.name)}
-						key={el.id}
+						onClick={() => setGroupFunction(el.groupID, el.name)}
+						key={el.groupID}
 					>
 						{el.name}
 					</Cell>
@@ -319,32 +321,37 @@ export default function Shedule() {
 	function searchEngine(value) {
 		setSearch(value);
 		let search = value.toLowerCase();
-		let arr = groups.filter(
+		let arr = storage.groups.filter(
 			({ name }) => name.toLowerCase().indexOf(search) > -1
 		);
 		renderSearch(arr);
 	}
 
 	useEffect(() => {
-		if (!preLoaded) {
-			setPreLoaded(true);
-			// Вытаскиваем группу юзера из локального хранилища
-			let group = JSON.parse(localStorage.getItem("group"));
+		// Вытаскиваем группу юзера из локального хранилища
+		let group = JSON.parse(localStorage.getItem("group"));
 
-			// Проверяем, сохранена ли группа (null - группы в локальном хранилище нет)
-			if (group !== null) {
-				// Кидаем в стейт все необходимые для последующих процессов данные
-				setGroup({ id: group.id, name: group.name });
+		// Проверяем, сохранена ли группа (null - группы в локальном хранилище нет)
+		if (group !== null) {
+			// Кидаем в стейт все необходимые для последующих процессов данные
+			setGroup({ id: group.id, name: group.name });
 
-				// Начинаем рендерить расписание
-				loadShedule(group.id);
-			} else {
-				// Выводим юзеру поиск с выбором группы
-				setLoader(true);
-				renderSearch(groups);
-			}
+			// Начинаем рендерить расписание
+			loadShedule(group.id);
+		} else {
+			if (storage.groups.length === 0) {
+				api("getGroups").then((response) => {
+					if (response.response) {
+						setLoaded(false);
+						setLoader(true);
+						dispatch(setAlreadyLoaded(false));
+						dispatch(saveGroups(response.groups));
+						renderSearch(response.groups);
+					}
+				});
+			} else renderSearch(storage.groups);
 		}
-	}, [setLoaded, preLoaded, setPreLoaded, loadShedule, renderSearch]);
+	}, [setLoaded, loadShedule, renderSearch, dispatch, storage.groups]);
 
 	return (
 		<Fragment>
@@ -444,6 +451,7 @@ export default function Shedule() {
 							<Fragment>
 								<PullToRefresh
 									onRefresh={() => {
+										dispatch(setAlreadyLoaded(false));
 										setFetching(true);
 										loadShedule(group.id, true);
 									}}

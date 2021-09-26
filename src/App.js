@@ -24,12 +24,13 @@ import {
 	Icon16Done,
 	Icon16Cancel,
 	Icon28Newsfeed,
+	Icon28PollSquareOutline,
 	Icon28CalendarOutline,
 	Icon28DownloadCloudOutline,
+	Icon28SettingsOutline,
 	Icon28RecentOutline,
 	Icon28Users3Outline,
 	Icon28UserCircleOutline,
-	Icon28LockOutline,
 } from "@vkontakte/icons";
 
 import { useHistory } from "react-router-dom";
@@ -70,7 +71,13 @@ const App = withAdaptivity(
 
 		// Ловим 1ю часть URL и сейвим в storage
 		const locationListener = useCallback(() => {
-			dispatch(saveURL(window.location.pathname.split("/")[1]));
+			dispatch(
+				saveURL(
+					window.location.pathname.split("/")[2] !== undefined
+						? window.location.pathname.slice(1)
+						: window.location.pathname.split("/")[1]
+				)
+			);
 		}, [dispatch]);
 
 		// При клике на ссылку в эпике пушим в историю эту страницу
@@ -78,6 +85,18 @@ const App = withAdaptivity(
 			history.push("/" + e.currentTarget.dataset.story);
 			locationListener();
 		}
+
+		useEffect(() => {
+			if (localStorage.getItem("showUpdateCard")) {
+				dispatch(
+					setSnackbar({
+						text: "Установлено обновление: 1.1.3",
+						success: true,
+					})
+				);
+				localStorage.removeItem("showUpdateCard");
+			}
+		});
 
 		useEffect(() => {
 			if ((storage.popout.title && storage.popout.text) !== null) {
@@ -265,120 +284,100 @@ const App = withAdaptivity(
 											data-story="profile"
 											before={<Icon28UserCircleOutline />}
 										>
-											{storage.url !== "admin"
-												? "Профиль"
-												: "Обратно в профиль"}
+											Профиль
 										</Cell>
-										{storage.url !== "admin" && (
-											<Cell
-												onClick={URLChanger}
-												disabled={
-													storage.url === "news"
-												}
-												style={
-													storage.url === "news"
-														? {
-																backgroundColor:
-																	"var(--button_secondary_background)",
-																borderRadius: 8,
-														  }
-														: {}
-												}
-												data-story="news"
-												before={<Icon28Newsfeed />}
-											>
-												Новости
-											</Cell>
-										)}
-										{storage.url !== "admin" && (
-											<Cell
-												onClick={URLChanger}
-												disabled={storage.url === ""}
-												style={
-													storage.url === ""
-														? {
-																backgroundColor:
-																	"var(--button_secondary_background)",
-																borderRadius: 8,
-														  }
-														: {}
-												}
-												data-story=""
-												before={
-													<Icon28CalendarOutline />
-												}
-											>
-												Расписание
-											</Cell>
-										)}
-										{storage.url !== "admin" && (
-											<Cell
-												onClick={URLChanger}
-												disabled={
-													storage.url === "time"
-												}
-												style={
-													storage.url === "time"
-														? {
-																backgroundColor:
-																	"var(--button_secondary_background)",
-																borderRadius: 8,
-														  }
-														: {}
-												}
-												data-story="time"
-												before={<Icon28RecentOutline />}
-											>
-												Звонки
-											</Cell>
-										)}
-										{storage.url !== "admin" && (
-											<Cell
-												onClick={URLChanger}
-												disabled={
-													storage.url === "social"
-												}
-												style={
-													storage.url === "social"
-														? {
-																backgroundColor:
-																	"var(--button_secondary_background)",
-																borderRadius: 8,
-														  }
-														: {}
-												}
-												data-story="social"
-												before={<Icon28Users3Outline />}
-											>
-												Социальные сети
-											</Cell>
-										)}
+										<Cell
+											onClick={URLChanger}
+											disabled={storage.url === "news"}
+											style={
+												storage.url === "news"
+													? {
+															backgroundColor:
+																"var(--button_secondary_background)",
+															borderRadius: 8,
+													  }
+													: {}
+											}
+											data-story="news"
+											before={<Icon28Newsfeed />}
+										>
+											Новости
+										</Cell>
+										<Cell
+											onClick={URLChanger}
+											disabled={storage.url === ""}
+											style={
+												storage.url === ""
+													? {
+															backgroundColor:
+																"var(--button_secondary_background)",
+															borderRadius: 8,
+													  }
+													: {}
+											}
+											data-story=""
+											before={<Icon28CalendarOutline />}
+										>
+											Расписание
+										</Cell>
+										<Cell
+											onClick={URLChanger}
+											disabled={storage.url === "time"}
+											style={
+												storage.url === "time"
+													? {
+															backgroundColor:
+																"var(--button_secondary_background)",
+															borderRadius: 8,
+													  }
+													: {}
+											}
+											data-story="time"
+											before={<Icon28RecentOutline />}
+										>
+											Звонки
+										</Cell>
+										<Cell
+											onClick={URLChanger}
+											disabled={storage.url === "social"}
+											style={
+												storage.url === "social"
+													? {
+															backgroundColor:
+																"var(--button_secondary_background)",
+															borderRadius: 8,
+													  }
+													: {}
+											}
+											data-story="social"
+											before={<Icon28Users3Outline />}
+										>
+											Социальные сети
+										</Cell>
 									</Group>
-									{storage.url !== "admin" && (
-										<Group>
-											<Cell
-												onClick={URLChanger}
-												disabled={
-													storage.url === "download"
-												}
-												style={
-													storage.url === "download"
-														? {
-																backgroundColor:
-																	"var(--button_secondary_background)",
-																borderRadius: 8,
-														  }
-														: {}
-												}
-												data-story="download"
-												before={
-													<Icon28DownloadCloudOutline />
-												}
-											>
-												Загрузить приложение
-											</Cell>
-										</Group>
-									)}
+									<Group>
+										<Cell
+											onClick={URLChanger}
+											disabled={
+												storage.url === "download"
+											}
+											style={
+												storage.url === "download"
+													? {
+															backgroundColor:
+																"var(--button_secondary_background)",
+															borderRadius: 8,
+													  }
+													: {}
+											}
+											data-story="download"
+											before={
+												<Icon28DownloadCloudOutline />
+											}
+										>
+											Загрузить приложение
+										</Cell>
+									</Group>
 									{storage.user.status === 1 && (
 										<Group>
 											<Cell
@@ -396,16 +395,39 @@ const App = withAdaptivity(
 														: {}
 												}
 												data-story="admin"
-												before={<Icon28LockOutline />}
+												before={
+													<Icon28PollSquareOutline />
+												}
 											>
-												{storage.url === "admin"
-													? "Вы в админке! Воу!"
-													: "Перейти в админку"}
+												Статистика
+											</Cell>
+											<Cell
+												onClick={URLChanger}
+												disabled={
+													storage.url ===
+													"admin/settings"
+												}
+												style={
+													storage.url ===
+													"admin/settings"
+														? {
+																backgroundColor:
+																	"var(--button_secondary_background)",
+																borderRadius: 8,
+														  }
+														: {}
+												}
+												data-story="admin/settings"
+												before={
+													<Icon28SettingsOutline />
+												}
+											>
+												Настройки
 											</Cell>
 										</Group>
 									)}
 									<Footer style={{ marginTop: -10 }}>
-										Версия приложения: 1.1.2 <br />
+										Версия приложения: 1.1.3 <br />
 										Разработчик:{" "}
 										<a
 											href="https://vk.com/id172118960"

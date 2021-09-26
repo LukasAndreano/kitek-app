@@ -88,7 +88,9 @@ export default function Modals() {
 							localStorage.removeItem("group");
 							dispatch(saveSheduleDay(0));
 							dispatch(setSheduleStore([]));
-							history.push(window.location.pathname + "r");
+							history.push(
+								window.location.pathname + "leaveGroup"
+							);
 							history.goBack();
 						}}
 					>
@@ -193,7 +195,7 @@ export default function Modals() {
 				}
 				header={"О приложении"}
 				subheader={
-					"Это приложение для студентов КИТЭК'а, позволяющее просматривать текущее расписание, следить за новостями, а также быстро подписываться на социальные сети колледжа.\n\nТекущая версия: 1.1.2\nРазработчик: Никита Балин"
+					"Это приложение для студентов КИТЭК'а, позволяющее просматривать текущее расписание, следить за новостями, а также быстро подписываться на социальные сети колледжа.\n\nТекущая версия: 1.1.3\nРазработчик: Никита Балин"
 				}
 				actions={
 					<Button
