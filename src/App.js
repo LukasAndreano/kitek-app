@@ -42,6 +42,7 @@ import {
 	setActiveModal,
 	setSnackbar,
 	setPopout,
+	setNavigation,
 	setUser,
 } from "./reducers/mainReducer";
 import authorizedAPI from "./service/authorizedAPI";
@@ -71,11 +72,19 @@ const App = withAdaptivity(
 
 		// Ловим 1ю часть URL и сейвим в storage
 		const locationListener = useCallback(() => {
+			const url = window.location.pathname.split("/");
+
+			if (url[2] !== undefined && url[1] !== "admin") {
+				dispatch(setNavigation(false));
+			} else {
+				dispatch(setNavigation(true));
+			}
+
 			dispatch(
 				saveURL(
-					window.location.pathname.split("/")[2] !== undefined
+					url[2] !== undefined
 						? window.location.pathname.slice(1)
-						: window.location.pathname.split("/")[1]
+						: url[1]
 				)
 			);
 		}, [dispatch]);
@@ -90,7 +99,7 @@ const App = withAdaptivity(
 			if (localStorage.getItem("showUpdateCard")) {
 				dispatch(
 					setSnackbar({
-						text: "Установлено обновление: 1.1.3",
+						text: "Установлено обновление: 1.1.4",
 						success: true,
 					})
 				);
@@ -159,12 +168,13 @@ const App = withAdaptivity(
 				window.location.pathname.split("/")[1] !== "profile" &&
 				localStorage.getItem("access_token") !== null &&
 				localStorage.getItem("refresh_token") !== null
-			)
+			) {
 				request().then((data) => {
 					if (data.response) {
 						dispatch(setUser(data.user));
 					}
 				});
+			}
 		}, [dispatch, request]);
 
 		useEffect(() => {
@@ -194,7 +204,7 @@ const App = withAdaptivity(
 				history.goBack();
 			});
 
-			// Проверяем URL через 1мс, чтобы правильно отобразить таббар
+			// Проверяем URL через 100мс, чтобы правильно отобразить таббар
 			setTimeout(() => {
 				setThemeManager(true);
 				locationListener();
@@ -288,7 +298,14 @@ const App = withAdaptivity(
 										</Cell>
 										<Cell
 											onClick={URLChanger}
-											disabled={storage.url === "news"}
+											disabled={
+												storage.url === "news" ||
+												!storage.navigation
+											}
+											className={
+												!storage.navigation &&
+												"disabledNav"
+											}
 											style={
 												storage.url === "news"
 													? {
@@ -305,7 +322,14 @@ const App = withAdaptivity(
 										</Cell>
 										<Cell
 											onClick={URLChanger}
-											disabled={storage.url === ""}
+											disabled={
+												storage.url === "" ||
+												!storage.navigation
+											}
+											className={
+												!storage.navigation &&
+												"disabledNav"
+											}
 											style={
 												storage.url === ""
 													? {
@@ -322,7 +346,14 @@ const App = withAdaptivity(
 										</Cell>
 										<Cell
 											onClick={URLChanger}
-											disabled={storage.url === "time"}
+											disabled={
+												storage.url === "time" ||
+												!storage.navigation
+											}
+											className={
+												!storage.navigation &&
+												"disabledNav"
+											}
 											style={
 												storage.url === "time"
 													? {
@@ -339,7 +370,14 @@ const App = withAdaptivity(
 										</Cell>
 										<Cell
 											onClick={URLChanger}
-											disabled={storage.url === "social"}
+											disabled={
+												storage.url === "social" ||
+												!storage.navigation
+											}
+											className={
+												!storage.navigation &&
+												"disabledNav"
+											}
 											style={
 												storage.url === "social"
 													? {
@@ -359,7 +397,12 @@ const App = withAdaptivity(
 										<Cell
 											onClick={URLChanger}
 											disabled={
-												storage.url === "download"
+												storage.url === "download" ||
+												!storage.navigation
+											}
+											className={
+												!storage.navigation &&
+												"disabledNav"
 											}
 											style={
 												storage.url === "download"
@@ -383,7 +426,12 @@ const App = withAdaptivity(
 											<Cell
 												onClick={URLChanger}
 												disabled={
-													storage.url === "admin"
+													storage.url === "admin" ||
+													!storage.navigation
+												}
+												className={
+													!storage.navigation &&
+													"disabledNav"
 												}
 												style={
 													storage.url === "admin"
@@ -405,7 +453,12 @@ const App = withAdaptivity(
 												onClick={URLChanger}
 												disabled={
 													storage.url ===
-													"admin/settings"
+														"admin/settings" ||
+													!storage.navigation
+												}
+												className={
+													!storage.navigation &&
+													"disabledNav"
 												}
 												style={
 													storage.url ===
@@ -427,7 +480,7 @@ const App = withAdaptivity(
 										</Group>
 									)}
 									<Footer style={{ marginTop: -10 }}>
-										Версия приложения: 1.1.3 <br />
+										Версия приложения: 1.1.4 <br />
 										Разработчик:{" "}
 										<a
 											href="https://vk.com/id172118960"
@@ -462,6 +515,10 @@ const App = withAdaptivity(
 										<Tabbar>
 											<TabbarItem
 												onClick={URLChanger}
+												disabled={
+													!storage.navigation ||
+													storage.url === "news"
+												}
 												selected={
 													storage.url === "news"
 												}
@@ -475,6 +532,11 @@ const App = withAdaptivity(
 												onClick={URLChanger}
 												selected={storage.url === ""}
 												data-story=""
+												disabled={
+													!storage.navigation ||
+													storage.url === "news" ||
+													storage.url === ""
+												}
 												text="Расписание"
 											>
 												<Icon28CalendarOutline />
@@ -482,6 +544,10 @@ const App = withAdaptivity(
 
 											<TabbarItem
 												onClick={URLChanger}
+												disabled={
+													!storage.navigation ||
+													storage.url === "time"
+												}
 												selected={
 													storage.url === "time"
 												}
@@ -493,6 +559,10 @@ const App = withAdaptivity(
 
 											<TabbarItem
 												onClick={URLChanger}
+												disabled={
+													!storage.navigation ||
+													storage.url === "social"
+												}
 												selected={
 													storage.url === "social"
 												}
@@ -504,6 +574,10 @@ const App = withAdaptivity(
 
 											<TabbarItem
 												onClick={URLChanger}
+												disabled={
+													!storage.navigation ||
+													storage.url === "profile"
+												}
 												selected={
 													storage.url === "profile"
 												}

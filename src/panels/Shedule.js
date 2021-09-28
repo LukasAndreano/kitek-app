@@ -16,7 +16,6 @@ import {
 	Title,
 	ContentCard,
 	PanelHeaderButton,
-	PullToRefresh,
 } from "@vkontakte/vkui";
 import {
 	Icon56InfoOutline,
@@ -52,7 +51,7 @@ export default function Shedule() {
 	const [search, setSearch] = useState("");
 	const [loaded, setLoaded] = useState(false);
 	const [renderButtons, setRenderButtons] = useState(false);
-	const [fetching, setFetching] = useState(false);
+	const [lazyLoading, setLazyLoading] = useState(false)
 
 	const [shedule, setShedule] = useState([]);
 
@@ -69,11 +68,11 @@ export default function Shedule() {
 					data[localStorage.getItem("sheduleDay")].timetable;
 				renderData.forEach((el) => {
 					let group = teacherMode ? el.group.split("-") : null;
+
 					let currentNumber =
 						arr[el.number] !== undefined
-							? el.number + 1
+							? arr[el.number + 1] !== undefined ? el.number + 2 : el.number + 1
 							: el.number;
-
 					arr[currentNumber] = (
 						<Card
 							className="tw"
@@ -158,15 +157,18 @@ export default function Shedule() {
 						dispatch(saveSheduleDay(i));
 						localStorage.setItem("sheduleDay", i);
 						setRenderButtons(true);
-						setTimeout(() => setRenderButtons(false), 1);
+						setLazyLoading(true)
+						setRenderButtons(false)
+						setTimeout(() => {
+							setLazyLoading(false)
+						}, 1)
 					} else i++;
 				});
 			if (!fromStorage) {
-				setTimeout(() => setLoaded(true), 400);
+				setTimeout(() => setLoaded(true), 300);
 			} else {
 				setLoaded(true);
 			}
-			setFetching(false);
 		},
 		[dispatch, setSheduleButtons, setLoaded, renderLessons]
 	);
@@ -248,7 +250,6 @@ export default function Shedule() {
 								}
 							}
 						})
-						.catch(() => setFetching(false));
 				} else {
 					api("getShedule", {
 						group: encodeURI(group),
@@ -270,7 +271,6 @@ export default function Shedule() {
 								);
 							}
 						})
-						.catch(() => setFetching(false));
 				}
 			} else {
 				setLoaded(true);
@@ -374,7 +374,7 @@ export default function Shedule() {
 				Расписание
 			</PanelHeader>
 			<Group>
-				{loaded ? (
+				{(loaded && !lazyLoading) ? (
 					<Fragment>
 						{group === null ? (
 							<Fragment>
@@ -449,14 +449,6 @@ export default function Shedule() {
 							</Fragment>
 						) : (
 							<Fragment>
-								<PullToRefresh
-									onRefresh={() => {
-										dispatch(setAlreadyLoaded(false));
-										setFetching(true);
-										loadShedule(group.id, true);
-									}}
-									isFetching={fetching}
-								>
 									<Div>
 										{sheduleStorage.shedule.length !== 0 &&
 										sheduleStorage.shedule !== undefined ? (
@@ -523,12 +515,11 @@ export default function Shedule() {
 											</div>
 										)}
 									</Div>
-								</PullToRefresh>
 							</Fragment>
 						)}
 					</Fragment>
 				) : (
-					loader && (
+					loader && !lazyLoading && (
 						<Spinner size="medium" style={{ margin: "20px 0" }} />
 					)
 				)}

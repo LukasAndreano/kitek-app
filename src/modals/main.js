@@ -44,10 +44,11 @@ export default function Modals() {
 		if (!blockBackButton) {
 			setBlockBackButton(true);
 			history.goBack();
+			history.replace({ pathname: storage.url });
 			dispatch(setActiveModal(null));
 			setTimeout(() => setBlockBackButton(false), 50);
 		}
-	}, [history, dispatch, blockBackButton]);
+	}, [history, dispatch, blockBackButton, storage.url]);
 
 	useEffect(() => {
 		if (storage.activeModal !== null) pushToHistory(storage.activeModal);
@@ -195,7 +196,7 @@ export default function Modals() {
 				}
 				header={"О приложении"}
 				subheader={
-					"Это приложение для студентов КИТЭК'а, позволяющее просматривать текущее расписание, следить за новостями, а также быстро подписываться на социальные сети колледжа.\n\nТекущая версия: 1.1.3\nРазработчик: Никита Балин"
+					"Это приложение для студентов КИТЭК'а, позволяющее просматривать текущее расписание, следить за новостями, а также быстро подписываться на социальные сети колледжа.\n\nТекущая версия: 1.1.4\nРазработчик: Никита Балин"
 				}
 				actions={
 					<Button

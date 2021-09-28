@@ -5,6 +5,7 @@ export const mainReducer = createSlice({
 	initialState: {
 		isDesktop: false,
 		url: "/",
+		navigation: true,
 		activeModal: null,
 		snackbar: {
 			text: null,
@@ -54,6 +55,9 @@ export const mainReducer = createSlice({
 		setUser: (state, action) => {
 			state.user = action.payload;
 		},
+		setNavigation: (state, action) => {
+			state.navigation = action.payload;
+		},
 	},
 });
 
@@ -66,6 +70,7 @@ export const {
 	setUser,
 	setPopout,
 	saveGroups,
+	setNavigation,
 } = mainReducer.actions;
 
 export default mainReducer.reducer;

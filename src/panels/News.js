@@ -66,6 +66,7 @@ export default function News() {
 						<ContentCard
 							className="defaultText tw"
 							disabled
+							mode="tint"
 							style={{ marginBottom: 10 }}
 							text={el.text}
 							image={image}

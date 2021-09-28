@@ -14,6 +14,8 @@ import { BrowserRouter as Router } from "react-router-dom";
 import "@vkontakte/vkui/dist/vkui.css";
 import "./css/style.css";
 
+import api from "./service/api";
+
 // Импортируем главный файл
 import App from "./App";
 import Cookies from "./panels/Cookies";
@@ -24,7 +26,9 @@ try {
 
 	// Чистим локальное хранилище от мусора
 	localStorage.setItem("sheduleDay", 0);
-	localStorage.setItem("version", "1.1.2");
+
+	// Отправляем запрос на сервер, чтобы он учел +1 заход
+	api("init");
 
 	// Начинаем рендер, где подключаем Storage и ConfigProviver (необходим для определения платформы и нормальной работой с VKMA)
 	ReactDOM.render(
