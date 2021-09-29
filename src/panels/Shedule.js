@@ -38,7 +38,10 @@ import { saveGroups } from "../reducers/mainReducer";
 const currentDate = new Date();
 
 const month = "0" + (currentDate.getMonth() + 1);
-const day = currentDate.getDate();
+const day =
+	currentDate.getHours() + 7 > 24
+		? currentDate.getDate() + 1
+		: currentDate.getDate();
 const year = currentDate.getFullYear();
 
 const fullDate = day + "." + month + "." + year;
@@ -51,7 +54,7 @@ export default function Shedule() {
 	const [search, setSearch] = useState("");
 	const [loaded, setLoaded] = useState(false);
 	const [renderButtons, setRenderButtons] = useState(false);
-	const [lazyLoading, setLazyLoading] = useState(false)
+	const [lazyLoading, setLazyLoading] = useState(false);
 
 	const [shedule, setShedule] = useState([]);
 
@@ -66,17 +69,14 @@ export default function Shedule() {
 			if (data !== undefined && data.length !== 0) {
 				let renderData =
 					data[localStorage.getItem("sheduleDay")].timetable;
+				let id = 0;
 				renderData.forEach((el) => {
 					let group = teacherMode ? el.group.split("-") : null;
-
-					let currentNumber =
-						arr[el.number] !== undefined
-							? arr[el.number + 1] !== undefined ? el.number + 2 : el.number + 1
-							: el.number;
-					arr[currentNumber] = (
+					id++;
+					arr.push(
 						<Card
 							className="tw"
-							key={currentNumber}
+							key={id}
 							style={{ marginBottom: 10 }}
 						>
 							<Div>
@@ -90,7 +90,9 @@ export default function Shedule() {
 									<span className="type">{el.type}</span>
 									<span className="teacher">
 										{teacherMode
-											? group[1] + "-" + group[0]
+											? group[1] === undefined
+												? group[0]
+												: group[1] + "-" + group[0]
 											: el.teacher}
 									</span>
 								</h4>
@@ -157,11 +159,11 @@ export default function Shedule() {
 						dispatch(saveSheduleDay(i));
 						localStorage.setItem("sheduleDay", i);
 						setRenderButtons(true);
-						setLazyLoading(true)
-						setRenderButtons(false)
+						setLazyLoading(true);
+						setRenderButtons(false);
 						setTimeout(() => {
-							setLazyLoading(false)
-						}, 1)
+							setLazyLoading(false);
+						}, 1);
 					} else i++;
 				});
 			if (!fromStorage) {
@@ -201,60 +203,37 @@ export default function Shedule() {
 			} else if (!sheduleStorage.loaded) {
 				setLoader(true);
 				if (Number(group) === 0) {
-					authorizedAPI("getSheduleForTeacher", {})
-						.then((data) => {
-							if (
-								data.errorCode !== undefined &&
-								(data.errorCode === 3 || data.errorCode === 4)
-							)
-								refreshToken("getSheduleForTeacher", {}).then(
-									(data) => {
-										if (data.response) {
-											dispatch(setAlreadyLoaded(true));
-											let i = 0;
-											data.timetable.forEach((el) => {
-												el["id"] = i;
-												i++;
-											});
-											dispatch(
-												setSheduleStore(data.timetable)
+					authorizedAPI("getSheduleForTeacher", {}).then((data) => {
+						if (
+							data.errorCode !== undefined &&
+							(data.errorCode === 3 || data.errorCode === 4)
+						)
+							refreshToken("getSheduleForTeacher", {}).then(
+								(data) => {
+									if (data.response) {
+										dispatch(setAlreadyLoaded(true));
+										let i = 0;
+										data.timetable.forEach((el) => {
+											el["id"] = i;
+											i++;
+										});
+										dispatch(
+											setSheduleStore(data.timetable)
+										);
+										if (data.timetable.length !== 0) {
+											renderShedule(
+												data.timetable,
+												false,
+												true,
+												true
 											);
-											if (data.timetable.length !== 0) {
-												renderShedule(
-													data.timetable,
-													false,
-													true,
-													true
-												);
-											} else {
-												setLoaded(true);
-											}
+										} else {
+											setLoaded(true);
 										}
 									}
-								);
-							else {
-								if (data.response) {
-									dispatch(setAlreadyLoaded(true));
-									let i = 0;
-									data.timetable.forEach((el) => {
-										el["id"] = i;
-										i++;
-									});
-									dispatch(setSheduleStore(data.timetable));
-									renderShedule(
-										data.timetable,
-										false,
-										true,
-										true
-									);
 								}
-							}
-						})
-				} else {
-					api("getShedule", {
-						group: encodeURI(group),
-					})
-						.then((data) => {
+							);
+						else {
 							if (data.response) {
 								dispatch(setAlreadyLoaded(true));
 								let i = 0;
@@ -266,11 +245,27 @@ export default function Shedule() {
 								renderShedule(
 									data.timetable,
 									false,
-									false,
+									true,
 									true
 								);
 							}
-						})
+						}
+					});
+				} else {
+					api("getShedule", {
+						group: encodeURI(group),
+					}).then((data) => {
+						if (data.response) {
+							dispatch(setAlreadyLoaded(true));
+							let i = 0;
+							data.timetable.forEach((el) => {
+								el["id"] = i;
+								i++;
+							});
+							dispatch(setSheduleStore(data.timetable));
+							renderShedule(data.timetable, false, false, true);
+						}
+					});
 				}
 			} else {
 				setLoaded(true);
@@ -374,7 +369,7 @@ export default function Shedule() {
 				Расписание
 			</PanelHeader>
 			<Group>
-				{(loaded && !lazyLoading) ? (
+				{loaded && !lazyLoading ? (
 					<Fragment>
 						{group === null ? (
 							<Fragment>
@@ -449,77 +444,74 @@ export default function Shedule() {
 							</Fragment>
 						) : (
 							<Fragment>
-									<Div>
-										{sheduleStorage.shedule.length !== 0 &&
-										sheduleStorage.shedule !== undefined ? (
-											<Fragment>
-												<ContentCard
-													style={{ marginBottom: 10 }}
-													onClick={() =>
-														dispatch(
-															setActiveModal(
-																"connectNotifications"
-															)
+								<Div>
+									{sheduleStorage.shedule.length !== 0 &&
+									sheduleStorage.shedule !== undefined ? (
+										<Fragment>
+											<ContentCard
+												style={{ marginBottom: 10 }}
+												onClick={() =>
+													dispatch(
+														setActiveModal(
+															"connectNotifications"
 														)
-													}
-													header="Подключите уведомления!"
-													caption="И получайте сообщения об изменении расписания прямо во ВКонтакте."
-												/>
-												<HorizontalScroll
-													showArrows
-													getScrollToLeft={(i) =>
-														i - 120
-													}
-													getScrollToRight={(i) =>
-														i + 120
-													}
-													style={{ marginBottom: 10 }}
-												>
-													<div
-														style={{
-															display: "flex",
-														}}
-													>
-														{sheduleButtons}
-													</div>
-												</HorizontalScroll>
-
-												{shedule.length === 0 ? (
-													<Placeholder
-														icon={
-															<Icon56FireOutline />
-														}
-														header="Ура, отдыхаем!"
-													>
-														На этот день нет пар.
-													</Placeholder>
-												) : (
-													shedule
-												)}
-											</Fragment>
-										) : (
-											<div
-												style={{
-													height: "80vh",
-													display: "flex",
-													justifyContent: "center",
-													textAlign: "center",
-												}}
+													)
+												}
+												header="Подключите уведомления!"
+												caption="И получайте сообщения об изменении расписания прямо во ВКонтакте."
+											/>
+											<HorizontalScroll
+												showArrows
+												getScrollToLeft={(i) => i - 120}
+												getScrollToRight={(i) =>
+													i + 120
+												}
+												style={{ marginBottom: 10 }}
 											>
+												<div
+													style={{
+														display: "flex",
+													}}
+												>
+													{sheduleButtons}
+												</div>
+											</HorizontalScroll>
+
+											{shedule.length === 0 ? (
 												<Placeholder
 													icon={<Icon56FireOutline />}
 													header="Ура, отдыхаем!"
 												>
-													Нет пар на эту неделю.
+													На этот день нет пар.
 												</Placeholder>
-											</div>
-										)}
-									</Div>
+											) : (
+												shedule
+											)}
+										</Fragment>
+									) : (
+										<div
+											style={{
+												height: "80vh",
+												display: "flex",
+												justifyContent: "center",
+												textAlign: "center",
+											}}
+										>
+											<Placeholder
+												icon={<Icon56FireOutline />}
+												header="Ура, отдыхаем!"
+											>
+												Нет пар на эту неделю.
+											</Placeholder>
+										</div>
+									)}
+								</Div>
 							</Fragment>
 						)}
 					</Fragment>
 				) : (
-					loader && !lazyLoading && (
+					loader &&
+					!lazyLoading && (
 						<Spinner size="medium" style={{ margin: "20px 0" }} />
 					)
 				)}
