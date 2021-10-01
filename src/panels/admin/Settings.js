@@ -8,6 +8,7 @@ import {
 	CustomSelectOption,
 	Chip,
 	Spinner,
+	PanelHeaderBack,
 	File,
 } from "@vkontakte/vkui";
 
@@ -91,7 +92,20 @@ export default function Settings() {
 
 	return (
 		<React.Fragment>
-			<PanelHeader separator={storage.isDesktop ? true : false}>
+			<PanelHeader
+				left={
+					!storage.isDesktop ? (
+						<PanelHeaderBack
+							onClick={() => {
+								history.push("/profile");
+							}}
+						/>
+					) : (
+						""
+					)
+				}
+				separator={storage.isDesktop ? true : false}
+			>
 				Настройки
 			</PanelHeader>
 			<Group>

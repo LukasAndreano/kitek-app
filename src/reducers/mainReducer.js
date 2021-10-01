@@ -23,10 +23,14 @@ export const mainReducer = createSlice({
 		},
 		currentForm: 1,
 		groups: [],
+		waitForProfileGet: false,
 	},
 	reducers: {
 		savePlatform: (state, action) => {
 			state.isDesktop = action.payload;
+		},
+		setWaitForProfileGet: (state, action) => {
+			state.waitForProfileGet = action.payload;
 		},
 		saveURL: (state, action) => {
 			state.url = action.payload;
@@ -68,6 +72,7 @@ export const {
 	setSnackbar,
 	setCurrentForm,
 	setUser,
+	setWaitForProfileGet,
 	setPopout,
 	saveGroups,
 	setNavigation,

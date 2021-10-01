@@ -2,6 +2,7 @@ import React, { useEffect, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
 	Group,
+	PanelHeaderBack,
 	Placeholder,
 	PanelHeader,
 	Card,
@@ -61,6 +62,7 @@ export default function Admin() {
 								saveStatistics({
 									today: data.today,
 									month: data.month,
+									lastMonth: data.lastMonth,
 								})
 							);
 						} else {
@@ -86,7 +88,20 @@ export default function Admin() {
 
 	return (
 		<React.Fragment>
-			<PanelHeader separator={storage.isDesktop ? true : false}>
+			<PanelHeader
+				left={
+					!storage.isDesktop ? (
+						<PanelHeaderBack
+							onClick={() => {
+								history.push("/profile");
+							}}
+						/>
+					) : (
+						""
+					)
+				}
+				separator={storage.isDesktop ? true : false}
+			>
 				Статистика
 			</PanelHeader>
 			<Group>
@@ -104,15 +119,14 @@ export default function Admin() {
 					данных и их обновление может работать некорректно.
 				</Placeholder>
 				{adminStorage.statisticsLoaded ? (
-					<CardGrid size="s">
+					<CardGrid size={storage.isDesktop ? "s" : "m"}>
 						<Card>
 							<Div>
 								<Title weight="heavy" level="1">
 									{adminStorage.statistics.today} ч.
 								</Title>
 								<Text style={{ marginTop: 5 }}>
-									Столько пользователей зашло за сегодня в
-									приложение.
+									Пользователей за сегодня.
 								</Text>
 							</Div>
 						</Card>
@@ -122,8 +136,17 @@ export default function Admin() {
 									{adminStorage.statistics.month} ч.
 								</Title>
 								<Text style={{ marginTop: 5 }}>
-									Столько пользователей зашло за месяц в
-									приложение.
+									Пользователей за этот месяц.
+								</Text>
+							</Div>
+						</Card>
+						<Card>
+							<Div>
+								<Title weight="heavy" level="1">
+									{adminStorage.statistics.lastMonth} ч.
+								</Title>
+								<Text style={{ marginTop: 5 }}>
+									Пользователей за прошлый месяц.
 								</Text>
 							</Div>
 						</Card>

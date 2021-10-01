@@ -9,6 +9,7 @@ import {
 	Tabbar,
 	TabbarItem,
 	Alert,
+	ScreenSpinner,
 	Epic,
 	Group,
 	withAdaptivity,
@@ -44,6 +45,7 @@ import {
 	setPopout,
 	setNavigation,
 	setUser,
+	setWaitForProfileGet,
 } from "./reducers/mainReducer";
 import authorizedAPI from "./service/authorizedAPI";
 import refreshToken from "./service/refreshToken";
@@ -99,7 +101,7 @@ const App = withAdaptivity(
 			if (localStorage.getItem("showUpdateCard")) {
 				dispatch(
 					setSnackbar({
-						text: "Установлено обновление: 1.1.5",
+						text: "Установлено обновление: 1.1.6",
 						success: true,
 					})
 				);
@@ -169,8 +171,13 @@ const App = withAdaptivity(
 				localStorage.getItem("access_token") !== null &&
 				localStorage.getItem("refresh_token") !== null
 			) {
+				dispatch(setWaitForProfileGet(true));
 				request().then((data) => {
 					if (data.response) {
+						setTimeout(
+							() => dispatch(setWaitForProfileGet(false)),
+							200
+						);
 						dispatch(setUser(data.user));
 					}
 				});
@@ -480,7 +487,7 @@ const App = withAdaptivity(
 										</Group>
 									)}
 									<Footer style={{ marginTop: -10 }}>
-										Версия приложения: 1.1.5 <br />
+										Версия приложения: 1.1.6 <br />
 										Разработчик:{" "}
 										<a
 											href="https://vk.com/id172118960"
@@ -594,12 +601,20 @@ const App = withAdaptivity(
 									id="default"
 									activePanel="default"
 									modal={modal}
-									popout={popout}
+									popout={
+										storage.waitForProfileGet ? (
+											<ScreenSpinner />
+										) : (
+											popout
+										)
+									}
 								>
-									<Panel id="default">
-										<Controller />
-										{snackbar}
-									</Panel>
+									{!storage.waitForProfileGet && (
+										<Panel id="default">
+											<Controller />
+											{snackbar}
+										</Panel>
+									)}
 								</View>
 							</Epic>
 						</SplitCol>

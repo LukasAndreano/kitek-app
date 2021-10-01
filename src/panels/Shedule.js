@@ -35,16 +35,15 @@ import {
 
 import { saveGroups } from "../reducers/mainReducer";
 
-const currentDate = new Date();
+const currentDate = new Date(new Date().getTime() + 7 * 60 * 60 * 1000);
 
-const month = "0" + (currentDate.getMonth() + 1);
-const day =
-	currentDate.getHours() + 7 > 24
-		? currentDate.getDate() + 1
-		: currentDate.getDate();
-const year = currentDate.getFullYear();
-
-const fullDate = day + "." + month + "." + year;
+const fullDate =
+	"0" +
+	currentDate.getDate() +
+	"." +
+	(0 + (currentDate.getMonth() + 1)) +
+	"." +
+	currentDate.getFullYear();
 
 export default function Shedule() {
 	const [group, setGroup] = useState(null);
@@ -70,7 +69,7 @@ export default function Shedule() {
 				let renderData =
 					data[localStorage.getItem("sheduleDay")].timetable;
 				let id = 0;
-				renderData.forEach((el) => {
+				renderData.forEach((el, key) => {
 					let group = teacherMode ? el.group.split("-") : null;
 					id++;
 					arr.push(
@@ -81,12 +80,12 @@ export default function Shedule() {
 						>
 							<Div>
 								<Title level="3" weight="medium">
+									<span className="hide">
+										Пара №{el.number}
+									</span>{" "}
 									{el.name}
 								</Title>
 								<h4 style={{ marginTop: 5, marginBottom: 0 }}>
-									<span className="hide">
-										Пара №{el.number}
-									</span>
 									<span className="type">{el.type}</span>
 									<span className="teacher">
 										{teacherMode
@@ -99,6 +98,21 @@ export default function Shedule() {
 							</Div>
 						</Card>
 					);
+					if (
+						renderData[key + 1] !== undefined &&
+						renderData[key + 1].number !== el.number &&
+						(el.type === "Практика" ||
+							renderData[key + 1].type === "Практика") &&
+						el.name !== "Физическая культура" &&
+						renderData[key + 1].name !== "Физическая культура" &&
+						!teacherMode
+					)
+						arr.push(
+							<Card
+								key={id + 10}
+								style={{ height: 20, marginBottom: 10 }}
+							/>
+						);
 				});
 				setShedule(arr);
 			}
@@ -335,6 +349,7 @@ export default function Shedule() {
 			loadShedule(group.id);
 		} else {
 			if (storage.groups.length === 0) {
+				setLoader(true);
 				api("getGroups").then((response) => {
 					if (response.response) {
 						setLoaded(false);

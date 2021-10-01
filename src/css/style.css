@@ -63,6 +63,7 @@ option:hover {
 	background-color: var(--button_secondary_background);
 	border-radius: 25px;
 	padding: 0 10px;
+	white-space: nowrap;
 	color: var(--button_secondary_foreground);
 	font-size: 15px;
 	font-weight: 600;
@@ -72,16 +73,18 @@ option:hover {
 	border-radius: 25px;
 	padding: 0 10px;
 	margin-left: 5px;
+	white-space: nowrap;
 	color: var(--button_commerce_foreground);
 	font-size: 15px;
 	font-weight: 600;
 }
 .teacher {
-	background-color: var(--destructive);
+	background-color: var(--button_secondary_background);
 	border-radius: 25px;
 	padding: 0 10px;
 	margin-left: 5px;
-	color: var(--white);
+	white-space: nowrap;
+	color: var(--button_secondary_foreground);
 	font-size: 15px;
 	font-weight: 600;
 }
