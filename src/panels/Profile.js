@@ -156,13 +156,7 @@ export default function Profile() {
 												? "Преподаватель"
 												: storage.user.group
 												? "Студент, группа " +
-												  storage.user.group.split(
-														"-"
-												  )[1] +
-												  "-" +
-												  storage.user.group.split(
-														"-"
-												  )[0]
+												  storage.user.group
 												: "Нет никаких данных :("}
 										</Text>
 									</Gradient>

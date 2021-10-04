@@ -101,7 +101,7 @@ const App = withAdaptivity(
 			if (localStorage.getItem("showUpdateCard")) {
 				dispatch(
 					setSnackbar({
-						text: "Установлено обновление: 1.1.6",
+						text: "Установлено обновление: 1.1.7",
 						success: true,
 					})
 				);
@@ -487,7 +487,7 @@ const App = withAdaptivity(
 										</Group>
 									)}
 									<Footer style={{ marginTop: -10 }}>
-										Версия приложения: 1.1.6 <br />
+										Версия приложения: 1.1.7 <br />
 										Разработчик:{" "}
 										<a
 											href="https://vk.com/id172118960"
