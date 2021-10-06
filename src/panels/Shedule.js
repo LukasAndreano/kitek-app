@@ -418,6 +418,33 @@ export default function Shedule() {
 										}
 									/>
 								)}
+								{
+									(storage.user.group && storage.user.status === 0) && (
+										<Banner
+											mode="image"
+											header={`Вы из группы ${storage.user.group}?`}
+											subheader="Мы можем отобразить расписание для Вас, если это необходимо."
+											background={
+												<div
+													style={{
+														backgroundColor: "#6385c0",
+														backgroundSize: 320
+													}}
+												/>
+											}
+											actions={
+												<Button
+													mode="overlay_primary"
+													onClick={() =>
+														setGroupFunction(storage.user.group, storage.user.group)
+													}
+												>
+													Активировать
+												</Button>
+											}
+										/>
+									)
+								}
 								<Placeholder
 									style={{
 										marginBottom: -30,
