@@ -22,7 +22,11 @@ import Cookies from "./panels/Cookies";
 
 try {
 	// Подключаем менеджер тем. Автоматически определяет тему спустя 100 мс (задержка для загрузки VKUI).
-	themeManager();
+	try {
+		themeManager();
+	} catch(e) {
+		console.log("Theme changer not supported")
+	}
 
 	// Чистим локальное хранилище от мусора
 	localStorage.setItem("sheduleDay", "0");
