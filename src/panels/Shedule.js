@@ -1,3 +1,5 @@
+// noinspection JSCheckFunctionSignatures
+
 import React, { useState, useEffect, Fragment, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
@@ -14,7 +16,6 @@ import {
 	Card,
 	PanelHeader,
 	Title,
-	ContentCard,
 	PanelHeaderButton,
 } from "@vkontakte/vkui";
 import {
@@ -37,11 +38,13 @@ import { saveGroups } from "../reducers/mainReducer";
 
 const currentDate = new Date(new Date().getTime() + 7 * 60 * 60 * 1000);
 
+const month = ("0" + String(currentDate.getMonth() + 1)).slice(-2)
+
 const fullDate =
 	"0" +
 	currentDate.getDate() +
 	"." +
-	(0 + (currentDate.getMonth() + 1)) +
+	month +
 	"." +
 	currentDate.getFullYear();
 
@@ -67,7 +70,7 @@ export default function Shedule() {
 			let arr = [];
 			if (data !== undefined && data.length !== 0) {
 				let renderData =
-					data[localStorage.getItem("sheduleDay")].timetable;
+					data[localStorage.getItem("sheduleDay")]['timetable'];
 				let id = 0;
 				renderData.forEach((el, key) => {
 					let group = teacherMode ? el.group.split("-") : null;
@@ -92,7 +95,7 @@ export default function Shedule() {
 											? group[1] === undefined
 												? group[0]
 												: group[1] + "-" + group[0]
-											: el.teacher}
+											: el['teacher']}
 									</span>
 								</h4>
 							</Div>
@@ -197,8 +200,6 @@ export default function Shedule() {
 				sheduleStorage.shedule,
 				false,
 				JSON.parse(localStorage.getItem("group")).id === 0
-					? true
-					: false
 			);
 		}
 	}, [renderButtons, renderShedule, sheduleStorage.shedule]);
@@ -211,8 +212,6 @@ export default function Shedule() {
 					sheduleStorage.shedule,
 					true,
 					JSON.parse(localStorage.getItem("group")).id === 0
-						? true
-						: false
 				);
 			} else if (!sheduleStorage.loaded) {
 				setLoader(true);
@@ -227,16 +226,16 @@ export default function Shedule() {
 									if (data.response) {
 										dispatch(setAlreadyLoaded(true));
 										let i = 0;
-										data.timetable.forEach((el) => {
+										data['timetable'].forEach((el) => {
 											el["id"] = i;
 											i++;
 										});
 										dispatch(
-											setSheduleStore(data.timetable)
+											setSheduleStore(data['timetable'])
 										);
-										if (data.timetable.length !== 0) {
+										if (data['timetable'].length !== 0) {
 											renderShedule(
-												data.timetable,
+												data['timetable'],
 												false,
 												true,
 												true
@@ -251,13 +250,13 @@ export default function Shedule() {
 							if (data.response) {
 								dispatch(setAlreadyLoaded(true));
 								let i = 0;
-								data.timetable.forEach((el) => {
+								data['timetable'].forEach((el) => {
 									el["id"] = i;
 									i++;
 								});
-								dispatch(setSheduleStore(data.timetable));
+								dispatch(setSheduleStore(data['timetable']));
 								renderShedule(
-									data.timetable,
+									data['timetable'],
 									false,
 									true,
 									true
@@ -272,12 +271,12 @@ export default function Shedule() {
 						if (data.response) {
 							dispatch(setAlreadyLoaded(true));
 							let i = 0;
-							data.timetable.forEach((el) => {
+							data['timetable'].forEach((el) => {
 								el["id"] = i;
 								i++;
 							});
-							dispatch(setSheduleStore(data.timetable));
-							renderShedule(data.timetable, false, false, true);
+							dispatch(setSheduleStore(data['timetable']));
+							renderShedule(data['timetable'], false, false, true);
 						}
 					});
 				}
@@ -313,8 +312,8 @@ export default function Shedule() {
 			dataForRender.forEach((el) => {
 				arr.push(
 					<Cell
-						onClick={() => setGroupFunction(el.groupID, el.name)}
-						key={el.groupID}
+						onClick={() => setGroupFunction(el['groupID'], el.name)}
+						key={el['groupID']}
 					>
 						{el.name}
 					</Cell>
@@ -379,7 +378,7 @@ export default function Shedule() {
 						""
 					)
 				}
-				separator={storage.isDesktop ? true : false}
+				separator={storage.isDesktop}
 			>
 				Расписание
 			</PanelHeader>
@@ -437,7 +436,7 @@ export default function Shedule() {
 										searchEngine(
 											e.target.value
 												.replace(
-													/[A-Za-z^!@#$%^&*()_|/№:?;"'.,<>=-~]/gi,
+													/[A-Za-z^!@#$%&*()_|/№:?;"'.,<>=-~]/gi,
 													""
 												)
 												.trim()
@@ -461,20 +460,8 @@ export default function Shedule() {
 							<Fragment>
 								<Div>
 									{sheduleStorage.shedule.length !== 0 &&
-									sheduleStorage.shedule !== undefined ? (
+									sheduleStorage.shedule ? (
 										<Fragment>
-											<ContentCard
-												style={{ marginBottom: 10 }}
-												onClick={() =>
-													dispatch(
-														setActiveModal(
-															"connectNotifications"
-														)
-													)
-												}
-												header="Подключите уведомления!"
-												caption="И получайте сообщения об изменении расписания прямо во ВКонтакте."
-											/>
 											<HorizontalScroll
 												showArrows
 												getScrollToLeft={(i) => i - 120}

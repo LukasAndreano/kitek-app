@@ -1,3 +1,5 @@
+// noinspection JSCheckFunctionSignatures
+
 import React, { useEffect, useState, useCallback } from "react";
 import {
 	FormLayout,
@@ -136,7 +138,7 @@ export default function EditAccountInfo(props) {
 							setChanged(true);
 							setName(
 								e.target.value.replace(
-									/[0-9A-Za-z^!@#$%^&*()_|/№:?;"'.,<>=-~]/gi,
+									/[0-9A-Za-z^!@#$%&*()_|/№:?;"'.,<>=-~]/gi,
 									""
 								)
 							);

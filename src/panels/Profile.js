@@ -80,7 +80,7 @@ export default function Profile() {
 	return (
 		<React.Fragment>
 			<PanelHeader
-				separator={storage.isDesktop ? true : false}
+				separator={storage.isDesktop}
 				left={
 					localStorage.getItem("access_token") !== null &&
 					localStorage.getItem("refresh_token") !== null ? (
@@ -147,6 +147,7 @@ export default function Profile() {
 												: "Неизвестный пользователь"}
 										</Title>
 										<Text
+											weight={'regular'}
 											style={{
 												marginBottom: 10,
 												color: "var(--text_secondary)",

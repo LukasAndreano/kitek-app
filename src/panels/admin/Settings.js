@@ -104,7 +104,7 @@ export default function Settings() {
 						""
 					)
 				}
-				separator={storage.isDesktop ? true : false}
+				separator={storage.isDesktop}
 			>
 				Настройки
 			</PanelHeader>
@@ -222,7 +222,6 @@ export default function Settings() {
 								renderChip={({
 									value,
 									label,
-									option: { src },
 									...rest
 								}) => (
 									<Chip value={value} {...rest}>
@@ -230,7 +229,6 @@ export default function Settings() {
 									</Chip>
 								)}
 								renderOption={({
-									option: { src, value },
 									...otherProps
 								}) => {
 									return (

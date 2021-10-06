@@ -1,3 +1,5 @@
+// noinspection JSCheckFunctionSignatures
+
 import React, { Fragment, useCallback, useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
@@ -110,25 +112,26 @@ const App = withAdaptivity(
 		});
 
 		useEffect(() => {
-			if ((storage.popout.title && storage.popout.text) !== null) {
-				history.push(window.location.pathname + "#popout");
-				setPopoutFunc(
-					<Alert
-						onClose={() => {
-							history.goBack();
-						}}
-						actions={[
-							{
-								title: "Понятно",
-								autoclose: true,
-								mode: "cancel",
-							},
-						]}
-						header={storage.popout.title}
-						text={storage.popout.text}
-					/>
-				);
+			if ((storage.popout.title && storage.popout.text) === null) {
+				return;
 			}
+			history.push(window.location.pathname + "#popout");
+			setPopoutFunc(
+				<Alert
+					onClose={() => {
+						history.goBack();
+					}}
+					actions={[
+						{
+							title: "Понятно",
+							autoclose: true,
+							mode: "cancel",
+						},
+					]}
+					header={storage.popout.title}
+					text={storage.popout.text}
+				/>
+			);
 		}, [storage.popout, dispatch, history]);
 
 		// Ловим ивенты с кнопки назад-вперед

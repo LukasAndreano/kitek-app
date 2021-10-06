@@ -20,7 +20,7 @@ export default function Time() {
 
 	return (
 		<Fragment>
-			<PanelHeader separator={storage.isDesktop ? true : false}>
+			<PanelHeader separator={storage.isDesktop}>
 				{storage.isDesktop ? "Расписание звонков" : "Звонки"}
 			</PanelHeader>
 			<Group>

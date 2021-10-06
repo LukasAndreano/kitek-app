@@ -25,7 +25,7 @@ try {
 	themeManager();
 
 	// Чистим локальное хранилище от мусора
-	localStorage.setItem("sheduleDay", 0);
+	localStorage.setItem("sheduleDay", "0");
 
 	// Отправляем запрос на сервер, чтобы он учел +1 заход
 	api("init");
@@ -57,7 +57,7 @@ serviceWorkerRegistration.register({
 		if (waitingServiceWorker) {
 			waitingServiceWorker.addEventListener("statechange", (event) => {
 				if (event.target.state === "activated") {
-					localStorage.setItem("showUpdateCard", true);
+					localStorage.setItem("showUpdateCard", "true");
 					window.location.reload();
 				}
 			});

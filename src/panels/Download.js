@@ -11,7 +11,7 @@ export default function Time() {
 
 	return (
 		<Fragment>
-			<PanelHeader separator={storage.isDesktop ? true : false}>
+			<PanelHeader separator={storage.isDesktop}>
 				{storage.isDesktop ? "Загрузка приложения" : "Приложение"}
 			</PanelHeader>
 			<Group>
@@ -49,22 +49,6 @@ export default function Time() {
 					after={<Icon28DownloadCloudOutline />}
 				>
 					<span className="defaultText">Приложение для Android</span>
-				</RichCell>
-				<RichCell
-					multiline
-					caption="Google Play"
-					disabled
-					after={<Icon28DownloadCloudOutline fill="#f2f2f2" />}
-				>
-					Приложение для Android (скоро)
-				</RichCell>
-				<RichCell
-					multiline
-					caption="App Store"
-					disabled
-					after={<Icon28DownloadCloudOutline fill="#f2f2f2" />}
-				>
-					Приложение для iOS (скоро)
 				</RichCell>
 			</Group>
 		</Fragment>

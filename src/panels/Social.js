@@ -20,7 +20,7 @@ export default function Social() {
 
 	return (
 		<React.Fragment>
-			<PanelHeader separator={storage.isDesktop ? true : false}>
+			<PanelHeader separator={storage.isDesktop}>
 				{storage.isDesktop ? "Социальные сети" : "Соц. сети"}
 			</PanelHeader>
 			<Group>
