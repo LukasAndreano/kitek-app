@@ -44,11 +44,10 @@ export default function Modals() {
 		if (!blockBackButton) {
 			setBlockBackButton(true);
 			history.goBack();
-			history.replace({ pathname: storage.url });
 			dispatch(setActiveModal(null));
 			setTimeout(() => setBlockBackButton(false), 50);
 		}
-	}, [history, dispatch, blockBackButton, storage.url]);
+	}, [history, dispatch, blockBackButton]);
 
 	useEffect(() => {
 		if (storage.activeModal !== null) pushToHistory(storage.activeModal);
