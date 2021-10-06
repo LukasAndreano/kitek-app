@@ -30,10 +30,7 @@ import {
 	Icon28Newsfeed,
 	Icon28PollSquareOutline,
 	Icon28CalendarOutline,
-	Icon28DownloadCloudOutline,
 	Icon28SettingsOutline,
-	Icon28RecentOutline,
-	Icon28Users3Outline,
 	Icon28UserCircleOutline,
 } from "@vkontakte/icons";
 
@@ -334,6 +331,30 @@ const App = withAdaptivity(
 										<Cell
 											onClick={URLChanger}
 											disabled={
+												storage.url === "services" ||
+												!storage.navigation
+											}
+											className={
+												!storage.navigation &&
+												"disabledNav"
+											}
+											style={
+												storage.url === "services"
+													? {
+														backgroundColor:
+															"var(--button_secondary_background)",
+														borderRadius: 8,
+													}
+													: {}
+											}
+											data-story="services"
+											before={<Icon28CompassOutline />}
+										>
+											Сервисы
+										</Cell>
+										<Cell
+											onClick={URLChanger}
+											disabled={
 												storage.url === "" ||
 												!storage.navigation
 											}
@@ -354,82 +375,6 @@ const App = withAdaptivity(
 											before={<Icon28CalendarOutline />}
 										>
 											Расписание
-										</Cell>
-										<Cell
-											onClick={URLChanger}
-											disabled={
-												storage.url === "time" ||
-												!storage.navigation
-											}
-											className={
-												!storage.navigation &&
-												"disabledNav"
-											}
-											style={
-												storage.url === "time"
-													? {
-															backgroundColor:
-																"var(--button_secondary_background)",
-															borderRadius: 8,
-													  }
-													: {}
-											}
-											data-story="time"
-											before={<Icon28RecentOutline />}
-										>
-											Звонки
-										</Cell>
-										<Cell
-											onClick={URLChanger}
-											disabled={
-												storage.url === "social" ||
-												!storage.navigation
-											}
-											className={
-												!storage.navigation &&
-												"disabledNav"
-											}
-											style={
-												storage.url === "social"
-													? {
-															backgroundColor:
-																"var(--button_secondary_background)",
-															borderRadius: 8,
-													  }
-													: {}
-											}
-											data-story="social"
-											before={<Icon28Users3Outline />}
-										>
-											Социальные сети
-										</Cell>
-									</Group>
-									<Group>
-										<Cell
-											onClick={URLChanger}
-											disabled={
-												storage.url === "download" ||
-												!storage.navigation
-											}
-											className={
-												!storage.navigation &&
-												"disabledNav"
-											}
-											style={
-												storage.url === "download"
-													? {
-															backgroundColor:
-																"var(--button_secondary_background)",
-															borderRadius: 8,
-													  }
-													: {}
-											}
-											data-story="download"
-											before={
-												<Icon28DownloadCloudOutline />
-											}
-										>
-											Загрузить приложение
 										</Cell>
 									</Group>
 									{storage.user.status === 1 && (

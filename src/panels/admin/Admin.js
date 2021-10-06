@@ -93,7 +93,7 @@ export default function Admin() {
 					!storage.isDesktop ? (
 						<PanelHeaderBack
 							onClick={() => {
-								history.push("/profile");
+								history.push("/services");
 							}}
 						/>
 					) : (

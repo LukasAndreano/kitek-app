@@ -26,6 +26,7 @@ import EditAccountInfo from "./EditAccountInfo";
 import ChangePassword from "./ChangePassword";
 import Time from "./Time"
 import Download from "./Download"
+import Social from "./Social"
 
 export default function Modals() {
 	const [blockBackButton, setBlockBackButton] = useState(false);
@@ -324,6 +325,29 @@ export default function Modals() {
 				}
 			>
 				<Download />
+			</ModalPage>
+			<ModalPage
+				id="social"
+				onClose={() => {
+					closeModal();
+				}}
+				settlingHeight={100}
+				header={
+					<ModalPageHeader
+						right={
+							storage.isDesktop ? (
+								""
+							) : (
+								<PanelHeaderButton onClick={() => closeModal()}>
+									<Icon24Dismiss />
+								</PanelHeaderButton>
+							)
+						}
+						separator={false}
+					/>
+				}
+			>
+				<Social />
 			</ModalPage>
 		</ModalRoot>
 	);

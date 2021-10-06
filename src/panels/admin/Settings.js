@@ -97,7 +97,7 @@ export default function Settings() {
 					!storage.isDesktop ? (
 						<PanelHeaderBack
 							onClick={() => {
-								history.push("/profile");
+								history.push("/services");
 							}}
 						/>
 					) : (
