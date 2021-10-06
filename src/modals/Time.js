@@ -1,11 +1,10 @@
-import React, { Fragment } from "react";
+import React  from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
 	Group,
 	Placeholder,
 	SliderSwitch,
 	Div,
-	PanelHeader,
 	Avatar,
 	RichCell,
 } from "@vkontakte/vkui";
@@ -13,21 +12,27 @@ import { Icon56RecentOutline } from "@vkontakte/icons";
 
 import { setTab } from "../reducers/timeReducer";
 
+import { motion } from "framer-motion";
+
 export default function Time() {
-	const storage = useSelector((state) => state.main);
 	const timeStorage = useSelector((state) => state.time);
 	const dispatch = useDispatch();
 
 	return (
-		<Fragment>
-			<PanelHeader separator={storage.isDesktop}>
-				{storage.isDesktop ? "Расписание звонков" : "Звонки"}
-			</PanelHeader>
 			<Group>
 				<Placeholder
 					header="Расписание звонков"
-					icon={<Icon56RecentOutline />}
-					style={{ marginTop: -30, marginBottom: -30 }}
+					icon={<motion.div
+						initial={{ scale: 0 }}
+						animate={{ scale: 1 }}
+						transition={{
+							delay: 0.1,
+							type: "spring",
+							stiffness: 260,
+							damping: 20,
+						}}
+					><Icon56RecentOutline /></motion.div>}
+					style={{ marginTop: -40, marginBottom: -30 }}
 				>
 					На этой странице отображаются звонки учебных занятий.
 				</Placeholder>
@@ -228,6 +233,5 @@ export default function Time() {
 					<span className="defaultText">Пара</span>
 				</RichCell>
 			</Group>
-		</Fragment>
 	);
 }

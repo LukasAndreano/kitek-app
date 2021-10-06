@@ -4,7 +4,6 @@ import { Switch, Route } from "react-router-dom";
 
 // Импортируем все панели
 import Social from "./panels/Social";
-import Time from "./panels/Time";
 import News from "./panels/News";
 import Shedule from "./panels/Shedule";
 import Download from "./panels/Download";
@@ -13,6 +12,7 @@ import Download from "./panels/Download";
 import Profile from "./panels/Profile";
 import Admin from "./panels/admin/Admin";
 import Settings from "./panels/admin/Settings";
+import Services from "./panels/Services";
 
 const routes = [
 	{
@@ -26,11 +26,6 @@ const routes = [
 		panel: () => <Social />,
 	},
 	{
-		path: "/time",
-		exact: true,
-		panel: () => <Time />,
-	},
-	{
 		path: "/news",
 		exact: true,
 		panel: () => <News />,
@@ -39,6 +34,11 @@ const routes = [
 		path: "/download",
 		exact: true,
 		panel: () => <Download />,
+	},
+	{
+		path: "/services",
+		exact: true,
+		panel: () => <Services />,
 	},
 	{
 		path: "/profile",

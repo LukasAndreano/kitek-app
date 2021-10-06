@@ -24,6 +24,8 @@ import { saveSheduleDay, setSheduleStore } from "../reducers/sheduleReducer";
 
 import EditAccountInfo from "./EditAccountInfo";
 import ChangePassword from "./ChangePassword";
+import Time from "./Time"
+import Download from "./Download"
 
 export default function Modals() {
 	const [blockBackButton, setBlockBackButton] = useState(false);
@@ -274,6 +276,54 @@ export default function Modals() {
 				}
 			>
 				<ChangePassword closeModal={closeModal} />
+			</ModalPage>
+
+			<ModalPage
+				id="time"
+				onClose={() => {
+					closeModal();
+				}}
+				settlingHeight={100}
+				header={
+					<ModalPageHeader
+						right={
+							storage.isDesktop ? (
+								""
+							) : (
+								<PanelHeaderButton onClick={() => closeModal()}>
+									<Icon24Dismiss />
+								</PanelHeaderButton>
+							)
+						}
+						separator={false}
+					/>
+				}
+			>
+				<Time />
+			</ModalPage>
+
+			<ModalPage
+				id="download"
+				onClose={() => {
+					closeModal();
+				}}
+				dynamicContentHeight
+				header={
+					<ModalPageHeader
+						right={
+							storage.isDesktop ? (
+								""
+							) : (
+								<PanelHeaderButton onClick={() => closeModal()}>
+									<Icon24Dismiss />
+								</PanelHeaderButton>
+							)
+						}
+						separator={false}
+					/>
+				}
+			>
+				<Download />
 			</ModalPage>
 		</ModalRoot>
 	);

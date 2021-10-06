@@ -26,6 +26,7 @@ import {
 import {
 	Icon16Done,
 	Icon16Cancel,
+	Icon28CompassOutline,
 	Icon28Newsfeed,
 	Icon28PollSquareOutline,
 	Icon28CalendarOutline,
@@ -540,6 +541,19 @@ const App = withAdaptivity(
 
 											<TabbarItem
 												onClick={URLChanger}
+												selected={storage.url === "services"}
+												data-story="services"
+												disabled={
+													!storage.navigation ||
+													storage.url === "services"
+												}
+												text="Сервисы"
+											>
+												<Icon28CompassOutline />
+											</TabbarItem>
+
+											<TabbarItem
+												onClick={URLChanger}
 												selected={storage.url === ""}
 												data-story=""
 												disabled={
@@ -550,36 +564,6 @@ const App = withAdaptivity(
 												text="Расписание"
 											>
 												<Icon28CalendarOutline />
-											</TabbarItem>
-
-											<TabbarItem
-												onClick={URLChanger}
-												disabled={
-													!storage.navigation ||
-													storage.url === "time"
-												}
-												selected={
-													storage.url === "time"
-												}
-												data-story="time"
-												text="Звонки"
-											>
-												<Icon28RecentOutline />
-											</TabbarItem>
-
-											<TabbarItem
-												onClick={URLChanger}
-												disabled={
-													!storage.navigation ||
-													storage.url === "social"
-												}
-												selected={
-													storage.url === "social"
-												}
-												data-story="social"
-												text="Соц. сети"
-											>
-												<Icon28Users3Outline />
 											</TabbarItem>
 
 											<TabbarItem

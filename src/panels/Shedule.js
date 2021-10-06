@@ -457,6 +457,7 @@ export default function Shedule() {
 									расписание, необходимо выбрать группу.
 								</Placeholder>
 								<Search
+									placeholder="Название группы"
 									value={search}
 									maxLength="10"
 									onChange={(e) => {
