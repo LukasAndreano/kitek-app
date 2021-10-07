@@ -9,6 +9,7 @@ import {
 	Chip,
 	Spinner,
 	PanelHeaderBack,
+	Button,
 	File,
 } from "@vkontakte/vkui";
 
@@ -17,6 +18,7 @@ import { ChipsSelect } from "@vkontakte/vkui/unstable";
 import {
 	Icon56SettingsOutline,
 	Icon24DoneOutline,
+	Icon28NotificationAddOutline,
 	Icon24DocumentOutline,
 } from "@vkontakte/icons";
 
@@ -117,16 +119,13 @@ export default function Settings() {
 					На этой странице можно изменить настройки приложения.
 					Конфигурация обновляется в реальном времени, нажимать кнопку
 					для сохранения не требуется.
-					<br />
-					<br />
-					Это <span className="hide">бета</span> раздел. Подгрузка
-					данных и их обновление может работать некорректно.
 				</Placeholder>
 				{loaded ? (
 					<Fragment>
 						<FormItem top="Загрузка расписания" className="mb10">
 							<div style={{ display: "flex" }}>
 								<File
+									multiple
 									disabled={disabled}
 									style={{
 										width: "100%",
@@ -144,59 +143,41 @@ export default function Settings() {
 									onChange={(e) => {
 										e.preventDefault();
 										setDisabled(true);
-										if (e.target.files[0].size < 10000000) {
-											let form = new FormData();
-											form.append(
-												"shedule",
-												e.target.files[0]
-											);
-											authorizedAPIFiles(
-												"updateShedule",
-												form
-											).then((data) => {
-												if (
-													data.errorCode !==
-														undefined &&
-													(data.errorCode === 3 ||
-														data.errorCode === 4)
-												)
-													refreshTokenWithFileUpload(
-														"updateShedule",
-														form
-													).then((data) => {
-														if (data.response) {
-															dispatch(
-																setSnackbar({
-																	text: "Файл загружен. По окончанию обработки Вам придет уведомление в VK.",
-																	success: true,
-																})
-															);
-															setUpdated(true);
-														}
-													});
-												else {
-													if (data.response) {
-														dispatch(
-															setSnackbar({
-																text: "Файл загружен. По окончанию обработки Вам придет уведомление в VK.",
-																success: true,
-															})
-														);
-														setUpdated(true);
-													}
-												}
-											});
+										setUpdated(true)
+										for (let i = 0; i < e.target.files.length; i++) {
+											if (e.target.files[i].size < 10000000) {
+												let form = new FormData();
+												form.append(
+													"shedule",
+													e.target.files[i]
+												);
+												authorizedAPIFiles(
+													"updateShedule",
+													form
+												).then((data) => {
+													if (
+														data.errorCode !==
+															undefined &&
+														(data.errorCode === 3 ||
+															data.errorCode === 4)
+													)
+														refreshTokenWithFileUpload(
+															"updateShedule",
+															form
+														)
+												});
+											}
 										}
 									}}
 									mode={updated ? "primary" : "secondary"}
 								>
 									{updated
-										? "Запущена обработка..."
+										? "Загружено"
 										: "Обновить расписание"}
 								</File>
 							</div>
 						</FormItem>
-						<FormItem top="Выберите дни недели, на которое мы отобразим расписание">
+						<FormItem top="Выберите дни недели, на которое мы отобразим расписание" className="mb10">
 							<ChipsSelect
 								value={weekDaysState}
 								onChange={(e) => {
@@ -236,6 +217,28 @@ export default function Settings() {
 									);
 								}}
 							/>
+						</FormItem>
+						<FormItem top={"Рассылка уведомлений"}>
+							<Button before={<Icon28NotificationAddOutline />} onClick={() => {
+								request("startMailing").then((data) => {
+									if (!data.response) {
+										dispatch(
+											setSnackbar({
+												text: "Произошла ошибка при запуске рассылки...",
+												success: false,
+											})
+										)
+								}
+											else {
+										dispatch(
+											setSnackbar({
+												text: "Рассылка запущена!",
+												success: true,
+											})
+										);
+									}
+								});
+							}} stretched size={"l"}>Запустить рассылку</Button>
 						</FormItem>
 					</Fragment>
 				) : (

@@ -42,14 +42,14 @@ export default function Time() {
 			</PanelHeader>
 			<Group>
 				<CardScroll size="m">
-					<Card style={{marginLeft: storage.isDesktop ? 12 : 5}} onClick={() => dispatch(setSnackbar({text: "Добро пожаловать на вкладку «Сервисы»!", success: true}))}>
+					<Card className={"tap"} style={{marginLeft: storage.isDesktop ? 12 : 5}} onClick={() => dispatch(setSnackbar({text: "Добро пожаловать на вкладку «Сервисы»!", success: true}))}>
 						<Div>
 							<Avatar style={{ background: 'var(--button_commerce_background)' }} size={28} shadow={false}><Icon16Pin fill="var(--white)" /></Avatar>
 							<Title level={4} weight={"medium"} style={{marginTop: 10, marginBottom: 5}}>Вкладка «Сервисы»</Title>
 							<Text weight={"regular"}>Здесь расположены дополнительные функции и разделы приложения.</Text>
 						</Div>
 					</Card>
-					<Card onClick={() => dispatch(
+					<Card className={"tap"} onClick={() => dispatch(
 						setActiveModal(
 							"connectNotifications"
 						)
@@ -60,7 +60,7 @@ export default function Time() {
 							<Text weight={"regular"}>Получайте уведомления при обновлении расписания. Прямо во ВКонтакте.</Text>
 						</Div>
 					</Card>
-					<Card onClick={() => dispatch(setActiveModal('download'))}>
+					<Card className={"tap"} onClick={() => dispatch(setActiveModal('download'))}>
 						<Div>
 							<Avatar style={{ background: 'var(--button_commerce_background)' }} size={28} shadow={false}><Icon16Down fill="var(--white)" /></Avatar>
 							<Title level={4} weight={"medium"} style={{marginTop: 10, marginBottom: 5}}>Приложение</Title>

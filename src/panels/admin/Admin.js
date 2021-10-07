@@ -113,10 +113,6 @@ export default function Admin() {
 					На этой странице отображатся посещаемость приложения. Каждый
 					запрос к приложению (перезагрузка страницы) считается за
 					заход.
-					<br />
-					<br />
-					Это <span className="hide">бета</span> раздел. Подгрузка
-					данных и их обновление может работать некорректно.
 				</Placeholder>
 				{adminStorage.statisticsLoaded ? (
 					<CardGrid size={storage.isDesktop ? "s" : "m"}>
