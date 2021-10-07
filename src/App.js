@@ -1,3 +1,5 @@
+// noinspection JSCheckFunctionSignatures
+
 import React, { Fragment, useCallback, useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
@@ -24,13 +26,11 @@ import {
 import {
 	Icon16Done,
 	Icon16Cancel,
+	Icon28CompassOutline,
 	Icon28Newsfeed,
 	Icon28PollSquareOutline,
 	Icon28CalendarOutline,
-	Icon28DownloadCloudOutline,
 	Icon28SettingsOutline,
-	Icon28RecentOutline,
-	Icon28Users3Outline,
 	Icon28UserCircleOutline,
 } from "@vkontakte/icons";
 
@@ -101,7 +101,7 @@ const App = withAdaptivity(
 			if (localStorage.getItem("showUpdateCard")) {
 				dispatch(
 					setSnackbar({
-						text: "Установлено обновление: 1.1.7",
+						text: "Установлено обновление: 1.1.7.1",
 						success: true,
 					})
 				);
@@ -110,25 +110,26 @@ const App = withAdaptivity(
 		});
 
 		useEffect(() => {
-			if ((storage.popout.title && storage.popout.text) !== null) {
-				history.push(window.location.pathname + "#popout");
-				setPopoutFunc(
-					<Alert
-						onClose={() => {
-							history.goBack();
-						}}
-						actions={[
-							{
-								title: "Понятно",
-								autoclose: true,
-								mode: "cancel",
-							},
-						]}
-						header={storage.popout.title}
-						text={storage.popout.text}
-					/>
-				);
+			if ((storage.popout.title && storage.popout.text) === null) {
+				return;
 			}
+			history.push(window.location.pathname + "#popout");
+			setPopoutFunc(
+				<Alert
+					onClose={() => {
+						history.goBack();
+					}}
+					actions={[
+						{
+							title: "Понятно",
+							autoclose: true,
+							mode: "cancel",
+						},
+					]}
+					header={storage.popout.title}
+					text={storage.popout.text}
+				/>
+			);
 		}, [storage.popout, dispatch, history]);
 
 		// Ловим ивенты с кнопки назад-вперед
@@ -330,6 +331,30 @@ const App = withAdaptivity(
 										<Cell
 											onClick={URLChanger}
 											disabled={
+												storage.url === "services" ||
+												!storage.navigation
+											}
+											className={
+												!storage.navigation &&
+												"disabledNav"
+											}
+											style={
+												storage.url === "services"
+													? {
+														backgroundColor:
+															"var(--button_secondary_background)",
+														borderRadius: 8,
+													}
+													: {}
+											}
+											data-story="services"
+											before={<Icon28CompassOutline />}
+										>
+											Сервисы
+										</Cell>
+										<Cell
+											onClick={URLChanger}
+											disabled={
 												storage.url === "" ||
 												!storage.navigation
 											}
@@ -350,82 +375,6 @@ const App = withAdaptivity(
 											before={<Icon28CalendarOutline />}
 										>
 											Расписание
-										</Cell>
-										<Cell
-											onClick={URLChanger}
-											disabled={
-												storage.url === "time" ||
-												!storage.navigation
-											}
-											className={
-												!storage.navigation &&
-												"disabledNav"
-											}
-											style={
-												storage.url === "time"
-													? {
-															backgroundColor:
-																"var(--button_secondary_background)",
-															borderRadius: 8,
-													  }
-													: {}
-											}
-											data-story="time"
-											before={<Icon28RecentOutline />}
-										>
-											Звонки
-										</Cell>
-										<Cell
-											onClick={URLChanger}
-											disabled={
-												storage.url === "social" ||
-												!storage.navigation
-											}
-											className={
-												!storage.navigation &&
-												"disabledNav"
-											}
-											style={
-												storage.url === "social"
-													? {
-															backgroundColor:
-																"var(--button_secondary_background)",
-															borderRadius: 8,
-													  }
-													: {}
-											}
-											data-story="social"
-											before={<Icon28Users3Outline />}
-										>
-											Социальные сети
-										</Cell>
-									</Group>
-									<Group>
-										<Cell
-											onClick={URLChanger}
-											disabled={
-												storage.url === "download" ||
-												!storage.navigation
-											}
-											className={
-												!storage.navigation &&
-												"disabledNav"
-											}
-											style={
-												storage.url === "download"
-													? {
-															backgroundColor:
-																"var(--button_secondary_background)",
-															borderRadius: 8,
-													  }
-													: {}
-											}
-											data-story="download"
-											before={
-												<Icon28DownloadCloudOutline />
-											}
-										>
-											Загрузить приложение
 										</Cell>
 									</Group>
 									{storage.user.status === 1 && (
@@ -487,7 +436,7 @@ const App = withAdaptivity(
 										</Group>
 									)}
 									<Footer style={{ marginTop: -10 }}>
-										Версия приложения: 1.1.7 <br />
+										Версия приложения: 1.1.7.1 <br />
 										Разработчик:{" "}
 										<a
 											href="https://vk.com/id172118960"
@@ -537,6 +486,19 @@ const App = withAdaptivity(
 
 											<TabbarItem
 												onClick={URLChanger}
+												selected={storage.url === "services"}
+												data-story="services"
+												disabled={
+													!storage.navigation ||
+													storage.url === "services"
+												}
+												text="Сервисы"
+											>
+												<Icon28CompassOutline />
+											</TabbarItem>
+
+											<TabbarItem
+												onClick={URLChanger}
 												selected={storage.url === ""}
 												data-story=""
 												disabled={
@@ -547,36 +509,6 @@ const App = withAdaptivity(
 												text="Расписание"
 											>
 												<Icon28CalendarOutline />
-											</TabbarItem>
-
-											<TabbarItem
-												onClick={URLChanger}
-												disabled={
-													!storage.navigation ||
-													storage.url === "time"
-												}
-												selected={
-													storage.url === "time"
-												}
-												data-story="time"
-												text="Звонки"
-											>
-												<Icon28RecentOutline />
-											</TabbarItem>
-
-											<TabbarItem
-												onClick={URLChanger}
-												disabled={
-													!storage.navigation ||
-													storage.url === "social"
-												}
-												selected={
-													storage.url === "social"
-												}
-												data-story="social"
-												text="Соц. сети"
-											>
-												<Icon28Users3Outline />
 											</TabbarItem>
 
 											<TabbarItem

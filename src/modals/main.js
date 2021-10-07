@@ -24,6 +24,9 @@ import { saveSheduleDay, setSheduleStore } from "../reducers/sheduleReducer";
 
 import EditAccountInfo from "./EditAccountInfo";
 import ChangePassword from "./ChangePassword";
+import Time from "./Time"
+import Download from "./Download"
+import Social from "./Social"
 
 export default function Modals() {
 	const [blockBackButton, setBlockBackButton] = useState(false);
@@ -44,11 +47,10 @@ export default function Modals() {
 		if (!blockBackButton) {
 			setBlockBackButton(true);
 			history.goBack();
-			history.replace({ pathname: storage.url });
 			dispatch(setActiveModal(null));
 			setTimeout(() => setBlockBackButton(false), 50);
 		}
-	}, [history, dispatch, blockBackButton, storage.url]);
+	}, [history, dispatch, blockBackButton]);
 
 	useEffect(() => {
 		if (storage.activeModal !== null) pushToHistory(storage.activeModal);
@@ -196,7 +198,7 @@ export default function Modals() {
 				}
 				header={"О приложении"}
 				subheader={
-					"Это приложение для студентов КИТЭК'а, позволяющее просматривать текущее расписание, следить за новостями, а также быстро подписываться на социальные сети колледжа.\n\nТекущая версия: 1.1.7\nРазработчик: Никита Балин"
+					"Это приложение для студентов КИТЭК'а, позволяющее просматривать текущее расписание, следить за новостями, а также быстро подписываться на социальные сети колледжа.\n\nТекущая версия: 1.1.7.1\nРазработчик: Никита Балин"
 				}
 				actions={
 					<Button
@@ -275,6 +277,77 @@ export default function Modals() {
 				}
 			>
 				<ChangePassword closeModal={closeModal} />
+			</ModalPage>
+
+			<ModalPage
+				id="time"
+				onClose={() => {
+					closeModal();
+				}}
+				settlingHeight={100}
+				header={
+					<ModalPageHeader
+						right={
+							storage.isDesktop ? (
+								""
+							) : (
+								<PanelHeaderButton onClick={() => closeModal()}>
+									<Icon24Dismiss />
+								</PanelHeaderButton>
+							)
+						}
+						separator={false}
+					/>
+				}
+			>
+				<Time />
+			</ModalPage>
+
+			<ModalPage
+				id="download"
+				onClose={() => {
+					closeModal();
+				}}
+				dynamicContentHeight
+				header={
+					<ModalPageHeader
+						right={
+							storage.isDesktop ? (
+								""
+							) : (
+								<PanelHeaderButton onClick={() => closeModal()}>
+									<Icon24Dismiss />
+								</PanelHeaderButton>
+							)
+						}
+						separator={false}
+					/>
+				}
+			>
+				<Download />
+			</ModalPage>
+			<ModalPage
+				id="social"
+				onClose={() => {
+					closeModal();
+				}}
+				settlingHeight={100}
+				header={
+					<ModalPageHeader
+						right={
+							storage.isDesktop ? (
+								""
+							) : (
+								<PanelHeaderButton onClick={() => closeModal()}>
+									<Icon24Dismiss />
+								</PanelHeaderButton>
+							)
+						}
+						separator={false}
+					/>
+				}
+			>
+				<Social />
 			</ModalPage>
 		</ModalRoot>
 	);

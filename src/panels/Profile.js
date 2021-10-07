@@ -19,7 +19,6 @@ import {
 	Icon28UserStarBadgeOutline,
 	Icon28SettingsOutline,
 	Icon28EditOutline,
-	Icon28PollSquareOutline,
 	Icon28InfoOutline,
 	Icon28Notifications,
 	Icon28BugOutline,
@@ -29,7 +28,6 @@ import Login from "../forms/Login";
 import Register from "../forms/Register";
 
 import { setActiveModal, setUser, setSnackbar } from "../reducers/mainReducer";
-import { useHistory } from "react-router-dom";
 
 import authorizedAPI from "../service/authorizedAPI";
 import refreshToken from "../service/refreshToken";
@@ -39,8 +37,6 @@ export default function Profile() {
 	const dispatch = useDispatch();
 
 	const [fetching, setFetching] = useState(false);
-
-	const history = useHistory();
 
 	const request = useCallback(() => {
 		return new Promise((resolve) => {
@@ -80,7 +76,7 @@ export default function Profile() {
 	return (
 		<React.Fragment>
 			<PanelHeader
-				separator={storage.isDesktop ? true : false}
+				separator={storage.isDesktop}
 				left={
 					localStorage.getItem("access_token") !== null &&
 					localStorage.getItem("refresh_token") !== null ? (
@@ -147,6 +143,7 @@ export default function Profile() {
 												: "Неизвестный пользователь"}
 										</Title>
 										<Text
+											weight={'regular'}
 											style={{
 												marginBottom: 10,
 												color: "var(--text_secondary)",
@@ -209,38 +206,6 @@ export default function Profile() {
 													? "Администратор"
 													: "Преподаватель"}
 											</SimpleCell>
-											{storage.user.status === 1 &&
-												!storage.isDesktop && (
-													<SimpleCell
-														before={
-															<Icon28PollSquareOutline />
-														}
-														onClick={() => {
-															history.push(
-																"/admin"
-															);
-														}}
-														description="Посещаемость приложения"
-													>
-														Статистика
-													</SimpleCell>
-												)}
-											{storage.user.status === 1 &&
-												!storage.isDesktop && (
-													<SimpleCell
-														before={
-															<Icon28SettingsOutline />
-														}
-														onClick={() => {
-															history.push(
-																"/admin/settings"
-															);
-														}}
-														description="Управление приложением"
-													>
-														Настройки
-													</SimpleCell>
-												)}
 											<Header>Настройки</Header>
 											{storage.user.status !== 2 && (
 												<SimpleCell

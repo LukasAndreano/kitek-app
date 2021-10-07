@@ -1,24 +1,28 @@
-import React, { Fragment } from "react";
-import { useSelector } from "react-redux";
-import { Group, Placeholder, PanelHeader, RichCell } from "@vkontakte/vkui";
+import React from "react";
+import { Group, Placeholder, RichCell } from "@vkontakte/vkui";
 import {
 	Icon56DownloadSquareOutline,
 	Icon28DownloadCloudOutline,
 } from "@vkontakte/icons";
 
-export default function Time() {
-	const storage = useSelector((state) => state.main);
+import {motion} from "framer-motion";
 
+export default function Download() {
 	return (
-		<Fragment>
-			<PanelHeader separator={storage.isDesktop}>
-				{storage.isDesktop ? "Загрузка приложения" : "Приложение"}
-			</PanelHeader>
 			<Group>
 				<Placeholder
 					header="Загрузка приложения"
-					icon={<Icon56DownloadSquareOutline />}
-					style={{ marginTop: -30, marginBottom: -30 }}
+					icon={<motion.div
+						initial={{ scale: 0 }}
+						animate={{ scale: 1 }}
+						transition={{
+							delay: 0.1,
+							type: "spring",
+							stiffness: 260,
+							damping: 20,
+						}}
+					><Icon56DownloadSquareOutline /></motion.div>}
+					style={{ marginTop: -40, marginBottom: -30 }}
 				>
 					Загрузите приложение КИТЭК'а и просматривайте расписание и
 					новости еще быстрее!
@@ -51,6 +55,5 @@ export default function Time() {
 					<span className="defaultText">Приложение для Android</span>
 				</RichCell>
 			</Group>
-		</Fragment>
 	);
 }

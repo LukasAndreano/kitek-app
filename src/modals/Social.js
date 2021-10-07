@@ -1,10 +1,8 @@
 import React from "react";
-import { useSelector } from "react-redux";
 import {
 	Group,
 	Placeholder,
 	Button,
-	PanelHeader,
 	Avatar,
 	RichCell,
 } from "@vkontakte/vkui";
@@ -15,19 +13,24 @@ import vk from "../img/vk.png";
 import tiktok from "../img/tiktok.png";
 import instagram from "../img/instagram.png";
 
-export default function Social() {
-	const storage = useSelector((state) => state.main);
+import { motion } from "framer-motion";
 
+export default function Social() {
 	return (
-		<React.Fragment>
-			<PanelHeader separator={storage.isDesktop}>
-				{storage.isDesktop ? "Социальные сети" : "Соц. сети"}
-			</PanelHeader>
 			<Group>
 				<Placeholder
 					header="Социальные сети"
-					icon={<Icon56Users3Outline />}
-					style={{ marginTop: -30, marginBottom: -30 }}
+					icon={<motion.div
+						initial={{ scale: 0 }}
+						animate={{ scale: 1 }}
+						transition={{
+							delay: 0.1,
+							type: "spring",
+							stiffness: 260,
+							damping: 20,
+						}}
+					><Icon56Users3Outline /></motion.div>}
+					style={{ marginTop: -40, marginBottom: -30 }}
 				>
 					На этой странице расположены все социальные сети колледжа с
 					описанием контента, который в них публикуется.
@@ -101,6 +104,5 @@ export default function Social() {
 					<span className="defaultText">YouTube</span>
 				</RichCell>
 			</Group>
-		</React.Fragment>
 	);
 }

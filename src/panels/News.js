@@ -38,17 +38,10 @@ export default function News() {
 	function renderWall(data) {
 		let arr = [];
 		data.forEach((el) => {
-			if (
-				el.attachments !== undefined &&
-				el.attachments[0].type === "photo"
-			) {
-				var image =
-					el.attachments[0].photo.sizes[
-						el.attachments[0].photo.sizes.length - 1
-					].url;
-			} else {
-				image = null;
-			}
+			let image = el.attachments !== undefined &&
+				el.attachments[0].type === "photo" ? el.attachments[0].photo.sizes[
+			el.attachments[0].photo.sizes.length - 1
+				].url : null
 			if (el.text !== "")
 				arr.push(
 					<Link
@@ -60,7 +53,7 @@ export default function News() {
 							el.id
 						}
 						target="_blank"
-						refferer="no-refferer"
+						refferer="no-referrer"
 						className="noHover"
 					>
 						<ContentCard
@@ -89,7 +82,7 @@ export default function News() {
 
 	return (
 		<Fragment>
-			<PanelHeader separator={storage.isDesktop ? true : false}>
+			<PanelHeader separator={storage.isDesktop}>
 				Новости
 			</PanelHeader>
 			<PullToRefresh

@@ -1,12 +1,10 @@
 body {
 	-webkit-touch-callout: none;
 	-webkit-user-select: none;
-	-khtml-user-select: none;
 	-moz-user-select: none;
 	-ms-user-select: none;
 	user-select: none;
 	min-height: 100vh;
-	min-height: -webkit-fill-available;
 }
 .tw {
 	white-space: pre-wrap;
@@ -15,7 +13,6 @@ input,
 input:before,
 input:after {
 	-webkit-user-select: initial;
-	-khtml-user-select: initial;
 	-moz-user-select: initial;
 	-ms-user-select: initial;
 	user-select: initial;
@@ -42,12 +39,12 @@ option:hover {
 .vkuiFormItem .vkuiCheckbox {
 	border-radius: 8px;
 }
-.vkuiPanelHeader--android.vkuiPanelHeader--no-right
-	.vkuiPanelHeader__content
-	> *,
-.vkuiPanelHeader--vkcom.vkuiPanelHeader--no-right
-	.vkuiPanelHeader__content
-	> * {
+.vkuiPanelHeader--android.vkuiPanelHeader--no-right,
+.vkuiPanelHeader__content,
+> *,
+.vkuiPanelHeader--vkcom.vkuiPanelHeader--no-right,
+.vkuiPanelHeader__content,
+> * {
 	padding-top: 5px !important;
 }
 .CellInCard {
@@ -95,7 +92,7 @@ option:hover {
 	display: none !important;
 }
 .ml10 {
-	margin-left: 0px !important;
+	margin-left: 0 !important;
 }
 .vkuiSimpleCell {
 	border-radius: 8px !important;
@@ -133,7 +130,7 @@ a:hover {
 	font-weight: 600;
 	font-size: 14px;
 	color: var(--text_primary);
-	box-shadow: inset 0 0 0 1px rgb(0 0 0 / 8%);
+	box-shadow: inset 0 0 0 1px rgb(0 0 0);
 	background: var(--background_content);
 	display: flex;
 	align-items: center;
@@ -172,7 +169,7 @@ a:hover {
 	padding-bottom: 15px;
 }
 .snackBar-fix {
-	padding-bottom: 0px !important;
+	padding-bottom: 0 !important;
 }
 .disabledNav {
 	opacity: 0.5;

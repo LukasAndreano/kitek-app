@@ -93,14 +93,14 @@ export default function Admin() {
 					!storage.isDesktop ? (
 						<PanelHeaderBack
 							onClick={() => {
-								history.push("/profile");
+								history.push("/services");
 							}}
 						/>
 					) : (
 						""
 					)
 				}
-				separator={storage.isDesktop ? true : false}
+				separator={storage.isDesktop}
 			>
 				Статистика
 			</PanelHeader>
@@ -113,10 +113,6 @@ export default function Admin() {
 					На этой странице отображатся посещаемость приложения. Каждый
 					запрос к приложению (перезагрузка страницы) считается за
 					заход.
-					<br />
-					<br />
-					Это <span className="hide">бета</span> раздел. Подгрузка
-					данных и их обновление может работать некорректно.
 				</Placeholder>
 				{adminStorage.statisticsLoaded ? (
 					<CardGrid size={storage.isDesktop ? "s" : "m"}>
@@ -125,7 +121,7 @@ export default function Admin() {
 								<Title weight="heavy" level="1">
 									{adminStorage.statistics.today} ч.
 								</Title>
-								<Text style={{ marginTop: 5 }}>
+								<Text style={{ marginTop: 5 }} weight={"regular"}>
 									Пользователей за сегодня.
 								</Text>
 							</Div>
@@ -135,7 +131,7 @@ export default function Admin() {
 								<Title weight="heavy" level="1">
 									{adminStorage.statistics.month} ч.
 								</Title>
-								<Text style={{ marginTop: 5 }}>
+								<Text style={{ marginTop: 5 }} weight={"regular"}>
 									Пользователей за этот месяц.
 								</Text>
 							</Div>
@@ -145,7 +141,7 @@ export default function Admin() {
 								<Title weight="heavy" level="1">
 									{adminStorage.statistics.lastMonth} ч.
 								</Title>
-								<Text style={{ marginTop: 5 }}>
+								<Text style={{ marginTop: 5 }} weight={"regular"}>
 									Пользователей за прошлый месяц.
 								</Text>
 							</Div>
