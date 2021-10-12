@@ -38,10 +38,13 @@ export default function News() {
 	function renderWall(data) {
 		let arr = [];
 		data.forEach((el) => {
-			let image = el.attachments !== undefined &&
-				el.attachments[0].type === "photo" ? el.attachments[0].photo.sizes[
-			el.attachments[0].photo.sizes.length - 1
-				].url : null
+			let image =
+				el.attachments !== undefined &&
+				el.attachments[0].type === "photo"
+					? el.attachments[0].photo.sizes[
+							el.attachments[0].photo.sizes.length - 1
+					  ].url
+					: null;
 			if (el.text !== "")
 				arr.push(
 					<Link
@@ -82,9 +85,7 @@ export default function News() {
 
 	return (
 		<Fragment>
-			<PanelHeader separator={storage.isDesktop}>
-				Новости
-			</PanelHeader>
+			<PanelHeader separator={storage.isDesktop}>Новости</PanelHeader>
 			<PullToRefresh
 				onRefresh={() => {
 					setFetching(true);

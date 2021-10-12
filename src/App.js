@@ -341,10 +341,10 @@ const App = withAdaptivity(
 											style={
 												storage.url === "services"
 													? {
-														backgroundColor:
-															"var(--button_secondary_background)",
-														borderRadius: 8,
-													}
+															backgroundColor:
+																"var(--button_secondary_background)",
+															borderRadius: 8,
+													  }
 													: {}
 											}
 											data-story="services"
@@ -486,7 +486,9 @@ const App = withAdaptivity(
 
 											<TabbarItem
 												onClick={URLChanger}
-												selected={storage.url === "services"}
+												selected={
+													storage.url === "services"
+												}
 												data-story="services"
 												disabled={
 													!storage.navigation ||
