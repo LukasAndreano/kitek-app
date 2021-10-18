@@ -197,3 +197,65 @@ a:hover {
 	background: var(--action_sheet_separator);
 	border-radius: 8px;
 }
+.vkuiTabbar {
+	border-radius: 15px;
+	box-shadow: 0 0 20px 8px rgba(0,0,0,0.15) !important;
+	padding: 5px;
+}
+.vkuiEpic .vkuiTabbar {
+	justify-content: center;
+	transition: 0.4s;
+	opacity: 1;
+	display: flex;
+	align-items: center;
+	margin: 15px 13px;
+	width: 90% !important;
+}
+.vkuiTabbar--ios.vkuiTabbar--shadow::before {
+	display: none;
+}
+.snackbar-mobile-fix .vkuiSnackbar__body {
+	border-radius: 15px;
+	margin-bottom: 5px;
+}
+.vkuiSnackbar__body {
+	box-shadow: 0 0 20px 8px rgba(0,0,0,0.15) !important;
+}
+.snackbarActive .vkuiEpic .vkuiTabbar {
+	opacity: 0;
+	transition: 0.4s;
+}
+.TabbarItem--selected .vkuiIcon {
+	animation-name: boop;
+	animation-duration: 0.7s;
+}
+.Cell--disabled .vkuiIcon {
+	animation-name: boop;
+	animation-duration: 0.7s;
+}
+@keyframes boop {
+	25% {
+		-moz-transform: scale(1.1);
+		-webkit-transform: scale(1.1);
+		-o-transform: scale(1.1);
+		-ms-transform: scale(1.1);
+		transform: scale(1.1);
+	}
+	50% {
+		-moz-transform: scale(0.9);
+		-webkit-transform: scale(0.9);
+		-o-transform: scale(0.9);
+		-ms-transform: scale(0.9);
+		transform: scale(0.9);
+	}
+	100% {
+		-moz-transform: scale(1);
+		-webkit-transform: scale(1);
+		-o-transform: scale(1);
+		-ms-transform: scale(1);
+		transform: scale(1);
+	}
+}
+.badgehightlighted {
+	color: #FF3347;
+}

@@ -27,6 +27,7 @@ import ChangePassword from "./ChangePassword";
 import Time from "./Time"
 import Download from "./Download"
 import Social from "./Social"
+import FavoriteGroup from "./FavoriteGroup";
 
 export default function Modals() {
 	const [blockBackButton, setBlockBackButton] = useState(false);
@@ -149,6 +150,30 @@ export default function Modals() {
 					</Button>
 				}
 			/>
+
+			<ModalPage
+				id="favoriteGroup"
+				onClose={() => {
+					closeModal();
+				}}
+				dynamicContentHeight
+				header={
+					<ModalPageHeader
+						right={
+							storage.isDesktop ? (
+								""
+							) : (
+								<PanelHeaderButton onClick={() => closeModal()}>
+									<Icon24Dismiss />
+								</PanelHeaderButton>
+							)
+						}
+						separator={false}
+					/>
+				}
+			>
+				<FavoriteGroup closeModal={closeModal} />
+			</ModalPage>
 
 			<ModalPage
 				id="editAccountInfo"

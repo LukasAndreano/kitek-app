@@ -216,12 +216,12 @@ export default function Shedule() {
 			} else if (!sheduleStorage.loaded) {
 				setLoader(true);
 				if (Number(group) === 0) {
-					authorizedAPI("getSheduleForTeacher", {}).then((data) => {
+					authorizedAPI("teacher/getSheduleForTeacher", {}).then((data) => {
 						if (
 							data.errorCode !== undefined &&
 							(data.errorCode === 3 || data.errorCode === 4)
 						)
-							refreshToken("getSheduleForTeacher", {}).then(
+							refreshToken("teacher/getSheduleForTeacher", {}).then(
 								(data) => {
 									if (data.response) {
 										dispatch(setAlreadyLoaded(true));
@@ -486,6 +486,28 @@ export default function Shedule() {
 							</Fragment>
 						) : (
 							<Fragment>
+								{(storage.user.status === 2 && storage.user.teacherGroup !== null && group.name !== storage.user.teacherGroup) && (
+									<Banner
+										style={{marginBottom: -5}}
+										onClick={() => {
+											setGroupFunction(storage.user.teacherGroup, storage.user.teacherGroup)
+										}}
+										header={"Показать пары для " + storage.user.teacherGroup + "?"}
+										subheader="Нажмите здесь, чтобы посмотреть пары своей группы."
+										asideMode="expand"
+									/>
+								)}
+								{(storage.user.status === 2 && storage.user.teacherGroup !== null && group.name === storage.user.teacherGroup) && (
+									<Banner
+										style={{marginBottom: -5}}
+										onClick={() => {
+											setGroupFunction(0, 0)
+										}}
+										header={"Показать пары для Вас?"}
+										subheader="Нажмите здесь, чтобы посмотреть свои пары."
+										asideMode="expand"
+									/>
+								)}
 								<Div>
 									{sheduleStorage.shedule.length !== 0 &&
 									sheduleStorage.shedule ? (

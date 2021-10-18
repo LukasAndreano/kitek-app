@@ -1,7 +1,6 @@
 import React, { Fragment } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
-	Group,
 	PanelHeader,
 	CardScroll,
 	Card,
@@ -40,7 +39,7 @@ export default function Time() {
 			<PanelHeader separator={storage.isDesktop}>
 				Сервисы
 			</PanelHeader>
-			<Group>
+			<Div>
 				<CardScroll size="m">
 					<Card className={"tap"} style={{marginLeft: storage.isDesktop ? 12 : 5}} onClick={() => dispatch(setSnackbar({text: "Добро пожаловать на вкладку «Сервисы»!", success: true}))}>
 						<Div>
@@ -122,7 +121,7 @@ export default function Time() {
 						</Card>
 					)}
 				</div>
-			</Group>
+			</Div>
 		</Fragment>
 	);
 }
