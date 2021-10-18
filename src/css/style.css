@@ -199,7 +199,7 @@ a:hover {
 }
 .vkuiTabbar {
 	border-radius: 15px;
-	box-shadow: 0 0 20px 8px rgba(0,0,0,0.15) !important;
+	box-shadow: 0 0 20px 8px rgba(0, 0, 0, 0.15) !important;
 	padding: 5px;
 }
 .vkuiEpic .vkuiTabbar {
@@ -219,7 +219,7 @@ a:hover {
 	margin-bottom: 5px;
 }
 .vkuiSnackbar__body {
-	box-shadow: 0 0 20px 8px rgba(0,0,0,0.15) !important;
+	box-shadow: 0 0 20px 8px rgba(0, 0, 0, 0.15) !important;
 }
 .snackbarActive .vkuiEpic .vkuiTabbar {
 	opacity: 0;
@@ -257,5 +257,5 @@ a:hover {
 	}
 }
 .badgehightlighted {
-	color: #FF3347;
+	color: #ff3347;
 }

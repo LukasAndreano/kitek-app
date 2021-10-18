@@ -225,7 +225,11 @@ const App = withAdaptivity(
 					<Snackbar
 						layout="vertical"
 						duration={4000}
-						className={storage.isDesktop ? "snackBar-fix" : "snackbar-mobile-fix"}
+						className={
+							storage.isDesktop
+								? "snackBar-fix"
+								: "snackbar-mobile-fix"
+						}
 						onClose={() => {
 							dispatch(setSnackbar({ text: null }));
 							setSnackbarFunc(null);
@@ -277,7 +281,9 @@ const App = withAdaptivity(
 			<Fragment>
 				{themeManager && (
 					<SplitLayout
-						className={storage.snackbar.text !== null && 'snackbarActive'}
+						className={
+							storage.snackbar.text !== null && "snackbarActive"
+						}
 						header={hasHeader && <PanelHeader separator={false} />}
 						style={{ justifyContent: "center" }}
 					>

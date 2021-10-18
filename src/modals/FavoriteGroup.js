@@ -9,7 +9,7 @@ import {
 	Placeholder,
 	NativeSelect,
 } from "@vkontakte/vkui";
-import {Icon56Users3Outline} from "@vkontakte/icons";
+import { Icon56Users3Outline } from "@vkontakte/icons";
 import { useDispatch, useSelector } from "react-redux";
 import { setSnackbar, setUser, saveGroups } from "../reducers/mainReducer";
 import { motion } from "framer-motion";
@@ -51,7 +51,9 @@ export default function FavoriteGroup(props) {
 	}, [group]);
 
 	useEffect(() => {
-		setGroup(storage.user.teacherGroup === null ? 0 : storage.user.teacherGroup);
+		setGroup(
+			storage.user.teacherGroup === null ? 0 : storage.user.teacherGroup
+		);
 		if (storage.groups.length === 0)
 			api("getGroups").then((data) => {
 				if (data.response !== undefined && data.response !== null) {
@@ -86,17 +88,14 @@ export default function FavoriteGroup(props) {
 				header="Курируемая группа"
 				style={{ marginBottom: -30, marginTop: -60 }}
 			>
-				Добавьте курируемую группу и быстро просматривайте её расписание.
+				Добавьте курируемую группу и быстро просматривайте её
+				расписание.
 			</Placeholder>
 			<FormLayout
 				onSubmit={(e) => {
 					e.preventDefault();
 					setDisabled(true);
-					if (
-						!disabled &&
-						group !== 0 &&
-						changed
-					) {
+					if (!disabled && group !== 0 && changed) {
 						request().then((data) => {
 							if (data.response) {
 								dispatch(setUser(data.user));
@@ -147,10 +146,7 @@ export default function FavoriteGroup(props) {
 						stretched
 						type="submit"
 						loading={disabled || !loaded}
-						disabled={
-							group === 0 ||
-							!changed
-						}
+						disabled={group === 0 || !changed}
 					>
 						Сохранить
 					</Button>

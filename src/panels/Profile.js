@@ -21,7 +21,8 @@ import {
 	Icon28EditOutline,
 	Icon28InfoOutline,
 	Icon28Notifications,
-	Icon28BugOutline, Icon28Users3Outline,
+	Icon28BugOutline,
+	Icon28Users3Outline,
 } from "@vkontakte/icons";
 
 import Login from "../forms/Login";
@@ -206,24 +207,34 @@ export default function Profile() {
 													? "Администратор"
 													: "Преподаватель"}
 											</SimpleCell>
-											{storage.user.status === 2 &&
-											<SimpleCell
-												before={
-													<Icon28Users3Outline/>
-												}
-												multiline={true}
-												onClick={() => {
-													dispatch(
-														setActiveModal(
-															"favoriteGroup"
-														)
-													);
-												}}
-												description={storage.user.teacherGroup !== null ? "Группа, которую Вы курируете" : "Добавьте группу, которую Вы курируете"}
-											>
-												{storage.user.teacherGroup !== null ? storage.user.teacherGroup : "Курируемая группа"}
-											</SimpleCell>
-											}
+											{storage.user.status === 2 && (
+												<SimpleCell
+													before={
+														<Icon28Users3Outline />
+													}
+													multiline={true}
+													onClick={() => {
+														dispatch(
+															setActiveModal(
+																"favoriteGroup"
+															)
+														);
+													}}
+													description={
+														storage.user
+															.teacherGroup !==
+														null
+															? "Группа, которую Вы курируете"
+															: "Добавьте группу, которую Вы курируете"
+													}
+												>
+													{storage.user
+														.teacherGroup !== null
+														? storage.user
+																.teacherGroup
+														: "Курируемая группа"}
+												</SimpleCell>
+											)}
 											<Header>Настройки</Header>
 											{storage.user.status !== 2 && (
 												<SimpleCell

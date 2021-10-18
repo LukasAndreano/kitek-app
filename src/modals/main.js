@@ -24,10 +24,9 @@ import { saveSheduleDay, setSheduleStore } from "../reducers/sheduleReducer";
 
 import EditAccountInfo from "./EditAccountInfo";
 import ChangePassword from "./ChangePassword";
-
-import Time from "./Time"
-import Download from "./Download"
-import Social from "./Social"
+import Time from "./Time";
+import Download from "./Download";
+import Social from "./Social";
 import FavoriteGroup from "./FavoriteGroup";
 
 export default function Modals() {
