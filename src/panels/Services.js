@@ -9,6 +9,7 @@ import {
 	Avatar,
 	Title,
 	Text,
+	Group,
 
 } from "@vkontakte/vkui";
 
@@ -39,7 +40,8 @@ export default function Time() {
 			<PanelHeader separator={storage.isDesktop}>
 				Сервисы
 			</PanelHeader>
-			<Div>
+			<Group>
+				<Div>
 				<CardScroll size="m">
 					<Card className={"tap"} style={{marginLeft: storage.isDesktop ? 12 : 5}} onClick={() => dispatch(setSnackbar({text: "Добро пожаловать на вкладку «Сервисы»!", success: true}))}>
 						<Div>
@@ -121,7 +123,8 @@ export default function Time() {
 						</Card>
 					)}
 				</div>
-			</Div>
+				</Div>
+			</Group>
 		</Fragment>
 	);
 }

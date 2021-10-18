@@ -39,10 +39,10 @@ import { saveGroups } from "../reducers/mainReducer";
 const currentDate = new Date(new Date().getTime() + 7 * 60 * 60 * 1000);
 
 const month = ("0" + String(currentDate.getMonth() + 1)).slice(-2)
+const day = ("0" + String(currentDate.getDate())).slice(-2)
 
 const fullDate =
-	"0" +
-	currentDate.getDate() +
+	day +
 	"." +
 	month +
 	"." +
