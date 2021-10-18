@@ -1,7 +1,6 @@
 import React, { Fragment } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
-	Group,
 	PanelHeader,
 	CardScroll,
 	Card,
@@ -10,6 +9,7 @@ import {
 	Avatar,
 	Title,
 	Text,
+	Group,
 } from "@vkontakte/vkui";
 
 import {
@@ -35,6 +35,7 @@ export default function Time() {
 		<Fragment>
 			<PanelHeader separator={storage.isDesktop}>Сервисы</PanelHeader>
 			<Group>
+				<Div>
 				<CardScroll size="m">
 					<Card
 						className={"tap"}
@@ -224,6 +225,7 @@ export default function Time() {
 						</Card>
 					)}
 				</div>
+				</Div>
 			</Group>
 		</Fragment>
 	);

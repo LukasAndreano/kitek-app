@@ -19,6 +19,7 @@ export const mainReducer = createSlice({
 			name: null,
 			email: null,
 			group: null,
+			teacherGroup: null,
 			status: 0,
 		},
 		currentForm: 1,

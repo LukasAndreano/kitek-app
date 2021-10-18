@@ -101,7 +101,7 @@ const App = withAdaptivity(
 			if (localStorage.getItem("showUpdateCard")) {
 				dispatch(
 					setSnackbar({
-						text: "Установлено обновление: 1.1.7.1",
+						text: "Установлено обновление: 1.1.8",
 						success: true,
 					})
 				);
@@ -225,7 +225,7 @@ const App = withAdaptivity(
 					<Snackbar
 						layout="vertical"
 						duration={4000}
-						className={storage.isDesktop ? "snackBar-fix" : ""}
+						className={storage.isDesktop ? "snackBar-fix" : "snackbar-mobile-fix"}
 						onClose={() => {
 							dispatch(setSnackbar({ text: null }));
 							setSnackbarFunc(null);
@@ -277,6 +277,7 @@ const App = withAdaptivity(
 			<Fragment>
 				{themeManager && (
 					<SplitLayout
+						className={storage.snackbar.text !== null && 'snackbarActive'}
 						header={hasHeader && <PanelHeader separator={false} />}
 						style={{ justifyContent: "center" }}
 					>
@@ -436,7 +437,7 @@ const App = withAdaptivity(
 										</Group>
 									)}
 									<Footer style={{ marginTop: -10 }}>
-										Версия приложения: 1.1.7.1 <br />
+										Версия приложения: 1.1.8 <br />
 										Разработчик:{" "}
 										<a
 											href="https://vk.com/id172118960"
@@ -478,8 +479,8 @@ const App = withAdaptivity(
 												selected={
 													storage.url === "news"
 												}
+												text={"Новости"}
 												data-story="news"
-												text="Новости"
 											>
 												<Icon28Newsfeed />
 											</TabbarItem>
@@ -494,7 +495,7 @@ const App = withAdaptivity(
 													!storage.navigation ||
 													storage.url === "services"
 												}
-												text="Сервисы"
+												text={"Сервисы"}
 											>
 												<Icon28CompassOutline />
 											</TabbarItem>
@@ -508,7 +509,7 @@ const App = withAdaptivity(
 													storage.url === "news" ||
 													storage.url === ""
 												}
-												text="Расписание"
+												text={"Расписание"}
 											>
 												<Icon28CalendarOutline />
 											</TabbarItem>
@@ -523,7 +524,7 @@ const App = withAdaptivity(
 													storage.url === "profile"
 												}
 												data-story="profile"
-												text="Профиль"
+												text={"Профиль"}
 											>
 												<Icon28UserCircleOutline />
 											</TabbarItem>
@@ -546,11 +547,11 @@ const App = withAdaptivity(
 									{!storage.waitForProfileGet && (
 										<Panel id="default">
 											<Controller />
-											{snackbar}
 										</Panel>
 									)}
 								</View>
 							</Epic>
+							{snackbar}
 						</SplitCol>
 					</SplitLayout>
 				)}

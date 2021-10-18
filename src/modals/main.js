@@ -24,9 +24,11 @@ import { saveSheduleDay, setSheduleStore } from "../reducers/sheduleReducer";
 
 import EditAccountInfo from "./EditAccountInfo";
 import ChangePassword from "./ChangePassword";
-import Time from "./Time";
-import Download from "./Download";
-import Social from "./Social";
+
+import Time from "./Time"
+import Download from "./Download"
+import Social from "./Social"
+import FavoriteGroup from "./FavoriteGroup";
 
 export default function Modals() {
 	const [blockBackButton, setBlockBackButton] = useState(false);
@@ -151,6 +153,30 @@ export default function Modals() {
 			/>
 
 			<ModalPage
+				id="favoriteGroup"
+				onClose={() => {
+					closeModal();
+				}}
+				dynamicContentHeight
+				header={
+					<ModalPageHeader
+						right={
+							storage.isDesktop ? (
+								""
+							) : (
+								<PanelHeaderButton onClick={() => closeModal()}>
+									<Icon24Dismiss />
+								</PanelHeaderButton>
+							)
+						}
+						separator={false}
+					/>
+				}
+			>
+				<FavoriteGroup closeModal={closeModal} />
+			</ModalPage>
+
+			<ModalPage
 				id="editAccountInfo"
 				onClose={() => {
 					closeModal();
@@ -198,7 +224,7 @@ export default function Modals() {
 				}
 				header={"О приложении"}
 				subheader={
-					"Это приложение для студентов КИТЭК'а, позволяющее просматривать текущее расписание, следить за новостями, а также быстро подписываться на социальные сети колледжа.\n\nТекущая версия: 1.1.7.1\nРазработчик: Никита Балин"
+					"Это приложение для студентов КИТЭК'а, позволяющее просматривать текущее расписание, следить за новостями, а также быстро подписываться на социальные сети колледжа.\n\nТекущая версия: 1.1.8\nРазработчик: Никита Балин"
 				}
 				actions={
 					<Button
