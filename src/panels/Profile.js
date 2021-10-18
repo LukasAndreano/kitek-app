@@ -143,7 +143,7 @@ export default function Profile() {
 												: "Неизвестный пользователь"}
 										</Title>
 										<Text
-											weight={'regular'}
+											weight={"regular"}
 											style={{
 												marginBottom: 10,
 												color: "var(--text_secondary)",

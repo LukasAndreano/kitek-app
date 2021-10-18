@@ -121,7 +121,10 @@ export default function Admin() {
 								<Title weight="heavy" level="1">
 									{adminStorage.statistics.today} ч.
 								</Title>
-								<Text style={{ marginTop: 5 }} weight={"regular"}>
+								<Text
+									style={{ marginTop: 5 }}
+									weight={"regular"}
+								>
 									Пользователей за сегодня.
 								</Text>
 							</Div>
@@ -131,7 +134,10 @@ export default function Admin() {
 								<Title weight="heavy" level="1">
 									{adminStorage.statistics.month} ч.
 								</Title>
-								<Text style={{ marginTop: 5 }} weight={"regular"}>
+								<Text
+									style={{ marginTop: 5 }}
+									weight={"regular"}
+								>
 									Пользователей за этот месяц.
 								</Text>
 							</Div>
@@ -141,7 +147,10 @@ export default function Admin() {
 								<Title weight="heavy" level="1">
 									{adminStorage.statistics.lastMonth} ч.
 								</Title>
-								<Text style={{ marginTop: 5 }} weight={"regular"}>
+								<Text
+									style={{ marginTop: 5 }}
+									weight={"regular"}
+								>
 									Пользователей за прошлый месяц.
 								</Text>
 							</Div>

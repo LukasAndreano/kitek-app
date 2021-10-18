@@ -24,8 +24,8 @@ try {
 	// Подключаем менеджер тем. Автоматически определяет тему спустя 100 мс (задержка для загрузки VKUI).
 	try {
 		themeManager();
-	} catch(e) {
-		console.log("Theme changer not supported")
+	} catch (e) {
+		console.log("Theme changer not supported");
 	}
 
 	// Чистим локальное хранилище от мусора

@@ -143,9 +143,16 @@ export default function Settings() {
 									onChange={(e) => {
 										e.preventDefault();
 										setDisabled(true);
-										setUpdated(true)
-										for (let i = 0; i < e.target.files.length; i++) {
-											if (e.target.files[i].size < 10000000) {
+										setUpdated(true);
+										for (
+											let i = 0;
+											i < e.target.files.length;
+											i++
+										) {
+											if (
+												e.target.files[i].size <
+												10000000
+											) {
 												let form = new FormData();
 												form.append(
 													"shedule",
@@ -159,12 +166,13 @@ export default function Settings() {
 														data.errorCode !==
 															undefined &&
 														(data.errorCode === 3 ||
-															data.errorCode === 4)
+															data.errorCode ===
+																4)
 													)
 														refreshTokenWithFileUpload(
 															"updateShedule",
 															form
-														)
+														);
 												});
 											}
 										}
@@ -177,7 +185,10 @@ export default function Settings() {
 								</File>
 							</div>
 						</FormItem>
-						<FormItem top="Выберите дни недели, на которое мы отобразим расписание" className="mb10">
+						<FormItem
+							top="Выберите дни недели, на которое мы отобразим расписание"
+							className="mb10"
+						>
 							<ChipsSelect
 								value={weekDaysState}
 								onChange={(e) => {
@@ -200,18 +211,12 @@ export default function Settings() {
 								placeholder="Все дни недели. Изменить?"
 								showSelected={false}
 								closeAfterSelect={false}
-								renderChip={({
-									value,
-									label,
-									...rest
-								}) => (
+								renderChip={({ value, label, ...rest }) => (
 									<Chip value={value} {...rest}>
 										{label}
 									</Chip>
 								)}
-								renderOption={({
-									...otherProps
-								}) => {
+								renderOption={({ ...otherProps }) => {
 									return (
 										<CustomSelectOption {...otherProps} />
 									);
@@ -219,26 +224,32 @@ export default function Settings() {
 							/>
 						</FormItem>
 						<FormItem top={"Рассылка уведомлений"}>
-							<Button before={<Icon28NotificationAddOutline />} onClick={() => {
-								request("startMailing").then((data) => {
-									if (!data.response) {
-										dispatch(
-											setSnackbar({
-												text: "Произошла ошибка при запуске рассылки...",
-												success: false,
-											})
-										)
-								}
-											else {
-										dispatch(
-											setSnackbar({
-												text: "Рассылка запущена!",
-												success: true,
-											})
-										);
-									}
-								});
-							}} stretched size={"l"}>Запустить рассылку</Button>
+							<Button
+								before={<Icon28NotificationAddOutline />}
+								onClick={() => {
+									request("startMailing").then((data) => {
+										if (!data.response) {
+											dispatch(
+												setSnackbar({
+													text: "Произошла ошибка при запуске рассылки...",
+													success: false,
+												})
+											);
+										} else {
+											dispatch(
+												setSnackbar({
+													text: "Рассылка запущена!",
+													success: true,
+												})
+											);
+										}
+									});
+								}}
+								stretched
+								size={"l"}
+							>
+								Запустить рассылку
+							</Button>
 						</FormItem>
 					</Fragment>
 				) : (
