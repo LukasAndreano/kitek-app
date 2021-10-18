@@ -101,7 +101,7 @@ const App = withAdaptivity(
 			if (localStorage.getItem("showUpdateCard")) {
 				dispatch(
 					setSnackbar({
-						text: "Установлено обновление: 1.1.7.1",
+						text: "Установлено обновление: 1.1.8",
 						success: true,
 					})
 				);
