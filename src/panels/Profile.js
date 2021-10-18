@@ -207,7 +207,7 @@ export default function Profile() {
 													? "Администратор"
 													: "Преподаватель"}
 											</SimpleCell>
-											{storage.user.status === 2 && (
+											{(storage.user.status === 2 || storage.user.status === 1) && (
 												<SimpleCell
 													before={
 														<Icon28Users3Outline />

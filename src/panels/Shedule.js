@@ -494,7 +494,7 @@ export default function Shedule() {
 							</Fragment>
 						) : (
 							<Fragment>
-								{storage.user.status === 2 &&
+								{(storage.user.status === 2 || storage.user.status === 1) &&
 									storage.user.teacherGroup !== null &&
 									group.name !==
 										storage.user.teacherGroup && (
@@ -515,7 +515,7 @@ export default function Shedule() {
 											asideMode="expand"
 										/>
 									)}
-								{storage.user.status === 2 &&
+								{(storage.user.status === 2 || storage.user.status === 1) &&
 									storage.user.teacherGroup !== null &&
 									group.name ===
 										storage.user.teacherGroup && (
