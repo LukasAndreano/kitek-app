@@ -29,6 +29,7 @@ import {
 	Icon28CompassOutline,
 	Icon28Newsfeed,
 	Icon28PollSquareOutline,
+	Icon28ListOutline,
 	Icon28CalendarOutline,
 	Icon28SettingsOutline,
 	Icon28UserCircleOutline,
@@ -411,6 +412,34 @@ const App = withAdaptivity(
 												}
 											>
 												Статистика
+											</Cell>
+											<Cell
+												onClick={URLChanger}
+												disabled={
+													storage.url ===
+													"admin/albums" ||
+													!storage.navigation
+												}
+												className={
+													!storage.navigation &&
+													"disabledNav"
+												}
+												style={
+													storage.url ===
+													"admin/albums"
+														? {
+															backgroundColor:
+																"var(--button_secondary_background)",
+															borderRadius: 8,
+														}
+														: {}
+												}
+												data-story="admin/albums"
+												before={
+													<Icon28ListOutline />
+												}
+											>
+												Альбомы
 											</Cell>
 											<Cell
 												onClick={URLChanger}

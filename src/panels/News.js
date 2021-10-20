@@ -3,14 +3,15 @@ import { useSelector, useDispatch } from "react-redux";
 import {
 	Div,
 	ContentCard,
-	Link,
 	Spinner,
 	PanelHeader,
-	PullToRefresh,
+	PullToRefresh, Button, CardScroll, Card,
 } from "@vkontakte/vkui";
 import api from "../service/api";
+import {Icon20WriteSquareOutline} from "@vkontakte/icons"
 
 import { saveData } from "../reducers/newsReducer";
+import { setActiveModal } from "../reducers/mainReducer"
 
 export default function News() {
 	const [wall, setWall] = useState([]);
@@ -23,60 +24,49 @@ export default function News() {
 
 	useEffect(() => {
 		if (newsStorage.data.length !== 0) {
-			renderWall(newsStorage.data);
+			renderWall(newsStorage.data, storage.isDesktop);
 		} else {
 			setLoader(true);
-			api("getNews").then((data) => {
+			api("/getLatestNews").then((data) => {
 				if (data.response !== undefined && data.response !== null) {
-					renderWall(data.response.items);
-					dispatch(saveData(data.response.items));
+					renderWall(data.news, storage.isDesktop);
+					dispatch(saveData(data.news));
 				}
 			});
 		}
-	}, [newsStorage.data, dispatch, setLoader]);
+	}, [newsStorage.data, dispatch, setLoader, storage.isDesktop]);
 
-	function renderWall(data) {
+	function renderWall(data, desktop) {
 		let arr = [];
 		data.forEach((el) => {
-			let image =
-				el.attachments !== undefined &&
-				el.attachments[0].type === "photo"
-					? el.attachments[0].photo.sizes[
-							el.attachments[0].photo.sizes.length - 1
-					  ].url
-					: null;
-			if (el.text !== "")
 				arr.push(
-					<Link
-						key={el.id}
-						href={
-							"https://vk.com/omsktec?w=wall" +
-							el.owner_id +
-							"_" +
-							el.id
+					<Card key={el._id}>
+						{el.images.length !== 0 &&
+						<CardScroll size="l">
+							{el.images.map(el => {
+							return <Card key={el}>
+								<img src={el} alt="img" style={{width: desktop ? '103%' : '100%', height: '100%', borderTopLeftRadius: 8, borderTopRightRadius: 8}} />
+							</Card>
+							})}
+						</CardScroll>
 						}
-						target="_blank"
-						refferer="no-referrer"
-						className="noHover"
-					>
-						<ContentCard
+					<ContentCard
 							className="defaultText tw"
 							disabled
 							mode="tint"
-							style={{ marginBottom: 10 }}
-							text={el.text}
-							image={image}
+							style={{ marginBottom: 10, }}
+							text={el.description}
+							header={el.title}
 							caption={new Date(el.date * 1000).toLocaleString(
 								"ru-RU",
 								{
 									weekday: "long",
-									year: "numeric",
 									month: "long",
 									day: "numeric",
 								}
 							)}
 						/>
-					</Link>
+					</Card>
 				);
 		});
 		setWall(arr);
@@ -89,14 +79,14 @@ export default function News() {
 			<PullToRefresh
 				onRefresh={() => {
 					setFetching(true);
-					api("getNews")
+					api("getLatestNews")
 						.then((data) => {
 							if (
-								data.response !== undefined &&
-								data.response !== null
+								data.response !== false &&
+								data.news.length !== 0
 							) {
-								renderWall(data.response.items);
-								dispatch(saveData(data.response.items));
+								renderWall(data.news, storage.isDesktop);
+								dispatch(saveData(data.news));
 							}
 						})
 						.catch(() => {
@@ -105,6 +95,13 @@ export default function News() {
 				}}
 				isFetching={fetching}
 			>
+				{storage.isDesktop ? (
+					<Button stretched before={<Icon20WriteSquareOutline />} onClick={() => dispatch(setActiveModal('addNews'))} mode="secondary" size="l" style={{marginBottom: 10}}>Новая запись</Button>
+				) : (
+					<Div style={{marginBottom: -10, marginTop: -5}}>
+						<Button stretched before={<Icon20WriteSquareOutline />} onClick={() => dispatch(setActiveModal('addNews'))} mode="secondary" size="l">Новая запись</Button>
+					</Div>
+				)}
 				{wall.length === 0 && loader === true ? (
 					<Spinner size="medium" style={{ margin: "20px 0" }} />
 				) : storage.isDesktop ? (

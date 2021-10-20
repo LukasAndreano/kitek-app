@@ -16,6 +16,7 @@ import {
 	Icon16Down,
 	Icon16Users,
 	Icon16Recent,
+	Icon16Picture,
 	Icon16Pin,
 	Icon16Flash,
 	Icon16Poll,
@@ -213,6 +214,26 @@ export default function Time() {
 									description="Посещаемость приложения"
 								>
 									Статистика
+								</SimpleCell>
+								<SimpleCell
+									before={
+										<Avatar
+											style={{
+												background:
+													"var(--destructive)",
+											}}
+											size={28}
+											shadow={false}
+										>
+											<Icon16Picture fill="var(--white)" />
+										</Avatar>
+									}
+									onClick={() => {
+										history.push("/admin/albums");
+									}}
+									description="Управление местом для фото"
+								>
+									Альбомы
 								</SimpleCell>
 								<SimpleCell
 									before={

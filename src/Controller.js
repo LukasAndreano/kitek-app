@@ -7,12 +7,13 @@ import Social from "./panels/Social";
 import News from "./panels/News";
 import Shedule from "./panels/Shedule";
 import Download from "./panels/Download";
+import Services from "./panels/Services";
 
 // С доступами
 import Profile from "./panels/Profile";
 import Admin from "./panels/admin/Admin";
 import Settings from "./panels/admin/Settings";
-import Services from "./panels/Services";
+import Albums from "./panels/admin/Albums"
 
 const routes = [
 	{
@@ -54,6 +55,11 @@ const routes = [
 		path: "/admin/settings",
 		exact: true,
 		panel: () => <Settings />,
+	},
+	{
+		path: "/admin/albums",
+		exact: true,
+		panel: () => <Albums />,
 	},
 	{
 		path: "/",

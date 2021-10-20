@@ -28,6 +28,8 @@ import Time from "./Time";
 import Download from "./Download";
 import Social from "./Social";
 import FavoriteGroup from "./FavoriteGroup";
+import AddNews from "./AddNews"
+import AddAlbum from "./AddAlbum"
 
 export default function Modals() {
 	const [blockBackButton, setBlockBackButton] = useState(false);
@@ -302,6 +304,58 @@ export default function Modals() {
 				}
 			>
 				<ChangePassword closeModal={closeModal} />
+			</ModalPage>
+
+			<ModalPage
+				id="addNews"
+				onClose={() => {
+					closeModal();
+				}}
+				dynamicContentHeight
+				header={
+					<ModalPageHeader
+						right={
+							storage.isDesktop ? (
+								""
+							) : (
+								<PanelHeaderButton onClick={() => closeModal()}>
+									<Icon24Dismiss />
+								</PanelHeaderButton>
+							)
+						}
+						separator={false}
+					>
+						Новая запись
+					</ModalPageHeader>
+				}
+			>
+				<AddNews closeModal={closeModal} />
+			</ModalPage>
+
+			<ModalPage
+				id="addAlbum"
+				onClose={() => {
+					closeModal();
+				}}
+				dynamicContentHeight
+				header={
+					<ModalPageHeader
+						right={
+							storage.isDesktop ? (
+								""
+							) : (
+								<PanelHeaderButton onClick={() => closeModal()}>
+									<Icon24Dismiss />
+								</PanelHeaderButton>
+							)
+						}
+						separator={false}
+					>
+						Новый альбом
+					</ModalPageHeader>
+				}
+			>
+				<AddAlbum closeModal={closeModal} />
 			</ModalPage>
 
 			<ModalPage
