@@ -111,30 +111,34 @@ export default function News() {
 				}}
 				isFetching={fetching}
 			>
-				{storage.isDesktop ? (
-					<Button
-						stretched
-						before={<Icon20WriteSquareOutline />}
-						onClick={() => dispatch(setActiveModal("addNews"))}
-						mode="secondary"
-						size="l"
-						style={{ marginBottom: 10 }}
-					>
-						Новая запись
-					</Button>
-				) : (
-					<Div style={{ marginBottom: -10, marginTop: -5 }}>
-						<Button
-							stretched
-							before={<Icon20WriteSquareOutline />}
-							onClick={() => dispatch(setActiveModal("addNews"))}
-							mode="secondary"
-							size="l"
-						>
-							Новая запись
-						</Button>
-					</Div>
-				)}
+				{storage.user.status === 1 && 
+					<Fragment>
+						{storage.isDesktop ? (
+							<Button
+								stretched
+								before={<Icon20WriteSquareOutline />}
+								onClick={() => dispatch(setActiveModal("addNews"))}
+								mode="secondary"
+								size="l"
+								style={{ marginBottom: 10 }}
+							>
+								Новая запись
+							</Button>
+						) : (
+							<Div style={{ marginBottom: -10, marginTop: -5 }}>
+								<Button
+									stretched
+									before={<Icon20WriteSquareOutline />}
+									onClick={() => dispatch(setActiveModal("addNews"))}
+									mode="secondary"
+									size="l"
+								>
+									Новая запись
+								</Button>
+							</Div>
+						)}
+					</Fragment>
+				}
 				{wall.length === 0 && loader === true ? (
 					<Spinner size="medium" style={{ margin: "20px 0" }} />
 				) : storage.isDesktop ? (
