@@ -169,26 +169,33 @@ export default function Profile() {
 											<Header>Общая информация</Header>
 											<Card>
 												<SimpleCell
-													before={<Icon28MailOutline />}
+													before={
+														<Icon28MailOutline />
+													}
 													onClick={() => {
 														navigator.clipboard
 															.writeText(
-																storage.user.email
+																storage.user
+																	.email
 															)
 															.then(() => {
 																dispatch(
-																	setSnackbar({
-																		text: "Адрес электронной почты скопирован в буфер обмена.",
-																		success: true,
-																	})
+																	setSnackbar(
+																		{
+																			text: "Адрес электронной почты скопирован в буфер обмена.",
+																			success: true,
+																		}
+																	)
 																);
 															})
 															.catch(() => {
 																dispatch(
-																	setSnackbar({
-																		text: "Произошла ошибка при копировании почты в буфер обмена.",
-																		success: false,
-																	})
+																	setSnackbar(
+																		{
+																			text: "Произошла ошибка при копировании почты в буфер обмена.",
+																			success: false,
+																		}
+																	)
 																);
 															});
 													}}
@@ -205,11 +212,14 @@ export default function Profile() {
 												>
 													{storage.user.status === 0
 														? "Обычный пользователь"
-														: storage.user.status === 1
-															? "Администратор"
-															: "Преподаватель"}
+														: storage.user
+																.status === 1
+														? "Администратор"
+														: "Преподаватель"}
 												</SimpleCell>
-												{(storage.user.status === 2 || storage.user.status === 1) && (
+												{(storage.user.status === 2 ||
+													storage.user.status ===
+														1) && (
 													<SimpleCell
 														before={
 															<Icon28Users3Outline />
@@ -231,9 +241,10 @@ export default function Profile() {
 														}
 													>
 														{storage.user
-															.teacherGroup !== null
+															.teacherGroup !==
+														null
 															? storage.user
-																.teacherGroup
+																	.teacherGroup
 															: "Курируемая группа"}
 													</SimpleCell>
 												)}
@@ -266,7 +277,9 @@ export default function Profile() {
 															)
 														);
 													}}
-													before={<Icon28EditOutline />}
+													before={
+														<Icon28EditOutline />
+													}
 													description="Безопасность - это главное"
 													multiline
 												>
@@ -280,7 +293,9 @@ export default function Profile() {
 															)
 														);
 													}}
-													before={<Icon28Notifications />}
+													before={
+														<Icon28Notifications />
+													}
 													description="Получайте уведомления при изменении расписания"
 													multiline
 												>
@@ -297,7 +312,9 @@ export default function Profile() {
 															)
 														);
 													}}
-													before={<Icon28InfoOutline />}
+													before={
+														<Icon28InfoOutline />
+													}
 													description="Подробная информация о приложении"
 													multiline
 												>
@@ -306,13 +323,15 @@ export default function Profile() {
 												<SimpleCell
 													href="https://github.com/LukasAndreano/kitek-app"
 													target="_blank"
-													before={<Icon28BugOutline />}
+													before={
+														<Icon28BugOutline />
+													}
 													description="Заведите issue в репозитории на GitHub, если Вы нашли ошибку!"
 													multiline
 												>
-												<span className="defaultText">
-													Сообщить о баге
-												</span>
+													<span className="defaultText">
+														Сообщить о баге
+													</span>
 												</SimpleCell>
 											</Card>
 										</Div>

@@ -417,7 +417,7 @@ const App = withAdaptivity(
 												onClick={URLChanger}
 												disabled={
 													storage.url ===
-													"admin/albums" ||
+														"admin/albums" ||
 													!storage.navigation
 												}
 												className={
@@ -428,16 +428,14 @@ const App = withAdaptivity(
 													storage.url ===
 													"admin/albums"
 														? {
-															backgroundColor:
-																"var(--button_secondary_background)",
-															borderRadius: 8,
-														}
+																backgroundColor:
+																	"var(--button_secondary_background)",
+																borderRadius: 8,
+														  }
 														: {}
 												}
 												data-story="admin/albums"
-												before={
-													<Icon28ListOutline />
-												}
+												before={<Icon28ListOutline />}
 											>
 												Альбомы
 											</Cell>

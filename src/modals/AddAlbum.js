@@ -1,17 +1,11 @@
 // noinspection JSCheckFunctionSignatures
 
 import React, { useState, useCallback } from "react";
-import {
-	FormLayout,
-	Button,
-	Group,
-	FormItem,
-	Input,
-} from "@vkontakte/vkui";
+import { FormLayout, Button, Group, FormItem, Input } from "@vkontakte/vkui";
 import { useDispatch } from "react-redux";
 import { setSnackbar } from "../reducers/mainReducer";
 
-import { setAlbumsLoaded } from "../reducers/adminReducer"
+import { setAlbumsLoaded } from "../reducers/adminReducer";
 
 import authorizedAPI from "../service/authorizedAPI";
 import refreshToken from "../service/refreshToken";
@@ -20,7 +14,7 @@ export default function AddAlbum(props) {
 	const dispatch = useDispatch();
 
 	const [album_id, setAlbumId] = useState("");
-	const [group_id, setGroupId] = useState("")
+	const [group_id, setGroupId] = useState("");
 
 	const [disabled, setDisabled] = useState(false);
 
@@ -28,7 +22,7 @@ export default function AddAlbum(props) {
 		return new Promise((resolve) => {
 			authorizedAPI("admin/albums/add", {
 				album_id,
-				group_id
+				group_id,
 			}).then((data) => {
 				if (
 					data.errorCode !== undefined &&
@@ -36,7 +30,7 @@ export default function AddAlbum(props) {
 				)
 					refreshToken("admin/albums/add", {
 						album_id,
-						group_id
+						group_id,
 					}).then((data) => {
 						return resolve(data);
 					});
@@ -50,17 +44,14 @@ export default function AddAlbum(props) {
 	return (
 		<Group>
 			<FormLayout
-				style={{marginTop: -20}}
+				style={{ marginTop: -20 }}
 				onSubmit={(e) => {
 					e.preventDefault();
 					setDisabled(true);
-					if (
-						group_id !== "" ||
-						album_id !== ""
-					) {
+					if (group_id !== "" || album_id !== "") {
 						request().then((data) => {
 							if (data.response) {
-								dispatch(setAlbumsLoaded(false))
+								dispatch(setAlbumsLoaded(false));
 								props.closeModal();
 								dispatch(
 									setSnackbar({
@@ -92,9 +83,7 @@ export default function AddAlbum(props) {
 						value={group_id}
 						required
 						onChange={(e) => {
-							setGroupId(
-								e.target.value.trim()
-							);
+							setGroupId(e.target.value.trim());
 						}}
 					/>
 				</FormItem>
@@ -105,9 +94,7 @@ export default function AddAlbum(props) {
 						value={album_id}
 						required
 						onChange={(e) => {
-							setAlbumId(
-								e.target.value.trim()
-							);
+							setAlbumId(e.target.value.trim());
 						}}
 					/>
 				</FormItem>
@@ -117,10 +104,7 @@ export default function AddAlbum(props) {
 						stretched
 						type="submit"
 						loading={disabled}
-						disabled={
-							album_id === "" ||
-							group_id === ""
-						}
+						disabled={album_id === "" || group_id === ""}
 					>
 						Добавить
 					</Button>

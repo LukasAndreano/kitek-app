@@ -28,8 +28,8 @@ import Time from "./Time";
 import Download from "./Download";
 import Social from "./Social";
 import FavoriteGroup from "./FavoriteGroup";
-import AddNews from "./AddNews"
-import AddAlbum from "./AddAlbum"
+import AddNews from "./AddNews";
+import AddAlbum from "./AddAlbum";
 
 export default function Modals() {
 	const [blockBackButton, setBlockBackButton] = useState(false);

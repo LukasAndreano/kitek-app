@@ -6,7 +6,7 @@ export const adminReducer = createSlice({
 		statistics: {},
 		statisticsLoaded: false,
 		albumsLoaded: false,
-		albums: []
+		albums: [],
 	},
 	reducers: {
 		setStatisticsLoaded: (state, action) => {
@@ -24,6 +24,11 @@ export const adminReducer = createSlice({
 	},
 });
 
-export const { saveStatistics, setStatisticsLoaded, setAlbumsLoaded, saveAlbumsData } = adminReducer.actions;
+export const {
+	saveStatistics,
+	setStatisticsLoaded,
+	setAlbumsLoaded,
+	saveAlbumsData,
+} = adminReducer.actions;
 
 export default adminReducer.reducer;

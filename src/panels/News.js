@@ -5,13 +5,16 @@ import {
 	ContentCard,
 	Spinner,
 	PanelHeader,
-	PullToRefresh, Button, CardScroll, Card,
+	PullToRefresh,
+	Button,
+	CardScroll,
+	Card,
 } from "@vkontakte/vkui";
 import api from "../service/api";
-import {Icon20WriteSquareOutline} from "@vkontakte/icons"
+import { Icon20WriteSquareOutline } from "@vkontakte/icons";
 
 import { saveData } from "../reducers/newsReducer";
-import { setActiveModal } from "../reducers/mainReducer"
+import { setActiveModal } from "../reducers/mainReducer";
 
 export default function News() {
 	const [wall, setWall] = useState([]);
@@ -39,35 +42,48 @@ export default function News() {
 	function renderWall(data, desktop) {
 		let arr = [];
 		data.forEach((el) => {
-				arr.push(
-					<Card key={el._id}>
-						{el.images.length !== 0 &&
+			arr.push(
+				<Card key={el._id}>
+					{el.images.length !== 0 && (
 						<CardScroll size="l">
-							{el.images.map(el => {
-							return <Card key={el}>
-								<img src={el} alt="img" style={{width: desktop ? '103%' : '100%', height: '100%', borderTopLeftRadius: 8, borderTopRightRadius: 8}} />
-							</Card>
+							{el.images.map((el) => {
+								return (
+									<Card key={el}>
+										<img
+											src={el}
+											alt="img"
+											style={{
+												width: desktop
+													? "103%"
+													: "100%",
+												height: "100%",
+												borderTopLeftRadius: 8,
+												borderTopRightRadius: 8,
+											}}
+										/>
+									</Card>
+								);
 							})}
 						</CardScroll>
-						}
+					)}
 					<ContentCard
-							className="defaultText tw"
-							disabled
-							mode="tint"
-							style={{ marginBottom: 10, }}
-							text={el.description}
-							header={el.title}
-							caption={new Date(el.date * 1000).toLocaleString(
-								"ru-RU",
-								{
-									weekday: "long",
-									month: "long",
-									day: "numeric",
-								}
-							)}
-						/>
-					</Card>
-				);
+						className="defaultText tw"
+						disabled
+						mode="tint"
+						style={{ marginBottom: 10 }}
+						text={el.description}
+						header={el.title}
+						caption={new Date(el.date * 1000).toLocaleString(
+							"ru-RU",
+							{
+								weekday: "long",
+								month: "long",
+								day: "numeric",
+							}
+						)}
+					/>
+				</Card>
+			);
 		});
 		setWall(arr);
 		setFetching(false);
@@ -96,10 +112,27 @@ export default function News() {
 				isFetching={fetching}
 			>
 				{storage.isDesktop ? (
-					<Button stretched before={<Icon20WriteSquareOutline />} onClick={() => dispatch(setActiveModal('addNews'))} mode="secondary" size="l" style={{marginBottom: 10}}>Новая запись</Button>
+					<Button
+						stretched
+						before={<Icon20WriteSquareOutline />}
+						onClick={() => dispatch(setActiveModal("addNews"))}
+						mode="secondary"
+						size="l"
+						style={{ marginBottom: 10 }}
+					>
+						Новая запись
+					</Button>
 				) : (
-					<Div style={{marginBottom: -10, marginTop: -5}}>
-						<Button stretched before={<Icon20WriteSquareOutline />} onClick={() => dispatch(setActiveModal('addNews'))} mode="secondary" size="l">Новая запись</Button>
+					<Div style={{ marginBottom: -10, marginTop: -5 }}>
+						<Button
+							stretched
+							before={<Icon20WriteSquareOutline />}
+							onClick={() => dispatch(setActiveModal("addNews"))}
+							mode="secondary"
+							size="l"
+						>
+							Новая запись
+						</Button>
 					</Div>
 				)}
 				{wall.length === 0 && loader === true ? (

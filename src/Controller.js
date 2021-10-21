@@ -13,7 +13,7 @@ import Services from "./panels/Services";
 import Profile from "./panels/Profile";
 import Admin from "./panels/admin/Admin";
 import Settings from "./panels/admin/Settings";
-import Albums from "./panels/admin/Albums"
+import Albums from "./panels/admin/Albums";
 
 const routes = [
 	{

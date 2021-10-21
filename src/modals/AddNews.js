@@ -7,9 +7,10 @@ import {
 	Group,
 	FormItem,
 	Input,
-	Textarea, File
+	Textarea,
+	File,
 } from "@vkontakte/vkui";
-import {Icon24DoneOutline, Icon24CameraOutline} from "@vkontakte/icons";
+import { Icon24DoneOutline, Icon24CameraOutline } from "@vkontakte/icons";
 import { useDispatch } from "react-redux";
 import { setSnackbar } from "../reducers/mainReducer";
 
@@ -17,26 +18,26 @@ import authorizedAPI from "../service/authorizedAPI";
 import refreshToken from "../service/refreshToken";
 import authorizedAPIFiles from "../service/authorizedAPIFiles";
 import refreshTokenWithFileUpload from "../service/refreshTokenWithFileUpload";
-import {saveData} from "../reducers/newsReducer";
+import { saveData } from "../reducers/newsReducer";
 
 export default function AddNews(props) {
 	const dispatch = useDispatch();
 
 	const [title, setTitle] = useState("");
-	const [description, setDescription] = useState("")
+	const [description, setDescription] = useState("");
 
 	const [disabled, setDisabled] = useState(false);
 
-	const [uploaded, setUploaded] = useState(false)
-	const [files, setFiles] = useState(null)
-	const [images, setImages] = useState("")
+	const [uploaded, setUploaded] = useState(false);
+	const [files, setFiles] = useState(null);
+	const [images, setImages] = useState("");
 
 	const request = useCallback(() => {
 		return new Promise((resolve) => {
 			authorizedAPI("admin/news/add", {
 				title,
 				description,
-				images
+				images,
 			}).then((data) => {
 				if (
 					data.errorCode !== undefined &&
@@ -45,7 +46,7 @@ export default function AddNews(props) {
 					refreshToken("admin/news/add", {
 						title,
 						description,
-						images
+						images,
 					}).then((data) => {
 						return resolve(data);
 					});
@@ -97,14 +98,18 @@ export default function AddNews(props) {
 						value={title}
 						required
 						onChange={(e) => {
-							setTitle(
-								e.target.value
-							);
+							setTitle(e.target.value);
 						}}
 					/>
 				</FormItem>
 				<FormItem className="mb10" top="Текст записи">
-					<Textarea maxLength={4000} rows={9} value={description} onChange={e => setDescription(e.target.value)} placeholder="Несите учебник русского языка..." />
+					<Textarea
+						maxLength={4000}
+						rows={9}
+						value={description}
+						onChange={(e) => setDescription(e.target.value)}
+						placeholder="Несите учебник русского языка..."
+					/>
 				</FormItem>
 				<FormItem className="mb10" top="Вложения">
 					<File
@@ -127,57 +132,68 @@ export default function AddNews(props) {
 							e.preventDefault();
 							setUploaded(true);
 							if (e.target.files.length > 10) {
-								setUploaded(false)
-								dispatch(setSnackbar({text: "Можно загрузить не более 10 фотографий", success: false}))
+								setUploaded(false);
+								dispatch(
+									setSnackbar({
+										text: "Можно загрузить не более 10 фотографий",
+										success: false,
+									})
+								);
 							} else {
-								setFiles(e.target.files.length)
-								setDisabled(true)
-								let urls = []
+								setFiles(e.target.files.length);
+								setDisabled(true);
+								let urls = [];
 								for (
 									let i = 0;
 									i < e.target.files.length;
 									i++
 								) {
-									if (
-										e.target.files[i].size <
-										10000000
-									) {
+									if (e.target.files[i].size < 10000000) {
 										let form = new FormData();
-										form.append(
-											"image",
-											e.target.files[i]
-										);
+										form.append("image", e.target.files[i]);
 										authorizedAPIFiles(
 											"admin/albums/addPhoto",
 											form
 										).then((data) => {
 											if (data.response) {
-												urls.push(data.url)
-												if (i+1 === e.target.files.length) {
-													setDisabled(false)
-													setImages(urls.join(","))
-													console.log(urls.join(","))
+												urls.push(data.url);
+												if (
+													i + 1 ===
+													e.target.files.length
+												) {
+													setDisabled(false);
+													setImages(urls.join(","));
+													console.log(urls.join(","));
 												}
 											} else {
 												if (
 													data.errorCode !==
-													undefined &&
+														undefined &&
 													(data.errorCode === 3 ||
-														data.errorCode ===
-														4)
+														data.errorCode === 4)
 												)
 													refreshTokenWithFileUpload(
 														"admin/albums/addPhoto",
 														form
-													).then(data => {
+													).then((data) => {
 														if (data.response) {
-															urls.push(data.url)
-															if (i+1 === e.target.files.length) {
-																setDisabled(false)
-																setImages(urls.join(","))
+															urls.push(data.url);
+															if (
+																i + 1 ===
+																e.target.files
+																	.length
+															) {
+																setDisabled(
+																	false
+																);
+																setImages(
+																	urls.join(
+																		","
+																	)
+																);
 															}
 														}
-													})
+													});
 											}
 										});
 									}
