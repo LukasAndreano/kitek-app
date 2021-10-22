@@ -388,7 +388,7 @@ export default function Shedule() {
 				Расписание
 			</PanelHeader>
 			<Group>
-				{loaded && !lazyLoading ? (
+				{(loaded && !lazyLoading) ? (
 					<Fragment>
 						{group === null ? (
 							<Fragment>
