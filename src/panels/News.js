@@ -8,7 +8,7 @@ import {
 	PullToRefresh,
 	Button,
 	CardScroll,
-	Card,
+	Card, Placeholder,
 } from "@vkontakte/vkui";
 import api from "../service/api";
 import { Icon20WriteSquareOutline } from "@vkontakte/icons";
@@ -20,6 +20,7 @@ export default function News() {
 	const [wall, setWall] = useState([]);
 	const [loader, setLoader] = useState(false);
 	const [fetching, setFetching] = useState(false);
+	const [loaded, setLoaded] = useState(false)
 
 	const storage = useSelector((state) => state.main);
 	const newsStorage = useSelector((state) => state.news);
@@ -41,52 +42,55 @@ export default function News() {
 
 	function renderWall(data, desktop) {
 		let arr = [];
-		data.forEach((el) => {
-			arr.push(
-				<Card key={el._id}>
-					{el.images.length !== 0 && (
-						<CardScroll size="l">
-							{el.images.map((el) => {
-								return (
-									<Card key={el}>
-										<img
-											src={el}
-											alt="img"
-											style={{
-												width: desktop
-													? "103%"
-													: "100%",
-												height: "100%",
-												borderTopLeftRadius: 8,
-												borderTopRightRadius: 8,
-											}}
-										/>
-									</Card>
-								);
-							})}
-						</CardScroll>
-					)}
-					<ContentCard
-						className="defaultText tw"
-						disabled
-						mode="tint"
-						style={{ marginBottom: 10 }}
-						text={el.description}
-						header={el.title}
-						caption={new Date(el.date * 1000).toLocaleString(
-							"ru-RU",
-							{
-								weekday: "long",
-								month: "long",
-								day: "numeric",
-							}
+
+		if (data.length !== 0)
+			data.forEach((el) => {
+				arr.push(
+					<Card key={el._id}>
+						{el.images[0] !== "" && (
+							<CardScroll size="l">
+								{el.images.map((el) => {
+									return (
+										<Card key={el}>
+											<img
+												src={el}
+												alt="img"
+												style={{
+													width: desktop
+														? "103%"
+														: "100%",
+													height: "100%",
+													borderTopLeftRadius: 8,
+													borderTopRightRadius: 8,
+												}}
+											/>
+										</Card>
+									);
+								})}
+							</CardScroll>
 						)}
-					/>
-				</Card>
-			);
-		});
+						<ContentCard
+							className="defaultText tw"
+							disabled
+							mode="tint"
+							style={{ marginBottom: 10 }}
+							text={el.description}
+							header={el.title}
+							caption={new Date(el.date * 1000).toLocaleString(
+								"ru-RU",
+								{
+									weekday: "long",
+									month: "long",
+									day: "numeric",
+								}
+							)}
+						/>
+					</Card>
+				);
+			});
 		setWall(arr);
 		setFetching(false);
+		setLoaded(true)
 	}
 
 	return (
@@ -111,7 +115,7 @@ export default function News() {
 				}}
 				isFetching={fetching}
 			>
-				{storage.user.status === 1 && 
+				{storage.user.status === 1 &&
 					<Fragment>
 						{storage.isDesktop ? (
 							<Button
@@ -139,12 +143,17 @@ export default function News() {
 						)}
 					</Fragment>
 				}
-				{wall.length === 0 && loader === true ? (
+				{(loader === true && !loaded) ? (
 					<Spinner size="medium" style={{ margin: "20px 0" }} />
-				) : storage.isDesktop ? (
-					wall
 				) : (
-					<Div>{wall}</Div>
+					<Fragment>
+						{storage.isDesktop ? (
+							wall
+						) : (
+							<Div>{wall}</Div>
+						)}
+						{wall.length === 0 && <Placeholder style={{marginTop: -40}}>Новостей пока нет. <br />Ждём!</Placeholder>}
+					</Fragment>
 				)}
 			</PullToRefresh>
 		</Fragment>

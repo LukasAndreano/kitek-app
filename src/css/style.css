@@ -259,3 +259,6 @@ a:hover {
 .badgehightlighted {
 	color: #ff3347;
 }
+.avatar img {
+	object-fit: cover;
+}

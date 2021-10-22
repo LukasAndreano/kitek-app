@@ -12,7 +12,7 @@ import {
 	Text,
 	Header,
 	PullToRefresh,
-	SimpleCell,
+	SimpleCell, Avatar,
 } from "@vkontakte/vkui";
 import {
 	Icon28DoorArrowRightOutline,
@@ -23,7 +23,7 @@ import {
 	Icon28InfoOutline,
 	Icon28Notifications,
 	Icon28BugOutline,
-	Icon28Users3Outline,
+	Icon28Users3Outline, Icon28CameraOutline,
 } from "@vkontakte/icons";
 
 import Login from "../forms/Login";
@@ -132,6 +132,7 @@ export default function Profile() {
 											padding: 32,
 										}}
 									>
+										<Avatar onClick={() => dispatch(setActiveModal('changeAvatar'))} className={"avatar tap"} src={storage.user.avatar === null ? "https://sun9-78.userapi.com/impg/cQujlzxysdtnp2h8egzLAnxMnKhQ_PoHI_erIw/TPJ6iK6jGiM.jpg?size=1550x1551&quality=95&sign=fc53be2d938b8fab2cba18aceb12d968&type=album" : storage.user.avatar} size={100} />
 										<Title
 											style={{
 												marginBottom: 2,
@@ -284,6 +285,22 @@ export default function Profile() {
 													multiline
 												>
 													Изменить пароль
+												</SimpleCell>
+												<SimpleCell
+													onClick={() => {
+														dispatch(
+															setActiveModal(
+																"changeAvatar"
+															)
+														);
+													}}
+													before={
+														<Icon28CameraOutline />
+													}
+													description="Добавьте немного уникальности"
+													multiline
+												>
+													Изменить аватар
 												</SimpleCell>
 												<SimpleCell
 													onClick={() => {

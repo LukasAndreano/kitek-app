@@ -30,6 +30,7 @@ import Social from "./Social";
 import FavoriteGroup from "./FavoriteGroup";
 import AddNews from "./AddNews";
 import AddAlbum from "./AddAlbum";
+import ChangeAvatar from "./ChangeAvatar";
 
 export default function Modals() {
 	const [blockBackButton, setBlockBackButton] = useState(false);
@@ -304,6 +305,32 @@ export default function Modals() {
 				}
 			>
 				<ChangePassword closeModal={closeModal} />
+			</ModalPage>
+
+			<ModalPage
+				id="changeAvatar"
+				onClose={() => {
+					closeModal();
+				}}
+				dynamicContentHeight
+				header={
+					<ModalPageHeader
+						right={
+							storage.isDesktop ? (
+								""
+							) : (
+								<PanelHeaderButton onClick={() => closeModal()}>
+									<Icon24Dismiss />
+								</PanelHeaderButton>
+							)
+						}
+						separator={false}
+					>
+						Аватар
+					</ModalPageHeader>
+				}
+			>
+				<ChangeAvatar closeModal={closeModal} />
 			</ModalPage>
 
 			<ModalPage

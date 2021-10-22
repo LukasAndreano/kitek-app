@@ -12,6 +12,8 @@ export default function authorizedAPIFiles(method, data) {
 			})
 			.then((response) => {
 				return resolve(response.data);
-			});
+			}).catch((response) => {
+			return resolve(response.data)
+		})
 	});
 }
