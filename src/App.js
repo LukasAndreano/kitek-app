@@ -100,9 +100,12 @@ const App = withAdaptivity(
 
 		useEffect(() => {
 			if (localStorage.getItem("showUpdateCard")) {
-				dispatch(
-					setActiveModal('updated')
-				);
+				setTimeout(() => {
+					dispatch(
+						setActiveModal('updated')
+					);
+				}, 1000)
+
 				localStorage.removeItem("showUpdateCard");
 			}
 		});
@@ -178,7 +181,6 @@ const App = withAdaptivity(
 							200
 						);
 						dispatch(setUser(data.user));
-						localStorage.setItem("showUpdateCard", true)
 					}
 				});
 			}
