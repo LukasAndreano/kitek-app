@@ -61,9 +61,10 @@ export default function News() {
 												src={el}
 												alt="img"
 												style={{
-													width: desktop
-														? "103%"
-														: "100%",
+													width: "100%",
+													marginLeft: desktop
+													? 15
+													: 0,
 													height: "100%",
 													borderTopLeftRadius: 8,
 													borderTopRightRadius: 8
