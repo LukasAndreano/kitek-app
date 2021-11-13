@@ -29,6 +29,7 @@ import {
 	Icon28CompassOutline,
 	Icon28Newsfeed,
 	Icon28PollSquareOutline,
+	Icon28ListOutline,
 	Icon28CalendarOutline,
 	Icon28SettingsOutline,
 	Icon28UserCircleOutline,
@@ -99,12 +100,12 @@ const App = withAdaptivity(
 
 		useEffect(() => {
 			if (localStorage.getItem("showUpdateCard")) {
-				dispatch(
-					setSnackbar({
-						text: "Установлено обновление: 1.1.8",
-						success: true,
-					})
-				);
+				setTimeout(() => {
+					dispatch(
+						setActiveModal('updated')
+					);
+				}, 1000)
+
 				localStorage.removeItem("showUpdateCard");
 			}
 		});
@@ -225,7 +226,11 @@ const App = withAdaptivity(
 					<Snackbar
 						layout="vertical"
 						duration={4000}
-						className={storage.isDesktop ? "snackBar-fix" : "snackbar-mobile-fix"}
+						className={
+							storage.isDesktop
+								? "snackBar-fix"
+								: "snackbar-mobile-fix"
+						}
 						onClose={() => {
 							dispatch(setSnackbar({ text: null }));
 							setSnackbarFunc(null);
@@ -277,7 +282,9 @@ const App = withAdaptivity(
 			<Fragment>
 				{themeManager && (
 					<SplitLayout
-						className={storage.snackbar.text !== null && 'snackbarActive'}
+						className={
+							storage.snackbar.text !== null && "snackbarActive"
+						}
 						header={hasHeader && <PanelHeader separator={false} />}
 						style={{ justifyContent: "center" }}
 					>
@@ -410,6 +417,32 @@ const App = withAdaptivity(
 												onClick={URLChanger}
 												disabled={
 													storage.url ===
+														"admin/albums" ||
+													!storage.navigation
+												}
+												className={
+													!storage.navigation &&
+													"disabledNav"
+												}
+												style={
+													storage.url ===
+													"admin/albums"
+														? {
+																backgroundColor:
+																	"var(--button_secondary_background)",
+																borderRadius: 8,
+														  }
+														: {}
+												}
+												data-story="admin/albums"
+												before={<Icon28ListOutline />}
+											>
+												Альбомы
+											</Cell>
+											<Cell
+												onClick={URLChanger}
+												disabled={
+													storage.url ===
 														"admin/settings" ||
 													!storage.navigation
 												}
@@ -437,7 +470,7 @@ const App = withAdaptivity(
 										</Group>
 									)}
 									<Footer style={{ marginTop: -10 }}>
-										Версия приложения: 1.1.8 <br />
+										Версия приложения: 1.1.9 <br />
 										Разработчик:{" "}
 										<a
 											href="https://vk.com/id172118960"

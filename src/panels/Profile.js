@@ -6,12 +6,13 @@ import {
 	PanelHeader,
 	Gradient,
 	Div,
+	Card,
 	Spinner,
 	Title,
 	Text,
 	Header,
 	PullToRefresh,
-	SimpleCell,
+	SimpleCell, Avatar,
 } from "@vkontakte/vkui";
 import {
 	Icon28DoorArrowRightOutline,
@@ -21,7 +22,8 @@ import {
 	Icon28EditOutline,
 	Icon28InfoOutline,
 	Icon28Notifications,
-	Icon28BugOutline, Icon28Users3Outline,
+	Icon28BugOutline,
+	Icon28Users3Outline, Icon28CameraOutline,
 } from "@vkontakte/icons";
 
 import Login from "../forms/Login";
@@ -130,6 +132,7 @@ export default function Profile() {
 											padding: 32,
 										}}
 									>
+										<Avatar onClick={() => dispatch(setActiveModal('changeAvatar'))} className={"avatar tap"} src={storage.user.avatar === null ? "https://sun9-78.userapi.com/impg/cQujlzxysdtnp2h8egzLAnxMnKhQ_PoHI_erIw/TPJ6iK6jGiM.jpg?size=1550x1551&quality=95&sign=fc53be2d938b8fab2cba18aceb12d968&type=album" : storage.user.avatar} size={100} />
 										<Title
 											style={{
 												marginBottom: 2,
@@ -165,138 +168,189 @@ export default function Profile() {
 											}}
 										>
 											<Header>Общая информация</Header>
-											<SimpleCell
-												before={<Icon28MailOutline />}
-												onClick={() => {
-													navigator.clipboard
-														.writeText(
-															storage.user.email
-														)
-														.then(() => {
-															dispatch(
-																setSnackbar({
-																	text: "Адрес электронной почты скопирован в буфер обмена.",
-																	success: true,
-																})
-															);
-														})
-														.catch(() => {
-															dispatch(
-																setSnackbar({
-																	text: "Произошла ошибка при копировании почты в буфер обмена.",
-																	success: false,
-																})
-															);
-														});
-												}}
-												description="Адрес электронной почты"
-											>
-												{storage.user.email}
-											</SimpleCell>
-											<SimpleCell
-												before={
-													<Icon28UserStarBadgeOutline />
-												}
-												disabled
-												description="Ваш ранг в приложении"
-											>
-												{storage.user.status === 0
-													? "Обычный пользователь"
-													: storage.user.status === 1
-													? "Администратор"
-													: "Преподаватель"}
-											</SimpleCell>
-											{storage.user.status === 2 &&
-											<SimpleCell
-												before={
-													<Icon28Users3Outline/>
-												}
-												multiline={true}
-												onClick={() => {
-													dispatch(
-														setActiveModal(
-															"favoriteGroup"
-														)
-													);
-												}}
-												description={storage.user.teacherGroup !== null ? "Группа, которую Вы курируете" : "Добавьте группу, которую Вы курируете"}
-											>
-												{storage.user.teacherGroup !== null ? storage.user.teacherGroup : "Курируемая группа"}
-											</SimpleCell>
-											}
-											<Header>Настройки</Header>
-											{storage.user.status !== 2 && (
+											<Card>
 												<SimpleCell
 													before={
-														<Icon28SettingsOutline />
+														<Icon28MailOutline />
 													}
+													onClick={() => {
+														navigator.clipboard
+															.writeText(
+																storage.user
+																	.email
+															)
+															.then(() => {
+																dispatch(
+																	setSnackbar(
+																		{
+																			text: "Адрес электронной почты скопирован в буфер обмена.",
+																			success: true,
+																		}
+																	)
+																);
+															})
+															.catch(() => {
+																dispatch(
+																	setSnackbar(
+																		{
+																			text: "Произошла ошибка при копировании почты в буфер обмена.",
+																			success: false,
+																		}
+																	)
+																);
+															});
+													}}
+													description="Адрес электронной почты"
+												>
+													{storage.user.email}
+												</SimpleCell>
+												<SimpleCell
+													before={
+														<Icon28UserStarBadgeOutline />
+													}
+													disabled
+													description="Ваш ранг в приложении"
+												>
+													{storage.user.status === 0
+														? "Обычный пользователь"
+														: storage.user
+																.status === 1
+														? "Администратор"
+														: "Преподаватель"}
+												</SimpleCell>
+												{(storage.user.status === 2 ||
+													storage.user.status ===
+														1) && (
+													<SimpleCell
+														before={
+															<Icon28Users3Outline />
+														}
+														multiline={true}
+														onClick={() => {
+															dispatch(
+																setActiveModal(
+																	"favoriteGroup"
+																)
+															);
+														}}
+														description={
+															storage.user
+																.teacherGroup !==
+															null
+																? "Группа, которую Вы курируете"
+																: "Добавьте группу, которую Вы курируете"
+														}
+													>
+														{storage.user
+															.teacherGroup !==
+														null
+															? storage.user
+																	.teacherGroup
+															: "Курируемая группа"}
+													</SimpleCell>
+												)}
+											</Card>
+											<Header>Настройки</Header>
+											<Card>
+												{storage.user.status !== 2 && (
+													<SimpleCell
+														before={
+															<Icon28SettingsOutline />
+														}
+														onClick={() => {
+															dispatch(
+																setActiveModal(
+																	"editAccountInfo"
+																)
+															);
+														}}
+														description="Если нужно, например, изменить группу"
+														multiline
+													>
+														Отредактировать профиль
+													</SimpleCell>
+												)}
+												<SimpleCell
 													onClick={() => {
 														dispatch(
 															setActiveModal(
-																"editAccountInfo"
+																"changePassword"
 															)
 														);
 													}}
-													description="Если нужно, например, изменить группу"
+													before={
+														<Icon28EditOutline />
+													}
+													description="Безопасность - это главное"
 													multiline
 												>
-													Отредактировать профиль
+													Изменить пароль
 												</SimpleCell>
-											)}
-											<SimpleCell
-												onClick={() => {
-													dispatch(
-														setActiveModal(
-															"changePassword"
-														)
-													);
-												}}
-												before={<Icon28EditOutline />}
-												description="Безопасность - это главное"
-												multiline
-											>
-												Изменить пароль
-											</SimpleCell>
-											<SimpleCell
-												onClick={() => {
-													dispatch(
-														setActiveModal(
-															"connectNotifications"
-														)
-													);
-												}}
-												before={<Icon28Notifications />}
-												description="Получайте уведомления при изменении расписания"
-												multiline
-											>
-												Уведомления
-											</SimpleCell>
+												<SimpleCell
+													onClick={() => {
+														dispatch(
+															setActiveModal(
+																"changeAvatar"
+															)
+														);
+													}}
+													before={
+														<Icon28CameraOutline />
+													}
+													description="Добавьте немного уникальности"
+													multiline
+												>
+													Изменить аватар
+												</SimpleCell>
+												<SimpleCell
+													onClick={() => {
+														dispatch(
+															setActiveModal(
+																"connectNotifications"
+															)
+														);
+													}}
+													before={
+														<Icon28Notifications />
+													}
+													description="Получайте уведомления при изменении расписания"
+													multiline
+												>
+													Уведомления
+												</SimpleCell>
+											</Card>
 											<Header>Другое</Header>
-											<SimpleCell
-												onClick={() => {
-													dispatch(
-														setActiveModal(
-															"aboutAPP"
-														)
-													);
-												}}
-												before={<Icon28InfoOutline />}
-												description="Подробная информация о приложении"
-												multiline
-											>
-												О приложении
-											</SimpleCell>
-											<SimpleCell
-												href="https://github.com/LukasAndreano/kitek-app"
-												target="_blank"
-												before={<Icon28BugOutline />}
-												description="Заведите issue в репозитории на GitHub, если Вы нашли ошибку!"
-												multiline
-											>
-												<span className="defaultText">
-													Сообщить о баге
-												</span>
-											</SimpleCell>
+											<Card>
+												<SimpleCell
+													onClick={() => {
+														dispatch(
+															setActiveModal(
+																"aboutAPP"
+															)
+														);
+													}}
+													before={
+														<Icon28InfoOutline />
+													}
+													description="Подробная информация о приложении"
+													multiline
+												>
+													О приложении
+												</SimpleCell>
+												<SimpleCell
+													href="https://github.com/LukasAndreano/kitek-app"
+													target="_blank"
+													before={
+														<Icon28BugOutline />
+													}
+													description="Заведите issue в репозитории на GitHub, если Вы нашли ошибку!"
+													multiline
+												>
+													<span className="defaultText">
+														Сообщить о баге
+													</span>
+												</SimpleCell>
+											</Card>
 										</Div>
 									</Group>
 								</Fragment>

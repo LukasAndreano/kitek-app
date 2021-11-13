@@ -35,7 +35,7 @@ export default function EditAccountInfo(props) {
 		return new Promise((resolve) => {
 			authorizedAPI("editProfile", {
 				name,
-				group,
+				group: group === 0 ? storage.user.group : group,
 			}).then((data) => {
 				if (
 					data.errorCode !== undefined &&
@@ -43,7 +43,7 @@ export default function EditAccountInfo(props) {
 				)
 					refreshToken("editProfile", {
 						name,
-						group,
+						group: group === 0 ? storage.user.group : group,
 					}).then((data) => {
 						return resolve(data);
 					});
@@ -52,7 +52,7 @@ export default function EditAccountInfo(props) {
 				}
 			});
 		});
-	}, [group, name]);
+	}, [group, name, storage.user.group]);
 
 	useEffect(() => {
 		setGroup(storage.user.group === null ? 0 : storage.user.group);

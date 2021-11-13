@@ -7,16 +7,22 @@ import {
 	Button,
 	ModalPage,
 	ModalPageHeader,
-	PanelHeaderButton,
+	PanelHeaderButton, RichCell, Card, Text, Title, Group, Div,
 } from "@vkontakte/vkui";
 
 import { useHistory } from "react-router-dom";
 import { motion } from "framer-motion";
 
+import developer from "../img/avatar.png"
+
 import {
 	Icon56InfoOutline,
 	Icon24Dismiss,
 	Icon56NotificationOutline,
+	Icon28FaceRecognitionOutline,
+	Icon28Newsfeed,
+	Icon28SmartphoneOutline,
+	Icon28Users3Outline, Icon28SpeedometerMaxOutline,
 } from "@vkontakte/icons";
 
 import { setActiveModal, setUser } from "../reducers/mainReducer";
@@ -24,11 +30,13 @@ import { saveSheduleDay, setSheduleStore } from "../reducers/sheduleReducer";
 
 import EditAccountInfo from "./EditAccountInfo";
 import ChangePassword from "./ChangePassword";
-
-import Time from "./Time"
-import Download from "./Download"
-import Social from "./Social"
+import Time from "./Time";
+import Download from "./Download";
+import Social from "./Social";
 import FavoriteGroup from "./FavoriteGroup";
+import AddNews from "./AddNews";
+import AddAlbum from "./AddAlbum";
+import ChangeAvatar from "./ChangeAvatar";
 
 export default function Modals() {
 	const [blockBackButton, setBlockBackButton] = useState(false);
@@ -177,6 +185,111 @@ export default function Modals() {
 			</ModalPage>
 
 			<ModalPage
+				id="updated"
+				onClose={() => {
+					closeModal();
+				}}
+				dynamicContentHeight
+				header={
+					<ModalPageHeader
+						style={{marginBottom: -15}}
+						right={
+							storage.isDesktop ? (
+								""
+							) : (
+								<PanelHeaderButton onClick={() => closeModal()}>
+									<Icon24Dismiss />
+								</PanelHeaderButton>
+							)
+						}
+						separator={false}
+					/>
+				}
+			>
+				<Group style={{ textAlign: "center" }}>
+					<img src={developer} alt="avatar"  style={{width: 128}}/>
+					<Title level="2" weight="normal" style={{ marginBottom: 5 }}>
+						Приложение обновилось!
+					</Title>
+					<Text weight="regular">
+						Встречайте обновление 1.1.9!<br/>Давайте посмотрим, что мы изменили:
+					</Text>
+					<Div style={{ textAlign: "left" }}>
+						<Card>
+							<RichCell
+								before={
+									<Icon28FaceRecognitionOutline
+										style={{ marginTop: 18, marginRight: 10 }}
+									/>
+								}
+								caption="Добавьте немного уникальности в свой профиль - добавьте аватар."
+								className="tw"
+								disabled
+							>
+								Аватарки профиля
+							</RichCell>
+						</Card>
+						<Card style={{ marginTop: 10 }}>
+							<RichCell
+								before={
+									<Icon28Newsfeed
+										style={{ marginTop: 18, marginRight: 10 }}
+									/>
+								}
+								caption="Мы полностью переработали вкладку с новостями, чтобы в будущем публиковать здесь только уникальный контент."
+								className="tw"
+								disabled
+							>
+								Новости приложения (beta)
+							</RichCell>
+						</Card>
+						<Card style={{ marginTop: 10 }}>
+							<RichCell
+								before={
+									<Icon28SmartphoneOutline
+										style={{ marginTop: 18, marginRight: 10 }}
+									/>
+								}
+								caption="Теперь приложение будет работать даже на iPhone 5s. Наконец-то!"
+								className="tw"
+								disabled
+							>
+								Поддержка старых iPhone
+							</RichCell>
+						</Card>
+						<Card style={{ marginTop: 10 }}>
+							<RichCell
+								before={
+									<Icon28Users3Outline
+										style={{ marginTop: 18, marginRight: 10 }}
+									/>
+								}
+								caption="Отныне преподаватели, которые курируют какую-либо группу, могут отслеживать её расписание в один клик."
+								className="tw"
+								disabled
+							>
+								Курируемые группы
+							</RichCell>
+						</Card>
+						<Card style={{ marginTop: 10 }}>
+							<RichCell
+								before={
+									<Icon28SpeedometerMaxOutline
+										style={{ marginTop: 18, marginRight: 10 }}
+									/>
+								}
+								caption="В этом обновлении мы причесали код и переработали логику запросов. Всё для старых iOS & Android устройств!"
+								className="tw"
+								disabled
+							>
+								Теперь ещё быстрее
+							</RichCell>
+						</Card>
+					</Div>
+				</Group>
+			</ModalPage>
+
+			<ModalPage
 				id="editAccountInfo"
 				onClose={() => {
 					closeModal();
@@ -224,7 +337,7 @@ export default function Modals() {
 				}
 				header={"О приложении"}
 				subheader={
-					"Это приложение для студентов КИТЭК'а, позволяющее просматривать текущее расписание, следить за новостями, а также быстро подписываться на социальные сети колледжа.\n\nТекущая версия: 1.1.8\nРазработчик: Никита Балин"
+					"Это приложение для студентов КИТЭК'а, позволяющее просматривать текущее расписание, следить за новостями, а также быстро подписываться на социальные сети колледжа.\n\nТекущая версия: 1.1.9\nРазработчик: Никита Балин"
 				}
 				actions={
 					<Button
@@ -303,6 +416,84 @@ export default function Modals() {
 				}
 			>
 				<ChangePassword closeModal={closeModal} />
+			</ModalPage>
+
+			<ModalPage
+				id="changeAvatar"
+				onClose={() => {
+					closeModal();
+				}}
+				dynamicContentHeight
+				header={
+					<ModalPageHeader
+						right={
+							storage.isDesktop ? (
+								""
+							) : (
+								<PanelHeaderButton onClick={() => closeModal()}>
+									<Icon24Dismiss />
+								</PanelHeaderButton>
+							)
+						}
+						separator={false}
+					>
+						Аватар
+					</ModalPageHeader>
+				}
+			>
+				<ChangeAvatar closeModal={closeModal} />
+			</ModalPage>
+
+			<ModalPage
+				id="addNews"
+				onClose={() => {
+					closeModal();
+				}}
+				dynamicContentHeight
+				header={
+					<ModalPageHeader
+						right={
+							storage.isDesktop ? (
+								""
+							) : (
+								<PanelHeaderButton onClick={() => closeModal()}>
+									<Icon24Dismiss />
+								</PanelHeaderButton>
+							)
+						}
+						separator={false}
+					>
+						Новая запись
+					</ModalPageHeader>
+				}
+			>
+				<AddNews closeModal={closeModal} />
+			</ModalPage>
+
+			<ModalPage
+				id="addAlbum"
+				onClose={() => {
+					closeModal();
+				}}
+				dynamicContentHeight
+				header={
+					<ModalPageHeader
+						right={
+							storage.isDesktop ? (
+								""
+							) : (
+								<PanelHeaderButton onClick={() => closeModal()}>
+									<Icon24Dismiss />
+								</PanelHeaderButton>
+							)
+						}
+						separator={false}
+					>
+						Новый альбом
+					</ModalPageHeader>
+				}
+			>
+				<AddAlbum closeModal={closeModal} />
 			</ModalPage>
 
 			<ModalPage

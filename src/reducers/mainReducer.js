@@ -21,6 +21,7 @@ export const mainReducer = createSlice({
 			group: null,
 			teacherGroup: null,
 			status: 0,
+			avatar: null,
 		},
 		currentForm: 1,
 		groups: [],
@@ -63,6 +64,9 @@ export const mainReducer = createSlice({
 		setNavigation: (state, action) => {
 			state.navigation = action.payload;
 		},
+		updateAvatar: (state, action) => {
+			state.user.avatar = action.payload;
+		},
 	},
 });
 
@@ -73,6 +77,7 @@ export const {
 	setSnackbar,
 	setCurrentForm,
 	setUser,
+	updateAvatar,
 	setWaitForProfileGet,
 	setPopout,
 	saveGroups,
