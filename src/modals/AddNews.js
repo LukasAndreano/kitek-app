@@ -163,7 +163,6 @@ export default function AddNews(props) {
 												) {
 													setDisabled(false);
 													setImages(urls.join(","));
-													console.log(urls.join(","));
 												}
 											} else {
 												if (

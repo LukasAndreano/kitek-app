@@ -27,16 +27,21 @@ export default function News() {
 	const dispatch = useDispatch();
 
 	useEffect(() => {
-		if (newsStorage.data.length !== 0) {
+		if (newsStorage.data !== undefined && newsStorage.data !== null && newsStorage.data.length !== 0) {
 			renderWall(newsStorage.data, storage.isDesktop);
 		} else {
-			setLoader(true);
-			api("/getLatestNews").then((data) => {
-				if (data.response !== undefined && data.response !== null) {
-					renderWall(data.news, storage.isDesktop);
-					dispatch(saveData(data.news));
-				}
-			});
+			if (newsStorage.data !== null) {
+				setLoader(true);
+				api("/getLatestNews").then((data) => {
+					if (data.response !== undefined && data.response !== null && data.news.length !== 0) {
+						renderWall(data.news, storage.isDesktop);
+						dispatch(saveData(data.news));
+					} else {
+						setLoader(false);
+						dispatch(saveData(null));
+					}
+				});
+			}
 		}
 	}, [newsStorage.data, dispatch, setLoader, storage.isDesktop]);
 
@@ -61,7 +66,7 @@ export default function News() {
 														: "100%",
 													height: "100%",
 													borderTopLeftRadius: 8,
-													borderTopRightRadius: 8,
+													borderTopRightRadius: 8
 												}}
 											/>
 										</Card>
@@ -107,6 +112,8 @@ export default function News() {
 							) {
 								renderWall(data.news, storage.isDesktop);
 								dispatch(saveData(data.news));
+							} else {
+								setFetching(false)
 							}
 						})
 						.catch(() => {

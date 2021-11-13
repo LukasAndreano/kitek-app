@@ -53,9 +53,9 @@ export default function ChangeAvatar(props) {
 					accept="image/png, image/jpeg"
 					controlSize="l"
 					onChange={(e) => {
-						e.preventDefault();
-							setDisabled(true);
-							if (e.target.files[0].size < 10000000) {
+						e.preventDefault()
+							if (e.target.files.length !== 0 && e.target.files[0].size < 10000000) {
+								setDisabled(true);
 								let form = new FormData();
 								form.append("image", e.target.files[0]);
 								authorizedAPIFiles(

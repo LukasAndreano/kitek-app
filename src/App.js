@@ -101,10 +101,7 @@ const App = withAdaptivity(
 		useEffect(() => {
 			if (localStorage.getItem("showUpdateCard")) {
 				dispatch(
-					setSnackbar({
-						text: "Установлено обновление: 1.1.8",
-						success: true,
-					})
+					setActiveModal('updated')
 				);
 				localStorage.removeItem("showUpdateCard");
 			}
@@ -181,6 +178,7 @@ const App = withAdaptivity(
 							200
 						);
 						dispatch(setUser(data.user));
+						localStorage.setItem("showUpdateCard", true)
 					}
 				});
 			}
@@ -470,7 +468,7 @@ const App = withAdaptivity(
 										</Group>
 									)}
 									<Footer style={{ marginTop: -10 }}>
-										Версия приложения: 1.1.8 <br />
+										Версия приложения: 1.1.9 <br />
 										Разработчик:{" "}
 										<a
 											href="https://vk.com/id172118960"
