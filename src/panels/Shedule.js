@@ -265,7 +265,7 @@ export default function Shedule() {
 						}
 					);
 				} else {
-					api("getShedule", {
+					api("getShedule2", {
 						group: encodeURI(group),
 					}).then((data) => {
 						if (data.response) {

@@ -197,34 +197,6 @@ a:hover {
 	background: var(--action_sheet_separator);
 	border-radius: 8px;
 }
-.vkuiTabbar {
-	border-radius: 15px;
-	box-shadow: 0 0 20px 8px rgba(0, 0, 0, 0.15) !important;
-	padding: 5px;
-}
-.vkuiEpic .vkuiTabbar {
-	justify-content: center;
-	transition: 0.4s;
-	opacity: 1;
-	display: flex;
-	align-items: center;
-	margin: 15px 13px;
-	width: 90% !important;
-}
-.vkuiTabbar--ios.vkuiTabbar--shadow::before {
-	display: none;
-}
-.snackbar-mobile-fix .vkuiSnackbar__body {
-	border-radius: 15px;
-	margin-bottom: 5px;
-}
-.vkuiSnackbar__body {
-	box-shadow: 0 0 20px 8px rgba(0, 0, 0, 0.15) !important;
-}
-.snackbarActive .vkuiEpic .vkuiTabbar {
-	opacity: 0;
-	transition: 0.4s;
-}
 .TabbarItem--selected .vkuiIcon {
 	animation-name: boop;
 	animation-duration: 0.7s;
@@ -261,4 +233,27 @@ a:hover {
 }
 .avatar img {
 	object-fit: cover;
+}
+.paddingSnackbar {
+	margin: 0 0 50px 0;
+	z-index: 1;
+}
+.screenLoading {
+	display: flex;
+	justify-items: center;
+	height: 100vh !important;
+	animation-name: show;
+	animation-duration: 0.5s;
+}
+.prettyShow {
+	animation-name: show;
+	animation-duration: 0.5s;
+}
+@keyframes show {
+	0% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 1;
+	}
 }

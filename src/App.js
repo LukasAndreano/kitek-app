@@ -11,7 +11,6 @@ import {
 	Tabbar,
 	TabbarItem,
 	Alert,
-	ScreenSpinner,
 	Epic,
 	Group,
 	withAdaptivity,
@@ -20,7 +19,7 @@ import {
 	View,
 	usePlatform,
 	Footer,
-	VKCOM,
+	VKCOM, PanelSpinner,
 } from "@vkontakte/vkui";
 
 import {
@@ -57,7 +56,8 @@ import Modals from "./modals/main";
 const App = withAdaptivity(
 	({ viewWidth }) => {
 		const platform = usePlatform();
-		const isDesktop = viewWidth >= 3;
+
+		const isDesktop = viewWidth >= 4;
 		const hasHeader = platform !== VKCOM;
 
 		const [themeManager, setThemeManager] = useState(false);
@@ -227,9 +227,7 @@ const App = withAdaptivity(
 						layout="vertical"
 						duration={4000}
 						className={
-							storage.isDesktop
-								? "snackBar-fix"
-								: "snackbar-mobile-fix"
+							!storage.isDesktop ? "paddingSnackbar" : ""
 						}
 						onClose={() => {
 							dispatch(setSnackbar({ text: null }));
@@ -280,7 +278,7 @@ const App = withAdaptivity(
 
 		return (
 			<Fragment>
-				{themeManager && (
+				{(themeManager && !storage.waitForProfileGet) ? (
 					<SplitLayout
 						className={
 							storage.snackbar.text !== null && "snackbarActive"
@@ -289,7 +287,7 @@ const App = withAdaptivity(
 						style={{ justifyContent: "center" }}
 					>
 						{isDesktop && (
-							<SplitCol fixed width="280px" maxWidth="280px">
+							<SplitCol fixed width="280px" maxWidth="280px" className="prettyShow">
 								<Panel nav="navigationDesktop">
 									{hasHeader && (
 										<PanelHeader>КИТЭК</PanelHeader>
@@ -497,6 +495,7 @@ const App = withAdaptivity(
 							spaced={isDesktop}
 							width={isDesktop ? "560px" : "100%"}
 							maxWidth={isDesktop ? "560px" : "100%"}
+							className="prettyShow"
 						>
 							<Epic
 								activeStory={"default"}
@@ -570,24 +569,20 @@ const App = withAdaptivity(
 									activePanel="default"
 									modal={modal}
 									popout={
-										storage.waitForProfileGet ? (
-											<ScreenSpinner />
-										) : (
-											popout
-										)
+										popout
 									}
 								>
-									{!storage.waitForProfileGet && (
-										<Panel id="default">
-											<Controller />
-										</Panel>
-									)}
+									<Panel id="default">
+										<Controller />
+									</Panel>
 								</View>
 							</Epic>
 							{snackbar}
 						</SplitCol>
 					</SplitLayout>
-				)}
+				) : (
+					<PanelSpinner size="medium" className="screenLoading" />
+					)}
 			</Fragment>
 		);
 	},
