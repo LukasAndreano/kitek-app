@@ -20,7 +20,7 @@ import {
 	Icon16Pin,
 	Icon16Flash,
 	Icon16Poll,
-	Icon16Sync,
+	Icon16Sync, Icon16ArticleOutline,
 } from "@vkontakte/icons";
 
 import { setActiveModal, setSnackbar } from "../reducers/mainReducer";
@@ -155,6 +155,21 @@ export default function Time() {
 								description="Звонки учебных занятий."
 							>
 								Расписание звонков
+							</SimpleCell>
+							<SimpleCell
+								onClick={() => dispatch(setActiveModal("time"))}
+								before={
+									<Avatar
+										style={{ background: "var(--accent)" }}
+										size={28}
+										shadow={false}
+									>
+										<Icon16ArticleOutline fill="var(--white)" />
+									</Avatar>
+								}
+								description="История учебных занятий."
+							>
+								История расписания
 							</SimpleCell>
 						</Card>
 						<Card style={{ margin: "10px 0" }}>

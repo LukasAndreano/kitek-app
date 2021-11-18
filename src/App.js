@@ -468,7 +468,7 @@ const App = withAdaptivity(
 										</Group>
 									)}
 									<Footer style={{ marginTop: -10 }}>
-										Версия приложения: 1.1.9 <br />
+										Версия приложения: 1.2.0 <br />
 										Разработчик:{" "}
 										<a
 											href="https://vk.com/id172118960"
