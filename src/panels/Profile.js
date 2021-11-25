@@ -23,7 +23,7 @@ import {
 	Icon28InfoOutline,
 	Icon28Notifications,
 	Icon28BugOutline,
-	Icon28Users3Outline, Icon28CameraOutline,
+	Icon28Users3Outline, Icon28CameraOutline, Icon16Done,
 } from "@vkontakte/icons";
 
 import Login from "../forms/Login";
@@ -142,7 +142,7 @@ export default function Profile() {
 											weight="medium"
 										>
 											{storage.user.name
-												? storage.user.name
+												? <div style={{display: 'inline-flex'}}>{storage.user.name} {storage.user.verifed && <Icon16Done style={{marginTop: 4, marginLeft: 5}} fill={"#71AAEB"} />} </div>
 												: "Неизвестный пользователь"}
 										</Title>
 										<Text
@@ -163,8 +163,7 @@ export default function Profile() {
 									<Group mode="plain">
 										<Div
 											style={{
-												marginTop: -10,
-												marginLeft: -5,
+												marginTop: -10
 											}}
 										>
 											<Header>Общая информация</Header>

@@ -22,6 +22,7 @@ export const mainReducer = createSlice({
 			teacherGroup: null,
 			status: 0,
 			avatar: null,
+			verifed: false,
 		},
 		currentForm: 1,
 		groups: [],

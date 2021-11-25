@@ -13,9 +13,7 @@ import {
 	Div,
 	Footer,
 	Button,
-	Card,
 	PanelHeader,
-	Title,
 	PanelHeaderButton,
 } from "@vkontakte/vkui";
 import {
@@ -27,6 +25,7 @@ import api from "../service/api";
 import authorizedAPI from "../service/authorizedAPI";
 import refreshToken from "../service/refreshToken";
 
+import renderSheduleBlocks from "./handlers/renderSheduleBlocks";
 import { setActiveModal } from "../reducers/mainReducer";
 import {
 	setSheduleStore,
@@ -62,57 +61,8 @@ export default function Shedule() {
 	// Функция рендера самих пар, использующая локальное хранилище
 	const renderLessons = useCallback(
 		(data = null, teacherMode = false) => {
-			let arr = [];
 			if (data !== undefined && data.length !== 0) {
-				let renderData =
-					data[localStorage.getItem("sheduleDay")]["timetable"];
-				let id = 0;
-				renderData.forEach((el, key) => {
-					let group = teacherMode ? el.group.split("-") : null;
-					id++;
-					arr.push(
-						<Card
-							className="tw"
-							key={id}
-							style={{ marginBottom: 10 }}
-						>
-							<Div>
-								<Title level="3" weight="medium">
-									<span className="hide">
-										Пара №{el.number}
-									</span>{" "}
-									{el.name}
-								</Title>
-								<h4 style={{ marginTop: 5, marginBottom: 0 }}>
-									<span className="type">{el.type}</span>
-									<span className="teacher">
-										{teacherMode
-											? group[1] === undefined
-												? group[0]
-												: group[1] + "-" + group[0]
-											: el["teacher"]}
-									</span>
-								</h4>
-							</Div>
-						</Card>
-					);
-					if (
-						renderData[key + 1] !== undefined &&
-						renderData[key + 1].number !== el.number &&
-						(el.type === "Практика" ||
-							renderData[key + 1].type === "Практика") &&
-						el.name !== "Физическая культура" &&
-						renderData[key + 1].name !== "Физическая культура" &&
-						!teacherMode
-					)
-						arr.push(
-							<Card
-								key={id + 10}
-								style={{ height: 20, marginBottom: 10 }}
-							/>
-						);
-				});
-				setShedule(arr);
+				setShedule(renderSheduleBlocks(data[localStorage.getItem("sheduleDay")]["timetable"], teacherMode));
 			}
 		},
 		[setShedule]

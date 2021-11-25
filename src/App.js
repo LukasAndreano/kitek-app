@@ -581,7 +581,9 @@ const App = withAdaptivity(
 						</SplitCol>
 					</SplitLayout>
 				) : (
-					<PanelSpinner size="medium" className="screenLoading" />
+					<Panel id="loading" centered>
+						<PanelSpinner size="medium" className={"screenLoading"} />
+					</Panel>
 					)}
 			</Fragment>
 		);
