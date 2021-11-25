@@ -12,7 +12,8 @@ import {
 	Text,
 	Header,
 	PullToRefresh,
-	SimpleCell, Avatar,
+	SimpleCell,
+	Avatar,
 } from "@vkontakte/vkui";
 import {
 	Icon28DoorArrowRightOutline,
@@ -23,7 +24,9 @@ import {
 	Icon28InfoOutline,
 	Icon28Notifications,
 	Icon28BugOutline,
-	Icon28Users3Outline, Icon28CameraOutline,
+	Icon28Users3Outline,
+	Icon28CameraOutline,
+	Icon16Done,
 } from "@vkontakte/icons";
 
 import Login from "../forms/Login";
@@ -132,7 +135,22 @@ export default function Profile() {
 											padding: 32,
 										}}
 									>
-										<Avatar onClick={() => dispatch(setActiveModal('changeAvatar'))} className={"avatar tap"} src={storage.user.avatar === null ? "https://sun9-78.userapi.com/impg/cQujlzxysdtnp2h8egzLAnxMnKhQ_PoHI_erIw/TPJ6iK6jGiM.jpg?size=1550x1551&quality=95&sign=fc53be2d938b8fab2cba18aceb12d968&type=album" : storage.user.avatar} size={100} />
+										<Avatar
+											onClick={() =>
+												dispatch(
+													setActiveModal(
+														"changeAvatar"
+													)
+												)
+											}
+											className={"avatar tap"}
+											src={
+												storage.user.avatar === null
+													? "https://sun9-78.userapi.com/impg/cQujlzxysdtnp2h8egzLAnxMnKhQ_PoHI_erIw/TPJ6iK6jGiM.jpg?size=1550x1551&quality=95&sign=fc53be2d938b8fab2cba18aceb12d968&type=album"
+													: storage.user.avatar
+											}
+											size={100}
+										/>
 										<Title
 											style={{
 												marginBottom: 2,
@@ -141,9 +159,26 @@ export default function Profile() {
 											level="2"
 											weight="medium"
 										>
-											{storage.user.name
-												? storage.user.name
-												: "Неизвестный пользователь"}
+											{storage.user.name ? (
+												<div
+													style={{
+														display: "inline-flex",
+													}}
+												>
+													{storage.user.name}{" "}
+													{storage.user.verifed && (
+														<Icon16Done
+															style={{
+																marginTop: 4,
+																marginLeft: 5,
+															}}
+															fill={"#71AAEB"}
+														/>
+													)}{" "}
+												</div>
+											) : (
+												"Неизвестный пользователь"
+											)}
 										</Title>
 										<Text
 											weight={"regular"}
@@ -164,7 +199,6 @@ export default function Profile() {
 										<Div
 											style={{
 												marginTop: -10,
-												marginLeft: -5,
 											}}
 										>
 											<Header>Общая информация</Header>

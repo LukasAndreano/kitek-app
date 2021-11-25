@@ -3,100 +3,84 @@ import { useSelector, useDispatch } from "react-redux";
 import {
 	Div,
 	ContentCard,
+	Link,
 	Spinner,
 	PanelHeader,
 	PullToRefresh,
-	Button,
-	CardScroll,
-	Card, Placeholder,
 } from "@vkontakte/vkui";
 import api from "../service/api";
-import { Icon20WriteSquareOutline } from "@vkontakte/icons";
 
 import { saveData } from "../reducers/newsReducer";
-import { setActiveModal } from "../reducers/mainReducer";
 
 export default function News() {
 	const [wall, setWall] = useState([]);
 	const [loader, setLoader] = useState(false);
 	const [fetching, setFetching] = useState(false);
-	const [loaded, setLoaded] = useState(false)
 
 	const storage = useSelector((state) => state.main);
 	const newsStorage = useSelector((state) => state.news);
 	const dispatch = useDispatch();
 
 	useEffect(() => {
-		if (newsStorage.data !== undefined && newsStorage.data !== null && newsStorage.data.length !== 0) {
-			renderWall(newsStorage.data, storage.isDesktop);
+		if (newsStorage.data.length !== 0) {
+			renderWall(newsStorage.data);
 		} else {
-			if (newsStorage.data !== null) {
-				setLoader(true);
-				api("/getLatestNews").then((data) => {
-					if (data.response !== undefined && data.response !== null && data.news.length !== 0) {
-						renderWall(data.news, storage.isDesktop);
-						dispatch(saveData(data.news));
-					} else {
-						setLoader(false);
-						dispatch(saveData(null));
-					}
-				});
-			}
+			setLoader(true);
+			api("getNews").then((data) => {
+				if (data.response !== undefined && data.response !== null) {
+					renderWall(data.response.items);
+					dispatch(saveData(data.response.items));
+				}
+			});
 		}
-	}, [newsStorage.data, dispatch, setLoader, storage.isDesktop]);
+	}, [newsStorage.data, dispatch, setLoader]);
 
-	function renderWall(data, desktop) {
+	function renderWall(data) {
 		let arr = [];
-
-		if (data.length !== 0)
-			data.forEach((el) => {
+		data.forEach((el) => {
+			let image =
+				el.attachments !== undefined &&
+				el.attachments[0].type === "photo"
+					? el.attachments[0].photo.sizes[
+							el.attachments[0].photo.sizes.length - 1
+					  ].url
+					: null;
+			if (el.text !== "")
 				arr.push(
-					<Card key={el._id}>
-						{el.images[0] !== "" && (
-							<CardScroll size="l">
-								{el.images.map((el) => {
-									return (
-										<Card key={el}>
-											<img
-												src={el}
-												alt="img"
-												style={{
-													width: "100%",
-													marginLeft: desktop
-													? 15
-													: 0,
-													height: "100%",
-													borderTopLeftRadius: 8,
-													borderTopRightRadius: 8
-												}}
-											/>
-										</Card>
-									);
-								})}
-							</CardScroll>
-						)}
+					<Link
+						key={el.id}
+						href={
+							"https://vk.com/omsktec?w=wall" +
+							el.owner_id +
+							"_" +
+							el.id
+						}
+						target="_blank"
+						refferer="no-referrer"
+						className="noHover"
+					>
 						<ContentCard
 							className="defaultText tw"
 							disabled
 							mode="tint"
 							style={{ marginBottom: 10 }}
-							text={el.description}
-							header={el.title}
+							text={el.text}
+							image={image}
 							caption={new Date(el.date * 1000).toLocaleString(
 								"ru-RU",
 								{
 									weekday: "long",
+									year: "numeric",
 									month: "long",
 									day: "numeric",
 								}
 							)}
 						/>
-					</Card>
+					</Link>
 				);
-			});
+		});
 		setWall(arr);
 		setFetching(false);
-		setLoaded(true)
 	}
 
 	return (
@@ -105,16 +89,14 @@ export default function News() {
 			<PullToRefresh
 				onRefresh={() => {
 					setFetching(true);
-					api("getLatestNews")
+					api("getNews")
 						.then((data) => {
 							if (
-								data.response !== false &&
-								data.news.length !== 0
+								data.response !== undefined &&
+								data.response !== null
 							) {
-								renderWall(data.news, storage.isDesktop);
-								dispatch(saveData(data.news));
-							} else {
-								setFetching(false)
+								renderWall(data.response.items);
+								dispatch(saveData(data.response.items));
 							}
 						})
 						.catch(() => {
@@ -123,45 +105,12 @@ export default function News() {
 				}}
 				isFetching={fetching}
 			>
-				{storage.user.status === 1 &&
-					<Fragment>
-						{storage.isDesktop ? (
-							<Button
-								stretched
-								before={<Icon20WriteSquareOutline />}
-								onClick={() => dispatch(setActiveModal("addNews"))}
-								mode="secondary"
-								size="l"
-								style={{ marginBottom: 10 }}
-							>
-								Новая запись
-							</Button>
-						) : (
-							<Div style={{ marginBottom: -10, marginTop: -5 }}>
-								<Button
-									stretched
-									before={<Icon20WriteSquareOutline />}
-									onClick={() => dispatch(setActiveModal("addNews"))}
-									mode="secondary"
-									size="l"
-								>
-									Новая запись
-								</Button>
-							</Div>
-						)}
-					</Fragment>
-				}
-				{(loader === true && !loaded) ? (
+				{wall.length === 0 && loader === true ? (
 					<Spinner size="medium" style={{ margin: "20px 0" }} />
+				) : storage.isDesktop ? (
+					wall
 				) : (
-					<Fragment>
-						{storage.isDesktop ? (
-							wall
-						) : (
-							<Div>{wall}</Div>
-						)}
-						{wall.length === 0 && <Placeholder style={{marginTop: -40}}>Новостей пока нет. <br />Ждём!</Placeholder>}
-					</Fragment>
+					<Div>{wall}</Div>
 				)}
 			</PullToRefresh>
 		</Fragment>

@@ -58,7 +58,7 @@ export default function Albums() {
 					<Cell
 						description={"Группа: " + item.group_id}
 						key={item._id}
-						removable
+						mode={"removable"}
 						onRemove={() => {
 							request("admin/albums/delete", {
 								id: data[index]._id,

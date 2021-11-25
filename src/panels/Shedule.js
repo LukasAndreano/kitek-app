@@ -13,9 +13,7 @@ import {
 	Div,
 	Footer,
 	Button,
-	Card,
 	PanelHeader,
-	Title,
 	PanelHeaderButton,
 } from "@vkontakte/vkui";
 import {
@@ -27,6 +25,7 @@ import api from "../service/api";
 import authorizedAPI from "../service/authorizedAPI";
 import refreshToken from "../service/refreshToken";
 
+import renderSheduleBlocks from "./handlers/renderSheduleBlocks";
 import { setActiveModal } from "../reducers/mainReducer";
 import {
 	setSheduleStore,
@@ -35,6 +34,7 @@ import {
 } from "../reducers/sheduleReducer";
 
 import { saveGroups } from "../reducers/mainReducer";
+import { motion } from "framer-motion";
 
 const currentDate = new Date(new Date().getTime() + 7 * 60 * 60 * 1000);
 
@@ -62,57 +62,13 @@ export default function Shedule() {
 	// Функция рендера самих пар, использующая локальное хранилище
 	const renderLessons = useCallback(
 		(data = null, teacherMode = false) => {
-			let arr = [];
 			if (data !== undefined && data.length !== 0) {
-				let renderData =
-					data[localStorage.getItem("sheduleDay")]["timetable"];
-				let id = 0;
-				renderData.forEach((el, key) => {
-					let group = teacherMode ? el.group.split("-") : null;
-					id++;
-					arr.push(
-						<Card
-							className="tw"
-							key={id}
-							style={{ marginBottom: 10 }}
-						>
-							<Div>
-								<Title level="3" weight="medium">
-									<span className="hide">
-										Пара №{el.number}
-									</span>{" "}
-									{el.name}
-								</Title>
-								<h4 style={{ marginTop: 5, marginBottom: 0 }}>
-									<span className="type">{el.type}</span>
-									<span className="teacher">
-										{teacherMode
-											? group[1] === undefined
-												? group[0]
-												: group[1] + "-" + group[0]
-											: el["teacher"]}
-									</span>
-								</h4>
-							</Div>
-						</Card>
-					);
-					if (
-						renderData[key + 1] !== undefined &&
-						renderData[key + 1].number !== el.number &&
-						(el.type === "Практика" ||
-							renderData[key + 1].type === "Практика") &&
-						el.name !== "Физическая культура" &&
-						renderData[key + 1].name !== "Физическая культура" &&
-						!teacherMode
+				setShedule(
+					renderSheduleBlocks(
+						data[localStorage.getItem("sheduleDay")]["timetable"],
+						teacherMode
 					)
-						arr.push(
-							<Card
-								key={id + 10}
-								style={{ height: 20, marginBottom: 10 }}
-							/>
-						);
-				});
-				setShedule(arr);
+				);
 			}
 		},
 		[setShedule]
@@ -128,38 +84,54 @@ export default function Shedule() {
 		) => {
 			let arr = [];
 			let i = 0;
+			let delay = 0;
 			data.forEach((el) => {
 				let date = el.date.split(".");
+				delay += 0.1;
 				arr.push(
-					<Button
-						size="l"
-						className="fixButtonsInShedule"
-						style={{
-							marginRight: 8,
-							marginLeft: 2,
-							marginTop: 5,
-							marginBottom: 5,
-						}}
-						mode={
-							Number(localStorage.getItem("sheduleDay")) === el.id
-								? "primary"
-								: "secondary"
-						}
-						key={el.id}
-						onClick={() => {
-							dispatch(saveSheduleDay(el.id));
-							localStorage.setItem("sheduleDay", el.id);
-							setRenderButtons(true);
+					<motion.div
+						initial={{ scale: 0 }}
+						animate={{ scale: 1 }}
+						transition={{
+							delay,
+							type: "spring",
+							stiffness: 260,
+							damping: 40,
 						}}
 					>
-						{new Date(date[2], date[1] - 1, date[0])
-							.toLocaleString("ru-RU", { weekday: "long" })[0]
-							.toUpperCase() +
-							new Date(date[2], date[1] - 1, date[0])
-								.toLocaleString("ru-RU", { weekday: "long" })
-								.slice(1)}{" "}
-						({el.date.substring(0, 5)})
-					</Button>
+						<Button
+							size="l"
+							className="fixButtonsInShedule"
+							style={{
+								marginRight: 8,
+								marginLeft: 2,
+								marginTop: 5,
+								marginBottom: 5,
+							}}
+							mode={
+								Number(localStorage.getItem("sheduleDay")) ===
+								el.id
+									? "primary"
+									: "secondary"
+							}
+							key={el.id}
+							onClick={() => {
+								dispatch(saveSheduleDay(el.id));
+								localStorage.setItem("sheduleDay", el.id);
+								setRenderButtons(true);
+							}}
+						>
+							{new Date(date[2], date[1] - 1, date[0])
+								.toLocaleString("ru-RU", { weekday: "long" })[0]
+								.toUpperCase() +
+								new Date(date[2], date[1] - 1, date[0])
+									.toLocaleString("ru-RU", {
+										weekday: "long",
+									})
+									.slice(1)}{" "}
+							({el.date.substring(0, 5)})
+						</Button>
+					</motion.div>
 				);
 			});
 			setSheduleButtons(arr);
@@ -265,7 +237,7 @@ export default function Shedule() {
 						}
 					);
 				} else {
-					api("getShedule", {
+					api("getShedule2", {
 						group: encodeURI(group),
 					}).then((data) => {
 						if (data.response) {
@@ -388,7 +360,7 @@ export default function Shedule() {
 				Расписание
 			</PanelHeader>
 			<Group>
-				{(loaded && !lazyLoading) ? (
+				{loaded && !lazyLoading ? (
 					<Fragment>
 						{group === null ? (
 							<Fragment>
@@ -499,37 +471,63 @@ export default function Shedule() {
 									storage.user.teacherGroup !== null &&
 									group.name !==
 										storage.user.teacherGroup && (
-										<Banner
-											style={{ marginBottom: -5 }}
-											onClick={() => {
-												setGroupFunction(
-													storage.user.teacherGroup,
-													storage.user.teacherGroup
-												);
+										<motion.div
+											initial={{ opacity: 0 }}
+											animate={{
+												opacity: 1,
 											}}
-											header={
-												"Показать пары для " +
-												storage.user.teacherGroup +
-												"?"
-											}
-											subheader="Нажмите здесь, чтобы посмотреть пары своей группы."
-											asideMode="expand"
-										/>
+											transition={{
+												delay: 0.3,
+												damping: 40,
+											}}
+										>
+											<Banner
+												style={{ marginBottom: -5 }}
+												onClick={() => {
+													setGroupFunction(
+														storage.user
+															.teacherGroup,
+														storage.user
+															.teacherGroup
+													);
+												}}
+												header={
+													"Показать пары для " +
+													storage.user.teacherGroup +
+													"?"
+												}
+												subheader="Нажмите здесь, чтобы посмотреть пары своей группы."
+												asideMode="expand"
+											/>
+										</motion.div>
 									)}
 								{(storage.user.status === 2 ||
 									storage.user.status === 1) &&
 									storage.user.teacherGroup !== null &&
 									group.name ===
 										storage.user.teacherGroup && (
-										<Banner
-											style={{ marginBottom: -5 }}
-											onClick={() => {
-												setGroupFunction(0, 0);
+										<motion.div
+											initial={{ opacity: 0 }}
+											animate={{
+												opacity: 1,
 											}}
-											header={"Показать пары для Вас?"}
-											subheader="Нажмите здесь, чтобы посмотреть свои пары."
-											asideMode="expand"
-										/>
+											transition={{
+												delay: 0.3,
+												damping: 40,
+											}}
+										>
+											<Banner
+												style={{ marginBottom: -5 }}
+												onClick={() => {
+													setGroupFunction(0, 0);
+												}}
+												header={
+													"Показать пары для Вас?"
+												}
+												subheader="Нажмите здесь, чтобы посмотреть свои пары."
+												asideMode="expand"
+											/>
+										</motion.div>
 									)}
 								<Div>
 									{sheduleStorage.shedule.length !== 0 &&
@@ -560,7 +558,18 @@ export default function Shedule() {
 													На этот день нет пар.
 												</Placeholder>
 											) : (
-												shedule
+												<motion.div
+													initial={{ opacity: 0 }}
+													animate={{
+														opacity: 1,
+													}}
+													transition={{
+														delay: 0.3,
+														damping: 40,
+													}}
+												>
+													{shedule}
+												</motion.div>
 											)}
 										</Fragment>
 									) : (

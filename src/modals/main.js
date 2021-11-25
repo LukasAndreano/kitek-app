@@ -7,22 +7,28 @@ import {
 	Button,
 	ModalPage,
 	ModalPageHeader,
-	PanelHeaderButton, RichCell, Card, Text, Title, Group, Div,
+	PanelHeaderButton,
+	RichCell,
+	Card,
+	Text,
+	Title,
+	Group,
+	Div,
 } from "@vkontakte/vkui";
 
 import { useHistory } from "react-router-dom";
 import { motion } from "framer-motion";
 
-import developer from "../img/avatar.png"
+import developer from "../img/avatar.png";
 
 import {
 	Icon56InfoOutline,
 	Icon24Dismiss,
 	Icon56NotificationOutline,
-	Icon28FaceRecognitionOutline,
-	Icon28Newsfeed,
-	Icon28SmartphoneOutline,
-	Icon28Users3Outline, Icon28SpeedometerMaxOutline,
+	Icon28IpadOutline,
+	Icon28AppleWatchOutlite,
+	Icon28SnowflakeOutline,
+	Icon28SmartphoneStarsOutline,
 } from "@vkontakte/icons";
 
 import { setActiveModal, setUser } from "../reducers/mainReducer";
@@ -34,7 +40,6 @@ import Time from "./Time";
 import Download from "./Download";
 import Social from "./Social";
 import FavoriteGroup from "./FavoriteGroup";
-import AddNews from "./AddNews";
 import AddAlbum from "./AddAlbum";
 import ChangeAvatar from "./ChangeAvatar";
 
@@ -192,7 +197,7 @@ export default function Modals() {
 				dynamicContentHeight
 				header={
 					<ModalPageHeader
-						style={{marginBottom: -15}}
+						style={{ marginBottom: -15 }}
 						right={
 							storage.isDesktop ? (
 								""
@@ -207,82 +212,86 @@ export default function Modals() {
 				}
 			>
 				<Group style={{ textAlign: "center" }}>
-					<img src={developer} alt="avatar"  style={{width: 128}}/>
-					<Title level="2" weight="normal" style={{ marginBottom: 5 }}>
+					<img src={developer} alt="avatar" style={{ width: 128 }} />
+					<Title
+						level="2"
+						weight="normal"
+						style={{ marginBottom: 5 }}
+					>
 						Приложение обновилось!
 					</Title>
 					<Text weight="regular">
-						Встречайте обновление 1.1.9!<br/>Давайте посмотрим, что мы изменили:
+						Встречайте обновление 1.2.0!
+						<br />
+						Давайте посмотрим, что мы изменили:
 					</Text>
 					<Div style={{ textAlign: "left" }}>
 						<Card>
 							<RichCell
 								before={
-									<Icon28FaceRecognitionOutline
-										style={{ marginTop: 18, marginRight: 10 }}
+									<Icon28IpadOutline
+										style={{
+											marginTop: 18,
+											marginRight: 10,
+										}}
 									/>
 								}
-								caption="Добавьте немного уникальности в свой профиль - добавьте аватар."
+								caption="Теперь приложение работает без визуальных ошибок и на планшетах."
 								className="tw"
 								disabled
 							>
-								Аватарки профиля
+								Оптимизация под планшеты
 							</RichCell>
 						</Card>
 						<Card style={{ marginTop: 10 }}>
 							<RichCell
 								before={
-									<Icon28Newsfeed
-										style={{ marginTop: 18, marginRight: 10 }}
+									<Icon28AppleWatchOutlite
+										style={{
+											marginTop: 18,
+											marginRight: 10,
+										}}
 									/>
 								}
-								caption="Мы полностью переработали вкладку с новостями, чтобы в будущем публиковать здесь только уникальный контент."
+								caption="Теперь отображается, когда начнётся и когда закончится пара. Больше не нужно переключаться между разделами!"
 								className="tw"
 								disabled
 							>
-								Новости приложения (beta)
+								Расписание звонков
 							</RichCell>
 						</Card>
 						<Card style={{ marginTop: 10 }}>
 							<RichCell
 								before={
-									<Icon28SmartphoneOutline
-										style={{ marginTop: 18, marginRight: 10 }}
+									<Icon28SnowflakeOutline
+										style={{
+											marginTop: 18,
+											marginRight: 10,
+										}}
 									/>
 								}
-								caption="Теперь приложение будет работать даже на iPhone 5s. Наконец-то!"
+								caption="Встречайте новый эффект - снегопад. Ещё больше атмосферы нового года!"
 								className="tw"
 								disabled
 							>
-								Поддержка старых iPhone
+								Снежный эффект
 							</RichCell>
 						</Card>
 						<Card style={{ marginTop: 10 }}>
 							<RichCell
 								before={
-									<Icon28Users3Outline
-										style={{ marginTop: 18, marginRight: 10 }}
+									<Icon28SmartphoneStarsOutline
+										style={{
+											marginTop: 18,
+											marginRight: 10,
+										}}
 									/>
 								}
-								caption="Отныне преподаватели, которые курируют какую-либо группу, могут отслеживать её расписание в один клик."
+								caption="Теперь приложение выглядит ещё плавнее. Красота!"
 								className="tw"
 								disabled
 							>
-								Курируемые группы
-							</RichCell>
-						</Card>
-						<Card style={{ marginTop: 10 }}>
-							<RichCell
-								before={
-									<Icon28SpeedometerMaxOutline
-										style={{ marginTop: 18, marginRight: 10 }}
-									/>
-								}
-								caption="В этом обновлении мы причесали код и переработали логику запросов. Всё для старых iOS & Android устройств!"
-								className="tw"
-								disabled
-							>
-								Теперь ещё быстрее
+								Новые анимации
 							</RichCell>
 						</Card>
 					</Div>
@@ -337,7 +346,7 @@ export default function Modals() {
 				}
 				header={"О приложении"}
 				subheader={
-					"Это приложение для студентов КИТЭК'а, позволяющее просматривать текущее расписание, следить за новостями, а также быстро подписываться на социальные сети колледжа.\n\nТекущая версия: 1.1.9\nРазработчик: Никита Балин"
+					"Это приложение для студентов КИТЭК'а, позволяющее просматривать текущее расписание, следить за новостями, а также быстро подписываться на социальные сети колледжа.\n\nТекущая версия: 1.2.0\nРазработчик: Никита Балин"
 				}
 				actions={
 					<Button
@@ -445,32 +454,6 @@ export default function Modals() {
 			</ModalPage>
 
 			<ModalPage
-				id="addNews"
-				onClose={() => {
-					closeModal();
-				}}
-				dynamicContentHeight
-				header={
-					<ModalPageHeader
-						right={
-							storage.isDesktop ? (
-								""
-							) : (
-								<PanelHeaderButton onClick={() => closeModal()}>
-									<Icon24Dismiss />
-								</PanelHeaderButton>
-							)
-						}
-						separator={false}
-					>
-						Новая запись
-					</ModalPageHeader>
-				}
-			>
-				<AddNews closeModal={closeModal} />
-			</ModalPage>
-
-			<ModalPage
 				id="addAlbum"
 				onClose={() => {
 					closeModal();
@@ -501,7 +484,7 @@ export default function Modals() {
 				onClose={() => {
 					closeModal();
 				}}
-				settlingHeight={100}
+				dynamicContentHeight
 				header={
 					<ModalPageHeader
 						right={

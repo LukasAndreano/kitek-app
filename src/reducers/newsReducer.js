@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 export const newsReducer = createSlice({
 	name: "news",
 	initialState: {
-		data: undefined,
+		data: [],
 	},
 	reducers: {
 		saveData: (state, action) => {

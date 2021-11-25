@@ -3,7 +3,6 @@ import React from "react";
 import { Switch, Route } from "react-router-dom";
 
 // Импортируем все панели
-import Social from "./panels/Social";
 import News from "./panels/News";
 import Shedule from "./panels/Shedule";
 import Download from "./panels/Download";
@@ -20,11 +19,6 @@ const routes = [
 		path: "/",
 		exact: true,
 		panel: () => <Shedule />,
-	},
-	{
-		path: "/social",
-		exact: true,
-		panel: () => <Social />,
 	},
 	{
 		path: "/news",

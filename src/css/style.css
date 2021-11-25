@@ -20,6 +20,9 @@ input:after {
 .mb10 {
 	margin-bottom: -10px;
 }
+.mb10add {
+	margin-bottom: 10px;
+}
 .TabbarItem__in:hover,
 .Switch:hover,
 .TabbarItem:hover,
@@ -65,25 +68,28 @@ option:hover {
 	font-size: 15px;
 	font-weight: 600;
 }
-.type {
-	background-color: var(--button_commerce_background);
+.scheduleSpan {
 	border-radius: 25px;
 	padding: 0 10px;
 	margin-left: 5px;
 	white-space: nowrap;
-	color: var(--button_commerce_foreground);
 	font-size: 15px;
 	font-weight: 600;
 }
+.type {
+	background-color: var(--button_commerce_background);
+	color: var(--button_commerce_foreground);
+}
+.iconPadding {
+	margin-top: 2px;
+	margin-right: 4px;
+}
+.inlineFlex {
+	display: inline-flex;
+}
 .teacher {
 	background-color: var(--button_secondary_background);
-	border-radius: 25px;
-	padding: 0 10px;
-	margin-left: 5px;
-	white-space: nowrap;
 	color: var(--button_secondary_foreground);
-	font-size: 15px;
-	font-weight: 600;
 }
 .tap:hover {
 	cursor: pointer;
@@ -197,34 +203,6 @@ a:hover {
 	background: var(--action_sheet_separator);
 	border-radius: 8px;
 }
-.vkuiTabbar {
-	border-radius: 15px;
-	box-shadow: 0 0 20px 8px rgba(0, 0, 0, 0.15) !important;
-	padding: 5px;
-}
-.vkuiEpic .vkuiTabbar {
-	justify-content: center;
-	transition: 0.4s;
-	opacity: 1;
-	display: flex;
-	align-items: center;
-	margin: 15px 13px;
-	width: 90% !important;
-}
-.vkuiTabbar--ios.vkuiTabbar--shadow::before {
-	display: none;
-}
-.snackbar-mobile-fix .vkuiSnackbar__body {
-	border-radius: 15px;
-	margin-bottom: 5px;
-}
-.vkuiSnackbar__body {
-	box-shadow: 0 0 20px 8px rgba(0, 0, 0, 0.15) !important;
-}
-.snackbarActive .vkuiEpic .vkuiTabbar {
-	opacity: 0;
-	transition: 0.4s;
-}
 .TabbarItem--selected .vkuiIcon {
 	animation-name: boop;
 	animation-duration: 0.7s;
@@ -261,4 +239,25 @@ a:hover {
 }
 .avatar img {
 	object-fit: cover;
+}
+.paddingSnackbar {
+	margin: 0 0 50px 0;
+	z-index: 1;
+}
+.screenLoading {
+	animation-name: show;
+	animation-duration: 0.5s;
+	height: 100vh !important;
+}
+.prettyShow {
+	animation-name: show;
+	animation-duration: 0.5s;
+}
+@keyframes show {
+	0% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 1;
+	}
 }

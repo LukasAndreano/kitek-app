@@ -2,6 +2,7 @@
 
 import React, { Fragment, useCallback, useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import Snow from "react-snow-effect";
 import {
 	SplitLayout,
 	SplitCol,
@@ -11,7 +12,6 @@ import {
 	Tabbar,
 	TabbarItem,
 	Alert,
-	ScreenSpinner,
 	Epic,
 	Group,
 	withAdaptivity,
@@ -21,6 +21,7 @@ import {
 	usePlatform,
 	Footer,
 	VKCOM,
+	PanelSpinner,
 } from "@vkontakte/vkui";
 
 import {
@@ -57,7 +58,8 @@ import Modals from "./modals/main";
 const App = withAdaptivity(
 	({ viewWidth }) => {
 		const platform = usePlatform();
-		const isDesktop = viewWidth >= 3;
+
+		const isDesktop = viewWidth >= 4;
 		const hasHeader = platform !== VKCOM;
 
 		const [themeManager, setThemeManager] = useState(false);
@@ -101,10 +103,8 @@ const App = withAdaptivity(
 		useEffect(() => {
 			if (localStorage.getItem("showUpdateCard")) {
 				setTimeout(() => {
-					dispatch(
-						setActiveModal('updated')
-					);
-				}, 1000)
+					dispatch(setActiveModal("updated"));
+				}, 1000);
 
 				localStorage.removeItem("showUpdateCard");
 			}
@@ -226,11 +226,7 @@ const App = withAdaptivity(
 					<Snackbar
 						layout="vertical"
 						duration={4000}
-						className={
-							storage.isDesktop
-								? "snackBar-fix"
-								: "snackbar-mobile-fix"
-						}
+						className={!storage.isDesktop ? "paddingSnackbar" : ""}
 						onClose={() => {
 							dispatch(setSnackbar({ text: null }));
 							setSnackbarFunc(null);
@@ -280,7 +276,8 @@ const App = withAdaptivity(
 
 		return (
 			<Fragment>
-				{themeManager && (
+				{isDesktop && <Snow />}
+				{themeManager && !storage.waitForProfileGet ? (
 					<SplitLayout
 						className={
 							storage.snackbar.text !== null && "snackbarActive"
@@ -289,7 +286,12 @@ const App = withAdaptivity(
 						style={{ justifyContent: "center" }}
 					>
 						{isDesktop && (
-							<SplitCol fixed width="280px" maxWidth="280px">
+							<SplitCol
+								fixed
+								width="280px"
+								maxWidth="280px"
+								className="prettyShow"
+							>
 								<Panel nav="navigationDesktop">
 									{hasHeader && (
 										<PanelHeader>КИТЭК</PanelHeader>
@@ -470,7 +472,7 @@ const App = withAdaptivity(
 										</Group>
 									)}
 									<Footer style={{ marginTop: -10 }}>
-										Версия приложения: 1.1.9 <br />
+										Версия приложения: 1.2.0 <br />
 										Разработчик:{" "}
 										<a
 											href="https://vk.com/id172118960"
@@ -497,6 +499,7 @@ const App = withAdaptivity(
 							spaced={isDesktop}
 							width={isDesktop ? "560px" : "100%"}
 							maxWidth={isDesktop ? "560px" : "100%"}
+							className="prettyShow"
 						>
 							<Epic
 								activeStory={"default"}
@@ -569,24 +572,24 @@ const App = withAdaptivity(
 									id="default"
 									activePanel="default"
 									modal={modal}
-									popout={
-										storage.waitForProfileGet ? (
-											<ScreenSpinner />
-										) : (
-											popout
-										)
-									}
+									popout={popout}
 								>
-									{!storage.waitForProfileGet && (
-										<Panel id="default">
-											<Controller />
-										</Panel>
-									)}
+									<Panel id="default">
+										<Controller />
+										{!isDesktop && <Snow />}
+									</Panel>
 								</View>
 							</Epic>
 							{snackbar}
 						</SplitCol>
 					</SplitLayout>
+				) : (
+					<Panel id="loading" centered>
+						<PanelSpinner
+							size="medium"
+							className={"screenLoading"}
+						/>
+					</Panel>
 				)}
 			</Fragment>
 		);

@@ -16,6 +16,6 @@ export default async function refreshTokenWithFileUpload(method, file) {
 					return resolve(data);
 				});
 			}
-		})
+		});
 	});
 }
