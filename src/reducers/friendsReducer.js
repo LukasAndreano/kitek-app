@@ -4,7 +4,7 @@ export const friendsReducer = createSlice({
 	name: "friends",
 	initialState: {
 		loaded: false,
-		data: []
+		data: [],
 	},
 	reducers: {
 		setLoaded: (state, action) => {

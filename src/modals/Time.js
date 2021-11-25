@@ -1,8 +1,5 @@
 import React from "react";
-import {
-	Group,
-	Placeholder,
-} from "@vkontakte/vkui";
+import { Group, Placeholder } from "@vkontakte/vkui";
 import { Icon56RecentOutline } from "@vkontakte/icons";
 
 import { motion } from "framer-motion";
@@ -28,7 +25,8 @@ export default function Time() {
 				}
 				style={{ marginTop: -40 }}
 			>
-				Расписание звонков переехало прямо в расписание! Теперь смотреть длительность пары ещё проще!
+				Расписание звонков переехало прямо в расписание! Теперь смотреть
+				длительность пары ещё проще!
 			</Placeholder>
 		</Group>
 	);

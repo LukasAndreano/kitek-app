@@ -101,7 +101,7 @@ export default function ChangePassword(props) {
 										course: 0,
 										group: null,
 										status: 0,
-										avatar: null
+										avatar: null,
 									})
 								);
 								dispatch(

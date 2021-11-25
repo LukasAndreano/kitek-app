@@ -7,13 +7,19 @@ import {
 	Button,
 	ModalPage,
 	ModalPageHeader,
-	PanelHeaderButton, RichCell, Card, Text, Title, Group, Div,
+	PanelHeaderButton,
+	RichCell,
+	Card,
+	Text,
+	Title,
+	Group,
+	Div,
 } from "@vkontakte/vkui";
 
 import { useHistory } from "react-router-dom";
 import { motion } from "framer-motion";
 
-import developer from "../img/avatar.png"
+import developer from "../img/avatar.png";
 
 import {
 	Icon56InfoOutline,
@@ -21,7 +27,8 @@ import {
 	Icon56NotificationOutline,
 	Icon28IpadOutline,
 	Icon28AppleWatchOutlite,
-	Icon28SnowflakeOutline, Icon28SmartphoneStarsOutline,
+	Icon28SnowflakeOutline,
+	Icon28SmartphoneStarsOutline,
 } from "@vkontakte/icons";
 
 import { setActiveModal, setUser } from "../reducers/mainReducer";
@@ -190,7 +197,7 @@ export default function Modals() {
 				dynamicContentHeight
 				header={
 					<ModalPageHeader
-						style={{marginBottom: -15}}
+						style={{ marginBottom: -15 }}
 						right={
 							storage.isDesktop ? (
 								""
@@ -205,19 +212,28 @@ export default function Modals() {
 				}
 			>
 				<Group style={{ textAlign: "center" }}>
-					<img src={developer} alt="avatar"  style={{width: 128}}/>
-					<Title level="2" weight="normal" style={{ marginBottom: 5 }}>
+					<img src={developer} alt="avatar" style={{ width: 128 }} />
+					<Title
+						level="2"
+						weight="normal"
+						style={{ marginBottom: 5 }}
+					>
 						Приложение обновилось!
 					</Title>
 					<Text weight="regular">
-						Встречайте обновление 1.2.0!<br/>Давайте посмотрим, что мы изменили:
+						Встречайте обновление 1.2.0!
+						<br />
+						Давайте посмотрим, что мы изменили:
 					</Text>
 					<Div style={{ textAlign: "left" }}>
 						<Card>
 							<RichCell
 								before={
 									<Icon28IpadOutline
-										style={{ marginTop: 18, marginRight: 10 }}
+										style={{
+											marginTop: 18,
+											marginRight: 10,
+										}}
 									/>
 								}
 								caption="Теперь приложение работает без визуальных ошибок и на планшетах."
@@ -231,7 +247,10 @@ export default function Modals() {
 							<RichCell
 								before={
 									<Icon28AppleWatchOutlite
-										style={{ marginTop: 18, marginRight: 10 }}
+										style={{
+											marginTop: 18,
+											marginRight: 10,
+										}}
 									/>
 								}
 								caption="Теперь отображается, когда начнётся и когда закончится пара. Больше не нужно переключаться между разделами!"
@@ -245,7 +264,10 @@ export default function Modals() {
 							<RichCell
 								before={
 									<Icon28SnowflakeOutline
-										style={{ marginTop: 18, marginRight: 10 }}
+										style={{
+											marginTop: 18,
+											marginRight: 10,
+										}}
 									/>
 								}
 								caption="Встречайте новый эффект - снегопад. Ещё больше атмосферы нового года!"
@@ -259,7 +281,10 @@ export default function Modals() {
 							<RichCell
 								before={
 									<Icon28SmartphoneStarsOutline
-										style={{ marginTop: 18, marginRight: 10 }}
+										style={{
+											marginTop: 18,
+											marginRight: 10,
+										}}
 									/>
 								}
 								caption="Теперь приложение выглядит ещё плавнее. Красота!"

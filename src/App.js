@@ -2,7 +2,7 @@
 
 import React, { Fragment, useCallback, useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import Snow from 'react-snow-effect';
+import Snow from "react-snow-effect";
 import {
 	SplitLayout,
 	SplitCol,
@@ -20,7 +20,8 @@ import {
 	View,
 	usePlatform,
 	Footer,
-	VKCOM, PanelSpinner,
+	VKCOM,
+	PanelSpinner,
 } from "@vkontakte/vkui";
 
 import {
@@ -102,10 +103,8 @@ const App = withAdaptivity(
 		useEffect(() => {
 			if (localStorage.getItem("showUpdateCard")) {
 				setTimeout(() => {
-					dispatch(
-						setActiveModal('updated')
-					);
-				}, 1000)
+					dispatch(setActiveModal("updated"));
+				}, 1000);
 
 				localStorage.removeItem("showUpdateCard");
 			}
@@ -227,9 +226,7 @@ const App = withAdaptivity(
 					<Snackbar
 						layout="vertical"
 						duration={4000}
-						className={
-							!storage.isDesktop ? "paddingSnackbar" : ""
-						}
+						className={!storage.isDesktop ? "paddingSnackbar" : ""}
 						onClose={() => {
 							dispatch(setSnackbar({ text: null }));
 							setSnackbarFunc(null);
@@ -280,7 +277,7 @@ const App = withAdaptivity(
 		return (
 			<Fragment>
 				{isDesktop && <Snow />}
-				{(themeManager && !storage.waitForProfileGet) ? (
+				{themeManager && !storage.waitForProfileGet ? (
 					<SplitLayout
 						className={
 							storage.snackbar.text !== null && "snackbarActive"
@@ -289,7 +286,12 @@ const App = withAdaptivity(
 						style={{ justifyContent: "center" }}
 					>
 						{isDesktop && (
-							<SplitCol fixed width="280px" maxWidth="280px" className="prettyShow">
+							<SplitCol
+								fixed
+								width="280px"
+								maxWidth="280px"
+								className="prettyShow"
+							>
 								<Panel nav="navigationDesktop">
 									{hasHeader && (
 										<PanelHeader>КИТЭК</PanelHeader>
@@ -570,9 +572,7 @@ const App = withAdaptivity(
 									id="default"
 									activePanel="default"
 									modal={modal}
-									popout={
-										popout
-									}
+									popout={popout}
 								>
 									<Panel id="default">
 										<Controller />
@@ -585,9 +585,12 @@ const App = withAdaptivity(
 					</SplitLayout>
 				) : (
 					<Panel id="loading" centered>
-						<PanelSpinner size="medium" className={"screenLoading"} />
+						<PanelSpinner
+							size="medium"
+							className={"screenLoading"}
+						/>
 					</Panel>
-					)}
+				)}
 			</Fragment>
 		);
 	},

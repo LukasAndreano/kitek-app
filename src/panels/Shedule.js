@@ -34,7 +34,7 @@ import {
 } from "../reducers/sheduleReducer";
 
 import { saveGroups } from "../reducers/mainReducer";
-import {motion} from "framer-motion";
+import { motion } from "framer-motion";
 
 const currentDate = new Date(new Date().getTime() + 7 * 60 * 60 * 1000);
 
@@ -63,7 +63,12 @@ export default function Shedule() {
 	const renderLessons = useCallback(
 		(data = null, teacherMode = false) => {
 			if (data !== undefined && data.length !== 0) {
-				setShedule(renderSheduleBlocks(data[localStorage.getItem("sheduleDay")]["timetable"], teacherMode));
+				setShedule(
+					renderSheduleBlocks(
+						data[localStorage.getItem("sheduleDay")]["timetable"],
+						teacherMode
+					)
+				);
 			}
 		},
 		[setShedule]
@@ -79,10 +84,10 @@ export default function Shedule() {
 		) => {
 			let arr = [];
 			let i = 0;
-			let delay = 0
+			let delay = 0;
 			data.forEach((el) => {
 				let date = el.date.split(".");
-				delay += 0.1
+				delay += 0.1;
 				arr.push(
 					<motion.div
 						initial={{ scale: 0 }}
@@ -94,35 +99,38 @@ export default function Shedule() {
 							damping: 40,
 						}}
 					>
-					<Button
-						size="l"
-						className="fixButtonsInShedule"
-						style={{
-							marginRight: 8,
-							marginLeft: 2,
-							marginTop: 5,
-							marginBottom: 5,
-						}}
-						mode={
-							Number(localStorage.getItem("sheduleDay")) === el.id
-								? "primary"
-								: "secondary"
-						}
-						key={el.id}
-						onClick={() => {
-							dispatch(saveSheduleDay(el.id));
-							localStorage.setItem("sheduleDay", el.id);
-							setRenderButtons(true);
-						}}
-					>
-						{new Date(date[2], date[1] - 1, date[0])
-							.toLocaleString("ru-RU", { weekday: "long" })[0]
-							.toUpperCase() +
-							new Date(date[2], date[1] - 1, date[0])
-								.toLocaleString("ru-RU", { weekday: "long" })
-								.slice(1)}{" "}
-						({el.date.substring(0, 5)})
-					</Button>
+						<Button
+							size="l"
+							className="fixButtonsInShedule"
+							style={{
+								marginRight: 8,
+								marginLeft: 2,
+								marginTop: 5,
+								marginBottom: 5,
+							}}
+							mode={
+								Number(localStorage.getItem("sheduleDay")) ===
+								el.id
+									? "primary"
+									: "secondary"
+							}
+							key={el.id}
+							onClick={() => {
+								dispatch(saveSheduleDay(el.id));
+								localStorage.setItem("sheduleDay", el.id);
+								setRenderButtons(true);
+							}}
+						>
+							{new Date(date[2], date[1] - 1, date[0])
+								.toLocaleString("ru-RU", { weekday: "long" })[0]
+								.toUpperCase() +
+								new Date(date[2], date[1] - 1, date[0])
+									.toLocaleString("ru-RU", {
+										weekday: "long",
+									})
+									.slice(1)}{" "}
+							({el.date.substring(0, 5)})
+						</Button>
 					</motion.div>
 				);
 			});
@@ -352,7 +360,7 @@ export default function Shedule() {
 				Расписание
 			</PanelHeader>
 			<Group>
-				{(loaded && !lazyLoading) ? (
+				{loaded && !lazyLoading ? (
 					<Fragment>
 						{group === null ? (
 							<Fragment>
@@ -463,59 +471,63 @@ export default function Shedule() {
 									storage.user.teacherGroup !== null &&
 									group.name !==
 										storage.user.teacherGroup && (
-									<motion.div
-										initial={{ opacity: 0 }}
-										animate={{
-											opacity: 1
-										}}
-										transition={{
-											delay: 0.3,
-											damping: 40,
-										}}
-									>
-										<Banner
-											style={{ marginBottom: -5 }}
-											onClick={() => {
-												setGroupFunction(
-													storage.user.teacherGroup,
-													storage.user.teacherGroup
-												);
+										<motion.div
+											initial={{ opacity: 0 }}
+											animate={{
+												opacity: 1,
 											}}
-											header={
-												"Показать пары для " +
-												storage.user.teacherGroup +
-												"?"
-											}
-											subheader="Нажмите здесь, чтобы посмотреть пары своей группы."
-											asideMode="expand"
-										/>
-									</motion.div>
+											transition={{
+												delay: 0.3,
+												damping: 40,
+											}}
+										>
+											<Banner
+												style={{ marginBottom: -5 }}
+												onClick={() => {
+													setGroupFunction(
+														storage.user
+															.teacherGroup,
+														storage.user
+															.teacherGroup
+													);
+												}}
+												header={
+													"Показать пары для " +
+													storage.user.teacherGroup +
+													"?"
+												}
+												subheader="Нажмите здесь, чтобы посмотреть пары своей группы."
+												asideMode="expand"
+											/>
+										</motion.div>
 									)}
 								{(storage.user.status === 2 ||
 									storage.user.status === 1) &&
 									storage.user.teacherGroup !== null &&
 									group.name ===
 										storage.user.teacherGroup && (
-									<motion.div
-										initial={{ opacity: 0 }}
-										animate={{
-											opacity: 1
-										}}
-										transition={{
-											delay: 0.3,
-											damping: 40,
-										}}
-									>
-										<Banner
-											style={{ marginBottom: -5 }}
-											onClick={() => {
-												setGroupFunction(0, 0);
+										<motion.div
+											initial={{ opacity: 0 }}
+											animate={{
+												opacity: 1,
 											}}
-											header={"Показать пары для Вас?"}
-											subheader="Нажмите здесь, чтобы посмотреть свои пары."
-											asideMode="expand"
-										/>
-									</motion.div>
+											transition={{
+												delay: 0.3,
+												damping: 40,
+											}}
+										>
+											<Banner
+												style={{ marginBottom: -5 }}
+												onClick={() => {
+													setGroupFunction(0, 0);
+												}}
+												header={
+													"Показать пары для Вас?"
+												}
+												subheader="Нажмите здесь, чтобы посмотреть свои пары."
+												asideMode="expand"
+											/>
+										</motion.div>
 									)}
 								<Div>
 									{sheduleStorage.shedule.length !== 0 &&
@@ -549,7 +561,7 @@ export default function Shedule() {
 												<motion.div
 													initial={{ opacity: 0 }}
 													animate={{
-														opacity: 1
+														opacity: 1,
 													}}
 													transition={{
 														delay: 0.3,
