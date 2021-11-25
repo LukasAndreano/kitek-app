@@ -19,10 +19,9 @@ import {
 	Icon56InfoOutline,
 	Icon24Dismiss,
 	Icon56NotificationOutline,
-	Icon28FaceRecognitionOutline,
-	Icon28Newsfeed,
-	Icon28SmartphoneOutline,
-	Icon28Users3Outline, Icon28SpeedometerMaxOutline,
+	Icon28IpadOutline,
+	Icon28AppleWatchOutlite,
+	Icon28SnowflakeOutline, Icon28SmartphoneStarsOutline,
 } from "@vkontakte/icons";
 
 import { setActiveModal, setUser } from "../reducers/mainReducer";
@@ -217,71 +216,57 @@ export default function Modals() {
 						<Card>
 							<RichCell
 								before={
-									<Icon28FaceRecognitionOutline
+									<Icon28IpadOutline
 										style={{ marginTop: 18, marginRight: 10 }}
 									/>
 								}
-								caption="Добавьте немного уникальности в свой профиль - добавьте аватар."
+								caption="Теперь приложение работает без визуальных ошибок и на планшетах."
 								className="tw"
 								disabled
 							>
-								Аватарки профиля
+								Оптимизация под планшеты
 							</RichCell>
 						</Card>
 						<Card style={{ marginTop: 10 }}>
 							<RichCell
 								before={
-									<Icon28Newsfeed
+									<Icon28AppleWatchOutlite
 										style={{ marginTop: 18, marginRight: 10 }}
 									/>
 								}
-								caption="Мы полностью переработали вкладку с новостями, чтобы в будущем публиковать здесь только уникальный контент."
+								caption="Теперь отображается, когда начнётся и когда закончится пара. Больше не нужно переключаться между разделами!"
 								className="tw"
 								disabled
 							>
-								Новости приложения (beta)
+								Расписание звонков
 							</RichCell>
 						</Card>
 						<Card style={{ marginTop: 10 }}>
 							<RichCell
 								before={
-									<Icon28SmartphoneOutline
+									<Icon28SnowflakeOutline
 										style={{ marginTop: 18, marginRight: 10 }}
 									/>
 								}
-								caption="Теперь приложение будет работать даже на iPhone 5s. Наконец-то!"
+								caption="Встречайте новый эффект - снегопад. Ещё больше атмосферы нового года!"
 								className="tw"
 								disabled
 							>
-								Поддержка старых iPhone
+								Снежный эффект
 							</RichCell>
 						</Card>
 						<Card style={{ marginTop: 10 }}>
 							<RichCell
 								before={
-									<Icon28Users3Outline
+									<Icon28SmartphoneStarsOutline
 										style={{ marginTop: 18, marginRight: 10 }}
 									/>
 								}
-								caption="Отныне преподаватели, которые курируют какую-либо группу, могут отслеживать её расписание в один клик."
+								caption="Теперь приложение выглядит ещё плавнее. Красота!"
 								className="tw"
 								disabled
 							>
-								Курируемые группы
-							</RichCell>
-						</Card>
-						<Card style={{ marginTop: 10 }}>
-							<RichCell
-								before={
-									<Icon28SpeedometerMaxOutline
-										style={{ marginTop: 18, marginRight: 10 }}
-									/>
-								}
-								caption="В этом обновлении мы причесали код и переработали логику запросов. Всё для старых iOS & Android устройств!"
-								className="tw"
-								disabled
-							>
-								Теперь ещё быстрее
+								Новые анимации
 							</RichCell>
 						</Card>
 					</Div>

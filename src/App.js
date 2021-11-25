@@ -100,9 +100,6 @@ const App = withAdaptivity(
 		}
 
 		useEffect(() => {
-			// dispatch(
-			// 	setActiveModal('updated')
-			// );
 			if (localStorage.getItem("showUpdateCard")) {
 				setTimeout(() => {
 					dispatch(
@@ -579,7 +576,7 @@ const App = withAdaptivity(
 								>
 									<Panel id="default">
 										<Controller />
-										{isDesktop && <Snow />}
+										{!isDesktop && <Snow />}
 									</Panel>
 								</View>
 							</Epic>
