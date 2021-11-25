@@ -22,7 +22,7 @@ export default function renderSheduleBlocks(renderData = [], teacherMode = false
 		// +1 к счётчику
 		id++;
 
-		// Пушим в массив как раз таки нужные нам блоки, предварительно обработав некоторые данные
+		// Пушим в массив как рMаз таки нужные нам блоки, предварительно обработав некоторые данные
 		arr.push(
 			<Card
 				className="tw mb10add"

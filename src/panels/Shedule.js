@@ -34,6 +34,7 @@ import {
 } from "../reducers/sheduleReducer";
 
 import { saveGroups } from "../reducers/mainReducer";
+import {motion} from "framer-motion";
 
 const currentDate = new Date(new Date().getTime() + 7 * 60 * 60 * 1000);
 
@@ -78,9 +79,21 @@ export default function Shedule() {
 		) => {
 			let arr = [];
 			let i = 0;
+			let delay = 0
 			data.forEach((el) => {
 				let date = el.date.split(".");
+				delay += 0.1
 				arr.push(
+					<motion.div
+						initial={{ scale: 0 }}
+						animate={{ scale: 1 }}
+						transition={{
+							delay,
+							type: "spring",
+							stiffness: 260,
+							damping: 40,
+						}}
+					>
 					<Button
 						size="l"
 						className="fixButtonsInShedule"
@@ -110,6 +123,7 @@ export default function Shedule() {
 								.slice(1)}{" "}
 						({el.date.substring(0, 5)})
 					</Button>
+					</motion.div>
 				);
 			});
 			setSheduleButtons(arr);
@@ -449,6 +463,16 @@ export default function Shedule() {
 									storage.user.teacherGroup !== null &&
 									group.name !==
 										storage.user.teacherGroup && (
+									<motion.div
+										initial={{ opacity: 0 }}
+										animate={{
+											opacity: 1
+										}}
+										transition={{
+											delay: 0.3,
+											damping: 40,
+										}}
+									>
 										<Banner
 											style={{ marginBottom: -5 }}
 											onClick={() => {
@@ -465,12 +489,23 @@ export default function Shedule() {
 											subheader="Нажмите здесь, чтобы посмотреть пары своей группы."
 											asideMode="expand"
 										/>
+									</motion.div>
 									)}
 								{(storage.user.status === 2 ||
 									storage.user.status === 1) &&
 									storage.user.teacherGroup !== null &&
 									group.name ===
 										storage.user.teacherGroup && (
+									<motion.div
+										initial={{ opacity: 0 }}
+										animate={{
+											opacity: 1
+										}}
+										transition={{
+											delay: 0.3,
+											damping: 40,
+										}}
+									>
 										<Banner
 											style={{ marginBottom: -5 }}
 											onClick={() => {
@@ -480,6 +515,7 @@ export default function Shedule() {
 											subheader="Нажмите здесь, чтобы посмотреть свои пары."
 											asideMode="expand"
 										/>
+									</motion.div>
 									)}
 								<Div>
 									{sheduleStorage.shedule.length !== 0 &&
@@ -510,7 +546,18 @@ export default function Shedule() {
 													На этот день нет пар.
 												</Placeholder>
 											) : (
-												shedule
+												<motion.div
+													initial={{ opacity: 0 }}
+													animate={{
+														opacity: 1
+													}}
+													transition={{
+														delay: 0.3,
+														damping: 40,
+													}}
+												>
+													{shedule}
+												</motion.div>
 											)}
 										</Fragment>
 									) : (

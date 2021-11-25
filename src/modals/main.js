@@ -211,7 +211,7 @@ export default function Modals() {
 						Приложение обновилось!
 					</Title>
 					<Text weight="regular">
-						Встречайте обновление 1.1.9!<br/>Давайте посмотрим, что мы изменили:
+						Встречайте обновление 1.2.0!<br/>Давайте посмотрим, что мы изменили:
 					</Text>
 					<Div style={{ textAlign: "left" }}>
 						<Card>
