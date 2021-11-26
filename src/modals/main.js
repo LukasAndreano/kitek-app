@@ -27,7 +27,6 @@ import {
 	Icon56NotificationOutline,
 	Icon28IpadOutline,
 	Icon28AppleWatchOutlite,
-	Icon28SnowflakeOutline,
 	Icon28SmartphoneStarsOutline,
 } from "@vkontakte/icons";
 
@@ -258,23 +257,6 @@ export default function Modals() {
 								disabled
 							>
 								Расписание звонков
-							</RichCell>
-						</Card>
-						<Card style={{ marginTop: 10 }}>
-							<RichCell
-								before={
-									<Icon28SnowflakeOutline
-										style={{
-											marginTop: 18,
-											marginRight: 10,
-										}}
-									/>
-								}
-								caption="Встречайте новый эффект - снегопад. Ещё больше атмосферы нового года!"
-								className="tw"
-								disabled
-							>
-								Снежный эффект
 							</RichCell>
 						</Card>
 						<Card style={{ marginTop: 10 }}>
