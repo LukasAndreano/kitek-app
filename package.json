@@ -4,24 +4,22 @@
   "private": true,
   "dependencies": {
     "@reduxjs/toolkit": "^1.6.1",
-    "@vkontakte/icons": "^1.134.0",
+    "@vkontakte/icons": "^1.135.0",
     "@vkontakte/vk-bridge": "^2.4.8",
-    "@vkontakte/vkui": "^4.22.0",
+    "@vkontakte/vkui": "^4.22.2",
     "axios": "^0.21.4",
     "framer-motion": "^4.1.17",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-redux": "^7.2.4",
     "react-router-dom": "^5.2.1",
-    "react-scripts": "4.0.3",
-    "react-snow-effect": "^1.2.0"
+    "react-scripts": "4.0.3"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "GENERATE_SOURCEMAP=false react-scripts build",
     "prettier": "npx prettier --write public && npx prettier --write src",
-    "deploy": "npm run prettier && npm run build",
-    "vk-miniapps-deploy": "vk-miniapps-deploy"
+    "deploy": "npm run prettier && npm run build"
   },
   "eslintConfig": {
     "extends": [
