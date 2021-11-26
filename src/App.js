@@ -2,7 +2,6 @@
 
 import React, { Fragment, useCallback, useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import Snow from "react-snow-effect";
 import {
 	SplitLayout,
 	SplitCol,
@@ -276,7 +275,6 @@ const App = withAdaptivity(
 
 		return (
 			<Fragment>
-				{isDesktop && <Snow />}
 				{themeManager && !storage.waitForProfileGet ? (
 					<SplitLayout
 						className={
@@ -576,7 +574,6 @@ const App = withAdaptivity(
 								>
 									<Panel id="default">
 										<Controller />
-										{!isDesktop && <Snow />}
 									</Panel>
 								</View>
 							</Epic>
