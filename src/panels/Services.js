@@ -15,7 +15,6 @@ import {
 import {
 	Icon16Down,
 	Icon16Users,
-	Icon16Recent,
 	Icon16Picture,
 	Icon16Pin,
 	Icon16Flash,
@@ -140,23 +139,6 @@ export default function Time() {
 							marginTop: 10,
 						}}
 					>
-						<Card>
-							<SimpleCell
-								onClick={() => dispatch(setActiveModal("time"))}
-								before={
-									<Avatar
-										style={{ background: "var(--accent)" }}
-										size={28}
-										shadow={false}
-									>
-										<Icon16Recent fill="var(--white)" />
-									</Avatar>
-								}
-								description="Звонки учебных занятий."
-							>
-								Расписание звонков
-							</SimpleCell>
-						</Card>
 						<Card style={{ margin: "10px 0" }}>
 							<SimpleCell
 								onClick={() =>
