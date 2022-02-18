@@ -20,6 +20,8 @@ import api from "./service/api";
 import App from "./App";
 import Cookies from "./panels/Cookies";
 
+// Hello, Kuzmina!
+
 try {
 	// Подключаем менеджер тем. Автоматически определяет тему спустя 100 мс (задержка для загрузки VKUI).
 	try {
