@@ -100,16 +100,6 @@ const App = withAdaptivity(
 		}
 
 		useEffect(() => {
-			if (localStorage.getItem("showUpdateCard")) {
-				setTimeout(() => {
-					dispatch(setActiveModal("updated"));
-				}, 1000);
-
-				localStorage.removeItem("showUpdateCard");
-			}
-		});
-
-		useEffect(() => {
 			if ((storage.popout.title && storage.popout.text) === null) {
 				return;
 			}
