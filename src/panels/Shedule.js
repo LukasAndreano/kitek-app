@@ -14,7 +14,7 @@ import {
 	Footer,
 	Button,
 	PanelHeader,
-	PanelHeaderButton,
+	PanelHeaderButton, Avatar
 } from "@vkontakte/vkui";
 import {
 	Icon56InfoOutline,
@@ -360,6 +360,25 @@ export default function Shedule() {
 				Расписание
 			</PanelHeader>
 			<Group>
+				<Banner
+					before={
+						<Avatar size={28} style={{ backgroundImage: "linear-gradient(90deg, #ffb73d 0%, #ffa000 100%)" }}>
+							<span style={{ color: "#fff" }}>!</span>
+						</Avatar>
+					}
+					header="Приложение скоро прекратит свою работу!"
+					subheader={
+						<React.Fragment>
+							И да, это не шутка — приложение перестанет работать уже в этот понедельник. <br/><br/>Подпишитесь на сообщество ВКонтакте, где как и раньше будут публиковать актуальное для всех групп расписание.
+						</React.Fragment>
+					}
+					actions={
+						<Button mode="secondary"  href={"https://vk.com/couples_schedul"} target={"_blank"}>
+							Подписаться
+						</Button>
+					}
+				/>
+
 				{loaded && !lazyLoading ? (
 					<Fragment>
 						{group === null ? (
