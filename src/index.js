@@ -41,10 +41,8 @@ try {
 		<Provider store={store}>
 			<ConfigProvider isWebView={true}>
 				<AdaptivityProvider>
-					<AppRoot>
-						<Router>
-							<App />
-						</Router>
+					<AppRoot className={"thankYouKitek"}>
+						<p>Service unavailable</p>
 					</AppRoot>
 				</AdaptivityProvider>
 			</ConfigProvider>

@@ -360,20 +360,6 @@ export default function Shedule() {
 				Расписание
 			</PanelHeader>
 			<Group>
-				<Banner
-					before={
-						<Avatar size={28} style={{ backgroundImage: "linear-gradient(90deg, #ffb73d 0%, #ffa000 100%)" }}>
-							<span style={{ color: "#fff" }}>!</span>
-						</Avatar>
-					}
-					header="Приложение скоро прекратит свою работу!"
-					subheader={
-						<React.Fragment>
-							И да, это не шутка — приложение перестанет работать уже в этот понедельник. <br/><br/>К сожалению, доработка и поддержка приостановлена разработчиком.
-						</React.Fragment>
-					}
-				/>
-
 				{loaded && !lazyLoading ? (
 					<Fragment>
 						{group === null ? (
