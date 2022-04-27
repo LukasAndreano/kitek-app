@@ -26,8 +26,6 @@ import {
 import {
 	Icon16Done,
 	Icon16Cancel,
-	Icon28CompassOutline,
-	Icon28Newsfeed,
 	Icon28PollSquareOutline,
 	Icon28ListOutline,
 	Icon28CalendarOutline,
@@ -305,54 +303,6 @@ const App = withAdaptivity(
 										<Cell
 											onClick={URLChanger}
 											disabled={
-												storage.url === "news" ||
-												!storage.navigation
-											}
-											className={
-												!storage.navigation &&
-												"disabledNav"
-											}
-											style={
-												storage.url === "news"
-													? {
-															backgroundColor:
-																"var(--button_secondary_background)",
-															borderRadius: 8,
-													  }
-													: {}
-											}
-											data-story="news"
-											before={<Icon28Newsfeed />}
-										>
-											Новости
-										</Cell>
-										<Cell
-											onClick={URLChanger}
-											disabled={
-												storage.url === "services" ||
-												!storage.navigation
-											}
-											className={
-												!storage.navigation &&
-												"disabledNav"
-											}
-											style={
-												storage.url === "services"
-													? {
-															backgroundColor:
-																"var(--button_secondary_background)",
-															borderRadius: 8,
-													  }
-													: {}
-											}
-											data-story="services"
-											before={<Icon28CompassOutline />}
-										>
-											Сервисы
-										</Cell>
-										<Cell
-											onClick={URLChanger}
-											disabled={
 												storage.url === "" ||
 												!storage.navigation
 											}
@@ -494,36 +444,6 @@ const App = withAdaptivity(
 								tabbar={
 									!isDesktop && (
 										<Tabbar>
-											<TabbarItem
-												onClick={URLChanger}
-												disabled={
-													!storage.navigation ||
-													storage.url === "news"
-												}
-												selected={
-													storage.url === "news"
-												}
-												text={"Новости"}
-												data-story="news"
-											>
-												<Icon28Newsfeed />
-											</TabbarItem>
-
-											<TabbarItem
-												onClick={URLChanger}
-												selected={
-													storage.url === "services"
-												}
-												data-story="services"
-												disabled={
-													!storage.navigation ||
-													storage.url === "services"
-												}
-												text={"Сервисы"}
-											>
-												<Icon28CompassOutline />
-											</TabbarItem>
-
 											<TabbarItem
 												onClick={URLChanger}
 												selected={storage.url === ""}

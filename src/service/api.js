@@ -1,5 +1,5 @@
 export default async function api(method, params) {
-	const data = await fetch("https://omsktec-api.nbalin.dev/v1/" + method, {
+	const data = await fetch("https://kitek-api.nbalin.dev/v1/" + method, {
 		method: "POST",
 		headers: {
 			Accept: "application/json",

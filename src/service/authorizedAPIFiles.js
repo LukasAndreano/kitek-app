@@ -3,7 +3,7 @@ import axios from "axios";
 export default function authorizedAPIFiles(method, data) {
 	return new Promise((resolve) => {
 		axios
-			.post("https://omsktec-api.nbalin.dev/v1/" + method, data, {
+			.post("https://kitek-api.nbalin.dev/v1/" + method, data, {
 				headers: {
 					Authorization:
 						"Bearer " + localStorage.getItem("access_token"),

@@ -1,5 +1,3 @@
-// noinspection JSCheckFunctionSignatures
-
 import React, { useState, useEffect, Fragment, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
@@ -14,7 +12,7 @@ import {
 	Footer,
 	Button,
 	PanelHeader,
-	PanelHeaderButton, Avatar
+	PanelHeaderButton
 } from "@vkontakte/vkui";
 import {
 	Icon56InfoOutline,

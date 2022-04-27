@@ -20,8 +20,6 @@ import api from "./service/api";
 import App from "./App";
 import Cookies from "./panels/Cookies";
 
-// Hello, Kuzmina!
-
 try {
 	// Подключаем менеджер тем. Автоматически определяет тему спустя 100 мс (задержка для загрузки VKUI).
 	try {
@@ -41,8 +39,10 @@ try {
 		<Provider store={store}>
 			<ConfigProvider isWebView={true}>
 				<AdaptivityProvider>
-					<AppRoot className={"thankYouKitek"}>
-						<p>Service unavailable</p>
+					<AppRoot>
+						<Router>
+							<App/>
+						</Router>
 					</AppRoot>
 				</AdaptivityProvider>
 			</ConfigProvider>
