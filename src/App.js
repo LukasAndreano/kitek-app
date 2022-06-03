@@ -1,509 +1,133 @@
-// noinspection JSCheckFunctionSignatures
-
-import React, { Fragment, useCallback, useEffect, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import React, { useEffect, useState, lazy, Suspense } from "react";
 import {
-	SplitLayout,
-	SplitCol,
-	Cell,
-	PanelHeader,
-	Panel,
-	Tabbar,
-	TabbarItem,
-	Alert,
-	Epic,
-	Group,
-	withAdaptivity,
-	Snackbar,
-	Avatar,
-	View,
-	usePlatform,
-	Footer,
-	VKCOM,
-	PanelSpinner,
+  AppearanceProvider,
+  AppRoot,
+  ConfigProvider,
+  Epic,
+  PanelHeader,
+  PanelHeaderButton,
+  SplitCol,
+  SplitLayout,
+  usePlatform,
+  View,
+  VKCOM,
+  withAdaptivity,
 } from "@vkontakte/vkui";
+import { withRouter } from "@reyzitwo/react-router-vkminiapps";
 
+// Panels
+import Home from "./components/home/base";
+import Page from "./components/__global/Page";
+import { useDispatch } from "react-redux";
 import {
-	Icon16Done,
-	Icon16Cancel,
-	Icon28PollSquareOutline,
-	Icon28ListOutline,
-	Icon28CalendarOutline,
-	Icon28SettingsOutline,
-	Icon28UserCircleOutline,
-} from "@vkontakte/icons";
+  setIsDesktop,
+  setPlatform,
+  setSelected,
+} from "./storage/reducers/main";
+import { Icon28SettingsOutline } from "@vkontakte/icons";
 
-import { useHistory } from "react-router-dom";
-import { motion } from "framer-motion";
-
-import {
-	savePlatform,
-	saveURL,
-	setActiveModal,
-	setSnackbar,
-	setPopout,
-	setNavigation,
-	setUser,
-	setWaitForProfileGet,
-} from "./reducers/mainReducer";
-import authorizedAPI from "./service/authorizedAPI";
-import refreshToken from "./service/refreshToken";
-
-import Controller from "./Controller";
-import Modals from "./modals/main";
+// Modals
+const Modals = lazy(() => import("./components/__modals/base"));
 
 const App = withAdaptivity(
-	({ viewWidth }) => {
-		const platform = usePlatform();
+  ({ viewWidth, router }) => {
+    // Main states (theme, mode, user)
+    const [theme, setTheme] = useState("light");
 
-		const isDesktop = viewWidth >= 4;
-		const hasHeader = platform !== VKCOM;
+    // Main params (like device, platform, header for nav and etc...)
+    const platform = usePlatform();
+    const dispatch = useDispatch();
 
-		const [themeManager, setThemeManager] = useState(false);
-		const [snackbar, setSnackbarFunc] = useState(null);
-		const [popout, setPopoutFunc] = useState(false);
+    const isDesktop = viewWidth >= 3;
+    const hasHeader = platform !== VKCOM;
 
-		const storage = useSelector((state) => state.main);
-		const dispatch = useDispatch();
+    // Catch offline mode and get user info on app start
+    useEffect(() => {
+      window
+        .matchMedia("(prefers-color-scheme: dark)")
+        .addEventListener("change", () => {
+          setTheme(
+            window.matchMedia("(prefers-color-scheme: dark)").matches
+              ? "dark"
+              : "light"
+          );
+        });
+    }, []);
 
-		// Инициализируем модальные окна
-		const modal = Modals();
+    useEffect(() => {
+      const localData = localStorage.getItem("userSelect");
 
-		// Получаем историю из роутера, необходимо для пуша в неё (URLChanger function)
-		const history = useHistory();
+      if (localData) {
+        const userData = JSON.parse(localData);
 
-		// Ловим 1ю часть URL и сейвим в storage
-		const locationListener = useCallback(() => {
-			const url = window.location.pathname.split("/");
+        dispatch(setSelected(userData));
+      }
+    }, [dispatch]);
 
-			if (url[2] !== undefined && url[1] !== "admin") {
-				dispatch(setNavigation(false));
-			} else {
-				dispatch(setNavigation(true));
-			}
+    useEffect(() => {
+      dispatch(setIsDesktop(isDesktop));
+      dispatch(setPlatform(platform));
 
-			dispatch(
-				saveURL(
-					url[2] !== undefined
-						? window.location.pathname.slice(1)
-						: url[1]
-				)
-			);
-		}, [dispatch]);
+      const currentTheme = window.matchMedia("(prefers-color-scheme: dark)");
 
-		// При клике на ссылку в эпике пушим в историю эту страницу
-		function URLChanger(e) {
-			history.push("/" + e.currentTarget.dataset.story);
-			locationListener();
-		}
+      setTheme(currentTheme.matches ? "dark" : "light");
+    }, [isDesktop, dispatch, platform]);
 
-		useEffect(() => {
-			if ((storage.popout.title && storage.popout.text) === null) {
-				return;
-			}
-			history.push(window.location.pathname + "#popout");
-			setPopoutFunc(
-				<Alert
-					onClose={() => {
-						history.goBack();
-					}}
-					actions={[
-						{
-							title: "Понятно",
-							autoclose: true,
-							mode: "cancel",
-						},
-					]}
-					header={storage.popout.title}
-					text={storage.popout.text}
-				/>
-			);
-		}, [storage.popout, dispatch, history]);
+    const toBack = () => router.toBack();
+    const toModal = (modal) => router.toModal(modal);
 
-		// Ловим ивенты с кнопки назад-вперед
-		window.onpopstate = () => {
-			if ((storage.popout.title && storage.popout.text) !== null) {
-				dispatch(
-					setPopout({
-						title: null,
-						text: null,
-					})
-				);
-				setPopoutFunc(null);
-			} else if (storage.activeModal !== null) {
-				dispatch(setActiveModal(null));
-			}
-			locationListener();
-		};
-
-		const request = useCallback(() => {
-			return new Promise((resolve) => {
-				authorizedAPI("getProfile", {}).then((data) => {
-					if (
-						data.errorCode !== undefined &&
-						(data.errorCode === 3 || data.errorCode === 4)
-					)
-						refreshToken("getProfile", {}).then((data) => {
-							dispatch(setUser(data.user));
-							return resolve(data);
-						});
-					else {
-						return resolve(data);
-					}
-				});
-			});
-		}, [dispatch]);
-
-		useEffect(() => {
-			if (
-				window.location.pathname.split("/")[1] !== "profile" &&
-				localStorage.getItem("access_token") !== null &&
-				localStorage.getItem("refresh_token") !== null
-			) {
-				dispatch(setWaitForProfileGet(true));
-				request().then((data) => {
-					if (data.response) {
-						setTimeout(
-							() => dispatch(setWaitForProfileGet(false)),
-							200
-						);
-						dispatch(setUser(data.user));
-					}
-				});
-			}
-		}, [dispatch, request]);
-
-		useEffect(() => {
-			// Определяем платформу пользователя (desktop или нет)
-			console.log("[Log] Platform detected! isDesktop: " + isDesktop);
-			dispatch(savePlatform(isDesktop));
-
-			window.addEventListener("offline", () => {
-				setPopoutFunc(null);
-				dispatch(setActiveModal(null));
-				dispatch(
-					setSnackbar({
-						success: false,
-						text: "Вы потеряли подключение к сети. Загрузка контента, обновление ленты, а также отправка некоторых данных может быть недоступна.",
-					})
-				);
-			});
-
-			window.addEventListener("online", () => {
-				dispatch(
-					setSnackbar({
-						text: "Подключение к сети восстановлено.",
-						success: true,
-					})
-				);
-				history.push("/online");
-				history.goBack();
-			});
-
-			// Проверяем URL через 100мс, чтобы правильно отобразить таббар
-			setTimeout(() => {
-				setThemeManager(true);
-				locationListener();
-			}, 100);
-		}, [dispatch, isDesktop, locationListener, setThemeManager, history]);
-
-		useEffect(() => {
-			if (storage.snackbar.text !== null)
-				setSnackbarFunc(
-					<Snackbar
-						layout="vertical"
-						duration={4000}
-						className={!storage.isDesktop ? "paddingSnackbar" : ""}
-						onClose={() => {
-							dispatch(setSnackbar({ text: null }));
-							setSnackbarFunc(null);
-						}}
-						before={
-							<motion.div
-								initial={{ scale: 0 }}
-								animate={{ scale: 1 }}
-								transition={{
-									delay: 0.4,
-									type: "spring",
-									stiffness: 260,
-									damping: 20,
-								}}
-							>
-								<Avatar
-									size={24}
-									style={{ background: "var(--accent)" }}
-								>
-									{storage.snackbar.success ? (
-										<Icon16Done
-											fill="#fff"
-											width={14}
-											height={14}
-										/>
-									) : (
-										<Icon16Cancel
-											fill="#fff"
-											width={14}
-											height={14}
-										/>
-									)}
-								</Avatar>
-							</motion.div>
-						}
-					>
-						{storage.snackbar.text}
-					</Snackbar>
-				);
-		}, [
-			setSnackbarFunc,
-			dispatch,
-			storage.isDesktop,
-			storage.snackbar.success,
-			storage.snackbar.text,
-		]);
-
-		return (
-			<Fragment>
-				{themeManager && !storage.waitForProfileGet ? (
-					<SplitLayout
-						className={
-							storage.snackbar.text !== null && "snackbarActive"
-						}
-						header={hasHeader && <PanelHeader separator={false} />}
-						style={{ justifyContent: "center" }}
-					>
-						{isDesktop && (
-							<SplitCol
-								fixed
-								width="280px"
-								maxWidth="280px"
-								className="prettyShow"
-							>
-								<Panel nav="navigationDesktop">
-									{hasHeader && (
-										<PanelHeader>КИТЭК</PanelHeader>
-									)}
-									<Group>
-										<Cell
-											onClick={URLChanger}
-											disabled={storage.url === "profile"}
-											style={
-												storage.url === "profile"
-													? {
-															backgroundColor:
-																"var(--button_secondary_background)",
-															borderRadius: 8,
-													  }
-													: {}
-											}
-											data-story="profile"
-											before={<Icon28UserCircleOutline />}
-										>
-											Профиль
-										</Cell>
-										<Cell
-											onClick={URLChanger}
-											disabled={
-												storage.url === "" ||
-												!storage.navigation
-											}
-											className={
-												!storage.navigation &&
-												"disabledNav"
-											}
-											style={
-												storage.url === ""
-													? {
-															backgroundColor:
-																"var(--button_secondary_background)",
-															borderRadius: 8,
-													  }
-													: {}
-											}
-											data-story=""
-											before={<Icon28CalendarOutline />}
-										>
-											Расписание
-										</Cell>
-									</Group>
-									{storage.user.status === 1 && (
-										<Group>
-											<Cell
-												onClick={URLChanger}
-												disabled={
-													storage.url === "admin" ||
-													!storage.navigation
-												}
-												className={
-													!storage.navigation &&
-													"disabledNav"
-												}
-												style={
-													storage.url === "admin"
-														? {
-																backgroundColor:
-																	"var(--button_secondary_background)",
-																borderRadius: 8,
-														  }
-														: {}
-												}
-												data-story="admin"
-												before={
-													<Icon28PollSquareOutline />
-												}
-											>
-												Статистика
-											</Cell>
-											<Cell
-												onClick={URLChanger}
-												disabled={
-													storage.url ===
-														"admin/albums" ||
-													!storage.navigation
-												}
-												className={
-													!storage.navigation &&
-													"disabledNav"
-												}
-												style={
-													storage.url ===
-													"admin/albums"
-														? {
-																backgroundColor:
-																	"var(--button_secondary_background)",
-																borderRadius: 8,
-														  }
-														: {}
-												}
-												data-story="admin/albums"
-												before={<Icon28ListOutline />}
-											>
-												Альбомы
-											</Cell>
-											<Cell
-												onClick={URLChanger}
-												disabled={
-													storage.url ===
-														"admin/settings" ||
-													!storage.navigation
-												}
-												className={
-													!storage.navigation &&
-													"disabledNav"
-												}
-												style={
-													storage.url ===
-													"admin/settings"
-														? {
-																backgroundColor:
-																	"var(--button_secondary_background)",
-																borderRadius: 8,
-														  }
-														: {}
-												}
-												data-story="admin/settings"
-												before={
-													<Icon28SettingsOutline />
-												}
-											>
-												Настройки
-											</Cell>
-										</Group>
-									)}
-									<Footer style={{ marginTop: -10 }}>
-										Версия приложения: 1.2.0 <br />
-										Разработчик:{" "}
-										<a
-											href="https://vk.com/id172118960"
-											target="_blank"
-											rel="noopener noreferrer"
-										>
-											Никита Балин
-										</a>
-										<br />
-										<a
-											href="https://github.com/LukasAndreano/kitek-app"
-											target="_blank"
-											rel="noopener noreferrer"
-										>
-											Репозиторий на GitHub
-										</a>
-									</Footer>
-								</Panel>
-							</SplitCol>
-						)}
-
-						<SplitCol
-							animate={!isDesktop}
-							spaced={isDesktop}
-							width={isDesktop ? "560px" : "100%"}
-							maxWidth={isDesktop ? "560px" : "100%"}
-							className="prettyShow"
-						>
-							<Epic
-								activeStory={"default"}
-								tabbar={
-									!isDesktop && (
-										<Tabbar>
-											<TabbarItem
-												onClick={URLChanger}
-												selected={storage.url === ""}
-												data-story=""
-												disabled={
-													!storage.navigation ||
-													storage.url === "news" ||
-													storage.url === ""
-												}
-												text={"Расписание"}
-											>
-												<Icon28CalendarOutline />
-											</TabbarItem>
-
-											<TabbarItem
-												onClick={URLChanger}
-												disabled={
-													!storage.navigation ||
-													storage.url === "profile"
-												}
-												selected={
-													storage.url === "profile"
-												}
-												data-story="profile"
-												text={"Профиль"}
-											>
-												<Icon28UserCircleOutline />
-											</TabbarItem>
-										</Tabbar>
-									)
-								}
-							>
-								<View
-									id="default"
-									activePanel="default"
-									modal={modal}
-									popout={popout}
-								>
-									<Panel id="default">
-										<Controller />
-									</Panel>
-								</View>
-							</Epic>
-							{snackbar}
-						</SplitCol>
-					</SplitLayout>
-				) : (
-					<Panel id="loading" centered>
-						<PanelSpinner
-							size="medium"
-							className={"screenLoading"}
-						/>
-					</Panel>
-				)}
-			</Fragment>
-		);
-	},
-	{
-		viewWidth: true,
-	}
+    return (
+      <ConfigProvider isWebView>
+        <AppearanceProvider appearance={theme}>
+          <AppRoot className={isDesktop ? "desktop" : ""}>
+            <SplitLayout
+              header={hasHeader && <PanelHeader separator={false} />}
+              style={{ justifyContent: "center" }}
+              modal={
+                <Suspense fallback={""}>
+                  <Modals router={router} toBack={toBack} />
+                </Suspense>
+              }
+              popout={router.popout}
+            >
+              <SplitCol
+                animate={!isDesktop}
+                spaced={isDesktop}
+                width={isDesktop ? "660px" : "100%"}
+                maxWidth={isDesktop ? "660px" : "100%"}
+              >
+                <Epic activeStory={router.activeView} tabbar={""}>
+                  <View id="schedule" activePanel={router.activePanel}>
+                    <Page
+                      id={"schedule"}
+                      name={"Расписание"}
+                      left={
+                        <PanelHeaderButton
+                          aria-label={"Настройки"}
+                          onClick={() => toModal("selectDisplayParam")}
+                        >
+                          <Icon28SettingsOutline
+                            fill={"var(--accent)"}
+                            width={24}
+                            height={24}
+                          />
+                        </PanelHeaderButton>
+                      }
+                    >
+                      <Home toModal={toModal} />
+                    </Page>
+                  </View>
+                </Epic>
+              </SplitCol>
+            </SplitLayout>
+          </AppRoot>
+        </AppearanceProvider>
+      </ConfigProvider>
+    );
+  },
+  {
+    viewWidth: true,
+  }
 );
 
-export default App;
+export default withRouter(App);

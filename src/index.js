@@ -1,70 +1,52 @@
 import React from "react";
 import ReactDOM from "react-dom";
 
-// Подключаем необходимые зависимости
-import { ConfigProvider, AdaptivityProvider, AppRoot } from "@vkontakte/vkui";
+// etc...
 import { Provider } from "react-redux";
-import { store } from "./store";
-import themeManager from "./service/themeManager";
+import { store } from "./storage/store";
+import { AdaptivityProvider } from "@vkontakte/vkui";
+
+// Router
+import Router from "@reyzitwo/react-router-vkminiapps";
+import structure from "./structure";
+
+// Modules
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
 
-import { BrowserRouter as Router } from "react-router-dom";
-
-// Подключаем все нужные стили для работы сервиса
+// Styles
 import "@vkontakte/vkui/dist/vkui.css";
-import "./css/style.css";
+import "./assets/css/global.scss";
 
-import api from "./service/api";
-
-// Импортируем главный файл
+// Import main panel
 import App from "./App";
-import Cookies from "./panels/Cookies";
 
-try {
-	// Подключаем менеджер тем. Автоматически определяет тему спустя 100 мс (задержка для загрузки VKUI).
-	try {
-		themeManager();
-	} catch (e) {
-		console.log("Theme changer not supported");
-	}
+const app = async () => {
+  ReactDOM.render(
+    <Provider store={store}>
+      <AdaptivityProvider>
+        <Router structure={structure}>
+          <App />
+        </Router>
+      </AdaptivityProvider>
+    </Provider>,
+    document.getElementById("root")
+  );
+};
 
-	// Чистим локальное хранилище от мусора
-	localStorage.setItem("sheduleDay", "0");
-
-	// Отправляем запрос на сервер, чтобы он учел +1 заход
-	api("init");
-
-	// Начинаем рендер, где подключаем Storage и ConfigProviver (необходим для определения платформы и нормальной работой с VKMA)
-	ReactDOM.render(
-		<Provider store={store}>
-			<ConfigProvider isWebView={true}>
-				<AdaptivityProvider>
-					<AppRoot>
-						<Router>
-							<App/>
-						</Router>
-					</AppRoot>
-				</AdaptivityProvider>
-			</ConfigProvider>
-		</Provider>,
-		document.getElementById("root")
-	);
-} catch {
-	ReactDOM.render(<Cookies />, document.getElementById("root"));
-}
+app();
 
 // Подключаем Service Worker, который необходим для PWA-приложений
 serviceWorkerRegistration.register({
-	onUpdate: (registration) => {
-		const waitingServiceWorker = registration.waiting;
+  onUpdate: (registration) => {
+    const waitingServiceWorker = registration.waiting;
 
-		if (waitingServiceWorker) {
-			waitingServiceWorker.addEventListener("statechange", (event) => {
-				if (event.target.state === "activated") {
-					window.location.reload();
-				}
-			});
-			waitingServiceWorker.postMessage({ type: "SKIP_WAITING" });
-		}
-	},
+    if (waitingServiceWorker) {
+      waitingServiceWorker.addEventListener("statechange", (event) => {
+        if (event.target.state === "activated") {
+          window.location.reload();
+        }
+      });
+      waitingServiceWorker.postMessage({ type: "SKIP_WAITING" });
+    }
+  },
 });

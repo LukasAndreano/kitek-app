@@ -1,0 +1,132 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+:root,
+.vkuispace_gray {
+  --accent: #f2f2f2;
+  --button_tertiary_foreground: #f2f2f2;
+  --button_outline_foreground: #f2f2f2;
+  --button_outline_border: #f2f2f2;
+}
+
+:root,
+body[scheme="bright_light"],
+[scheme="bright_light"],
+.vkuibright_light {
+  --background_content: #ebedf0;
+  --header_background: #ebedf0;
+  --tabbar_border_color: #fdfdfd;
+  --header_alternate_background: #fdfdfd;
+  --button_primary_background: #373737;
+  --tabbar_active_icon: #373737;
+  --accent: #373737;
+  --button_tertiary_foreground: #fdfdfd;
+  --button_outline_foreground: #fdfdfd;
+  --button_outline_border: #fdfdfd;
+  --search_bar_field_background: #fdfdfd;
+}
+
+.vkuiSplitLayout__inner {
+  background: var(--header_background);
+}
+
+body,
+.Header {
+  user-select: none;
+}
+
+.DivFix {
+  margin-top: -10px;
+}
+
+.DivFixFull {
+  margin-top: -10px;
+  margin-bottom: -10px;
+}
+
+.mb10 {
+  margin-bottom: 10px;
+}
+
+.panelPadding {
+  margin: 5px 10px;
+}
+
+.vkuiPanelHeader__content-in,
+.vkuiModalPageHeader__content-in {
+  font-weight: 400 !important;
+}
+
+.SimpleCell {
+  border-radius: 8px;
+}
+
+.vkuiPanelHeader__in {
+  margin-bottom: -10px;
+}
+
+.fixedLayout--fix {
+  margin-top: 55px;
+}
+
+.scheduleItem {
+  border-radius: 5px;
+
+  .Div {
+    padding: 0 15px 10px;
+  }
+
+  .scheduleItem__name--header {
+    padding: 0;
+
+    .vkuiHeader__content-in {
+      font-weight: 500;
+      color: var(--text_primary);
+    }
+  }
+
+  .scheduleItem__item--teacher {
+    margin-top: 5px;
+    color: var(--text_secondary);
+  }
+}
+
+.vkuiEpic .vkuiPanel__in {
+  padding-bottom: 0;
+}
+
+.vkuiSearch {
+  background: none;
+}
+
+.mt5 {
+  margin-top: 5px;
+}
+
+.desktop {
+  .home .vkuiFixedLayout {
+    margin-left: -8px;
+  }
+
+  .fixedLayout--fix {
+    margin-top: 35px;
+  }
+
+  .vkuiGroup--card > .vkuiGroup__inner {
+    box-shadow: none;
+  }
+}
+
+.vkuiSearch__after::before {
+  background: none;
+}
+
+.vkuiSearch__after {
+  background: none;
+}
+
+.vkuiPanelHeader__in {
+  width: 100vw;
+}
